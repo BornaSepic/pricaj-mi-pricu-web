@@ -1,0 +1,12 @@
+.cache
+.dockerignore
+.editorconfig
+.git
+.gitignore
+Dockerfile
+README.md
+build
+dist
+node_modules
+npm-debug.log
+.next

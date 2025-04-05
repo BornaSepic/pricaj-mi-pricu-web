@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -Eeuxo pipefail
+
+export DOCKER_BUILDKIT=0
+export COMPOSE_DOCKER_CLI_BUILD=0
+
+docker compose build main \
+  && docker compose up -d main \
+  && docker compose exec main ./docker-entrypoint.sh /bin/bash
