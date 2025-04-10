@@ -1,3 +1,28 @@
+/*
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useAuth } from '@/hooks/useAuth';
+
+export default function Home() {
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (!user) {
+        router.push('/auth/login');
+      } else if (user.role === 'admin') {
+        router.push('/dashboard/admin');
+      } else {
+        router.push('/dashboard/user');
+      }
+    }
+  }, [user, isLoading, router]);
+
+  return <div>Redirecting...</div>;
+}
+*/
+
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
@@ -12,7 +37,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js</a> on Docker Compose!
+          Welcome to <a href="https://nextjs.org">Next.js</a> on Docker Compose! - not anymore!
         </h1>
 
         <p className={styles.description}>
@@ -68,3 +93,4 @@ export default function Home() {
     </div>
   );
 }
+
