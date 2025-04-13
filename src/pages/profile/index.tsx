@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { API_URL } from '../../core/constants'
 import { useAuth } from '../../hooks/useAuth'
 import styles from './profile.module.css'
+import ThemePicker from "../../components/theme/ThemePicker";
 
 export default function ProfilePage() {
     const router = useRouter()
@@ -100,6 +101,8 @@ export default function ProfilePage() {
             <h1 className={styles.profileTitle}>
                 {isEditing ? 'Edit Profile' : 'Your Profile'}
             </h1>
+
+            <ThemePicker />
 
             {error && (
                 <div className={styles.errorMessage}>{error}</div>

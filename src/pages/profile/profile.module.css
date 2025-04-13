@@ -1,5 +1,5 @@
 .profileContainer {
-    background-color: #efefef;
+    background-color: var(--secondary-color, #efefef);
     max-width: 600px;
     margin: 60px 15px;
     padding: 15px 20px;
@@ -13,12 +13,12 @@
 .profileTitle {
     text-align: center;
     margin-bottom: 24px;
-    color: #333;
+    color: var(--text-color, #333);
     font-size: 24px;
 }
 
 .profileCard {
-    background-color: white;
+    background-color: var(--card-bg, white);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 30px;
@@ -46,7 +46,7 @@
 
 .fieldValue {
     font-size: 16px;
-    color: #333;
+    color: var(--text-color, #333);
     padding: 8px 0;
 }
 
@@ -79,7 +79,7 @@
 
 .formInput:focus {
     outline: none;
-    border-color: #4a90e2;
+    border-color: var(--button-primary, #4a90e2);
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
@@ -112,13 +112,13 @@
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;
-    background-color: #4a90e2;
+    background-color: var(--button-primary, #4a90e2);
     color: white;
     border: none;
 }
 
 .editButton:hover, .saveButton:hover {
-    background-color: #3a80d2;
+    background-color: var(--button-primary-hover, #3a80d2);
 }
 
 .logoutButton, .cancelButton {
@@ -135,9 +135,9 @@
 }
 
 .logoutButton:hover {
-    background-color: #f44336;
+    background-color: var(--accent-color, #f44336);
     color: white;
-    border-color: #f44336;
+    border-color: var(--accent-color, #f44336);
 }
 
 .cancelButton:hover {
@@ -185,13 +185,13 @@
 }
 
 .link {
-    color: #4a90e2;
+    color: var(--button-primary, #4a90e2);
     text-decoration: none;
     font-size: 14px;
     transition: color 0.2s;
 }
 
 .link:hover {
-    color: #3a80d2;
+    color: var(--button-primary-hover, #3a80d2);
     text-decoration: underline;
 }
