@@ -7,14 +7,18 @@ import { Header } from "../components/header";
 const queryClient = new QueryClient({})
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Header />
-        <main>
-          <Component {...pageProps} />
-        </main>
-      </AuthProvider>
-    </QueryClientProvider>
-  );
+    return (
+        <div className="app-background">
+            <div className="mobile-container">
+                <QueryClientProvider client={queryClient}>
+                    <AuthProvider>
+                        <Header />
+                        <main>
+                            <Component {...pageProps} />
+                        </main>
+                    </AuthProvider>
+                </QueryClientProvider>
+            </div>
+        </div>
+    );
 }

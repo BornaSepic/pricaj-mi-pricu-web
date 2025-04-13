@@ -1,0 +1,197 @@
+.profileContainer {
+    background-color: #efefef;
+    max-width: 600px;
+    margin: 60px 15px;
+    padding: 15px 20px;
+    border-radius: 50px;
+    min-height: 500px;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+}
+
+.profileTitle {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #333;
+    font-size: 24px;
+}
+
+.profileCard {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+/* Profile view mode */
+.profileDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profileField {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fieldLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #777;
+}
+
+.fieldValue {
+    font-size: 16px;
+    color: #333;
+    padding: 8px 0;
+}
+
+/* Profile edit mode */
+.profileForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+}
+
+.formInput {
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.formInput:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.formInput:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.formInfo {
+    font-size: 14px;
+    color: #777;
+    background-color: #f8f8f8;
+    padding: 10px;
+    border-radius: 6px;
+    border-left: 3px solid #ccc;
+}
+
+/* Action buttons */
+.profileActions {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.editButton, .saveButton {
+    flex: 1;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+}
+
+.editButton:hover, .saveButton:hover {
+    background-color: #3a80d2;
+}
+
+.logoutButton, .cancelButton {
+    flex: 1;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: transparent;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.logoutButton:hover {
+    background-color: #f44336;
+    color: white;
+    border-color: #f44336;
+}
+
+.cancelButton:hover {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+}
+
+.saveButton:disabled, .cancelButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Messages */
+.errorMessage {
+    background-color: #ffefef;
+    color: #e53935;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border-left: 4px solid #e53935;
+}
+
+.successMessage {
+    background-color: #f0f9eb;
+    color: #52c41a;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border-left: 4px solid #52c41a;
+}
+
+/* Loading state */
+.loadingSpinner {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+}
+
+/* Navigation */
+.profileNavigation {
+    text-align: center;
+}
+
+.link {
+    color: #4a90e2;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.link:hover {
+    color: #3a80d2;
+    text-decoration: underline;
+}

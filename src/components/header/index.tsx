@@ -1,35 +1,54 @@
 import { useAuth } from "../../hooks/useAuth";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import styles from "./Header.module.css";
 
 export const Header = () => {
-  const { user } = useAuth();
-  return (
-    <header className="flex items-center justify-between px-4 py-2 bg-gray-800 text-white">
-      <div>
-        <button>
-          <svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2 4H26C27.104 4 28 3.104 28 2C28 0.896 27.104 0 26 0H2C0.896 0 0 0.896 0 2C0 3.104 0.896 4 2 4ZM26 8H2C0.896 8 0 8.896 0 10C0 11.104 0.896 12 2 12H26C27.104 12 28 11.104 28 10C28 8.896 27.104 8 26 8ZM26 16H2C0.896 16 0 16.896 0 18C0 19.104 0.896 20 2 20H26C27.104 20 28 19.104 28 18C28 16.896 27.104 16 26 16Z" fill="black" />
-          </svg>
-        </button>
-      </div>
-      <div>
-        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="162" height="44" viewBox="0 0 162 44" fill="none">
-          <rect width="162" height="44" fill="url(#pattern0_1_3)" />
-          <defs>
-            <pattern id="pattern0_1_3" patternContentUnits="objectBoundingBox" width="1" height="1">
-              <use xlinkHref="#image0_1_3" transform="scale(0.00617284 0.0227273)" />
-            </pattern>
-            <image id="image0_1_3" width="162" height="44" preserveAspectRatio="none" xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKIAAAAsCAYAAADmSGOzAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg3OTIxNTk2RjRBMTFFOUJFRDY4RUE5M0Y0MDg1MjkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg3OTIxNUE2RjRBMTFFOUJFRDY4RUE5M0Y0MDg1MjkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1ODc5MjE1NzZGNEExMUU5QkVENjhFQTkzRjQwODUyOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1ODc5MjE1ODZGNEExMUU5QkVENjhFQTkzRjQwODUyOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PtPPEk8AAA/nSURBVHja7F0JcBvV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" />
-          </defs>
-        </svg>
-      </div>
+    const { user } = useAuth();
+    const [menuOpen, setMenuOpen] = useState(false);
 
-      <div>
-        {user ? (
-          <div className="flex items-center">
-            <span>{user.name}</span>
-          </div>
-        ) : null}
-      </div>
-    </header>
-  )
-}
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    };
+
+    return (
+        <header className={styles.header}>
+            <div className={styles.menuContainer}>
+                <button
+                    onClick={toggleMenu}
+                    className={styles.menuButton}
+                    aria-label="Toggle menu"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className={styles.menuIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+
+            <div className={styles.logoContainer}>
+                <Link href="/">
+                    <Image
+                        src="/portic_logo.png"
+                        alt="Portic Logo"
+                        width={162}
+                        height={44}
+                        priority
+                    />
+                </Link>
+            </div>
+
+            <div className={styles.userContainer}>
+                {user ? (
+                    <Link href="/profile" className={styles.userInfo}>
+                        <span className={styles.userName}>{user.name}</span>
+                    </Link>
+                ) : (
+                    <Link href="/auth/login" className={styles.loginLink}>
+                        <span>Login</span>
+                    </Link>
+                )}
+            </div>
+        </header>
+    );
+};

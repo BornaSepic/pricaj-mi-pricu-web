@@ -1,0 +1,72 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    width: 100%;
+}
+
+.menuContainer {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.menuButton {
+    padding: 4px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.menuButton:hover {
+    background-color: #f3f4f6;
+}
+
+.menuButton:focus {
+    outline: none;
+}
+
+.menuIcon {
+    width: 24px;
+    height: 24px;
+    color: #374151;
+}
+
+.logoContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.userContainer {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+}
+
+.userName {
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.loginLink {
+    color: #1f2937;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.loginLink:hover {
+    color: #4b5563;
+}
