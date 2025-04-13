@@ -13,7 +13,9 @@ Author: Paulina Svetic & Borna Sepic
 - Desktop has "mobile" view
 - Header component ✅
 - Login ✅
-- Started with: Register, Forgot password, Profile page
+- Profile page ✅
+- Started with: Register, Forgot password
+- Sample of Reading Card component
 
 ### Notes
 - /pages/analytics will be used for admin reports (/reports was already taken)
