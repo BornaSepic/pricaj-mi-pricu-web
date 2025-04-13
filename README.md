@@ -1,6 +1,6 @@
 # Documentation
 
-Author: Paulina Svetic & Borna Sepic
+Author: Paulina Svetic & Borna Šepic
 
 ## Change log 10.03.2025.
 
@@ -16,6 +16,7 @@ Author: Paulina Svetic & Borna Sepic
 - Profile page ✅
 - Started with: Register, Forgot password
 - Sample of Reading Card component
+- Profile page: theme selector
 
 ### Notes
 - /pages/analytics will be used for admin reports (/reports was already taken)
