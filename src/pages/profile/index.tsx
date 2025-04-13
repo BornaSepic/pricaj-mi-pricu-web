@@ -38,8 +38,8 @@ export default function ProfilePage() {
         }
 
         try {
-            const response = await fetch(`${API_URL}/user/profile`, {
-                method: 'PUT',
+            const response = await fetch(`${API_URL}/users/${user?.id}`, {
+                method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -169,9 +169,9 @@ export default function ProfilePage() {
                             </select>
                         </div>
 
-                        <div className={styles.formInfo}>
+                        {/*<div className={styles.formInfo}>
                             <p>Role can only be changed by an administrator.</p>
-                        </div>
+                        </div>*/}
                     </div>
                 )}
 
