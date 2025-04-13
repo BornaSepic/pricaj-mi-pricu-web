@@ -24,3 +24,49 @@ a {
 * {
   box-sizing: border-box;
 }
+
+:root {
+  --mobile-width: 500px;
+  --mobile-height: 900px;
+}
+
+/* Background with image for the entire page */
+.app-background {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /*background-color: #ae935fd9;*/
+  background-color: #fff;
+  /*background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;*/
+  overflow: hidden;
+}
+
+/* Mobile device container */
+.mobile-container {
+  width: var(--mobile-width);
+  height: var(--mobile-height);
+  max-height: 95vh;
+  overflow-y: auto;
+  background-color: darkred;
+  border-radius: 20px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Optional: Make the mobile container responsive but maintain aspect ratio */
+@media (max-height: 700px) {
+  .mobile-container {
+    height: 95vh;
+    width: calc(var(--mobile-width) * 95vh / var(--mobile-height));
+  }
+}
+
+/* Ensure content inside the container fits properly */
+.mobile-container main {
+  height: calc(var(--mobile-height) - 60px); /* Adjust based on your header height */
+  overflow-y: auto;
+}

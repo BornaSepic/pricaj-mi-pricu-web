@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import {keepPreviousData, useQuery} from "@tanstack/react-query"
 import { authenticatedFetch } from "../core/authenticated-fetch"
 import { API_URL } from "../core/constants"
 import { ProfileSuccessResponse, User } from "../core/types/auth"
@@ -25,13 +25,14 @@ const getUser = (): Promise<User | null> => {
 }
 
 export const useAuth = () => {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: [`get-user`],
     queryFn: () => getUser(),
-    placeholderData: (prev) => prev || null,
+    placeholderData: keepPreviousData
   })
 
 
+  console.log("User data:", data, isLoading)
   return {
     user: data,
     isLoading,
@@ -40,5 +41,6 @@ export const useAuth = () => {
     isUser: data?.role === "user",
     isSenior: data?.seniority === "senior",
     isJunior: data?.seniority === "junior",
+    refetch: refetch,
   }
 }

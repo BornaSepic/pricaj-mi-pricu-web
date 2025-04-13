@@ -1,71 +1,67 @@
 import { FormEvent, useState } from 'react'
-import { useRouter } from 'next/router'
 import { API_URL } from '../../core/constants'
-import { LoginSuccessResponse } from '../../core/types/auth'
 import styles from './auth.module.css'
 import Link from "next/link";
-import {useAuth} from "../../hooks/useAuth";
 
-export default function LoginPage() {
-    const router = useRouter()
-    const {refetch} = useAuth()
+export default function ForgotPasswordPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [success, setSuccess] = useState(false)
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         setIsLoading(true)
         setError(null)
+        setSuccess(false)
 
         const formData = new FormData(event.currentTarget)
         const email = formData.get('email')
-        const password = formData.get('password')
 
         try {
-            const response = await fetch(`${API_URL}/auth/login`, {
+            const response = await fetch(`${API_URL}/auth/forgot-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email }),
             })
 
             if (!response.ok) {
-                if (response.status === 401) {
-                    setError('Invalid email or password')
+                if (response.status === 404) {
+                    setError('Email not found')
                     setIsLoading(false)
                     return
                 } else {
-                    setError(`Login failed: ${response.statusText}`)
+                    setError(`Request failed: ${response.statusText}`)
                     setIsLoading(false)
                     return
                 }
             }
 
-            const rawData = await response.json()
-            const result = LoginSuccessResponse.safeParse(rawData)
-
-            if (!result.success) {
-                setError('Something went wrong. Please try again later.')
-                setIsLoading(false)
-                return
-            }
-
-            localStorage.setItem('access_token', result.data.access_token)
-
-            await refetch()
-
+            // Reset form and show success message
+            setSuccess(true)
+            event.currentTarget.reset()
         } catch (err) {
-            console.error('Login error:', err)
+            console.error('Forgot password error:', err)
             setError('An unexpected error occurred. Please try again.')
+        } finally {
             setIsLoading(false)
         }
     }
 
     return (
         <div className={styles.authContainer}>
-            <h1 className={styles.authTitle}>Welcome Back</h1>
+            <h1 className={styles.authTitle}>Reset Your Password</h1>
+            <p className={styles.authDescription}>
+                Enter your email address below and we'll send you a link to reset your password.
+            </p>
 
             {error && (
                 <div className={styles.errorMessage}>{error}</div>
+            )}
+
+            {success && (
+                <div className={styles.successMessage}>
+                    Password reset link has been sent to your email. Please check your inbox.
+                </div>
             )}
 
             <form onSubmit={handleSubmit} autoComplete="off" className={styles.authForm}>
@@ -77,36 +73,22 @@ export default function LoginPage() {
                         name="email"
                         placeholder="Your email"
                         required
-                        disabled={isLoading}
-                        className={styles.formInput}
-                    />
-                </div>
-
-                <div className={styles.formGroup}>
-                    <label htmlFor="password" className={styles.formLabel}>Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Your password"
-                        required
-                        disabled={isLoading}
+                        disabled={isLoading || success}
                         className={styles.formInput}
                     />
                 </div>
 
                 <button
                     type="submit"
-                    disabled={isLoading}
+                    disabled={isLoading || success}
                     className={styles.authButton}
                 >
-                    {isLoading ? 'Logging in...' : 'Log In'}
+                    {isLoading ? 'Sending...' : 'Send Reset Link'}
                 </button>
             </form>
 
             <div className={styles.additionalOptions}>
-                <Link href="/auth/forgot-password" className={styles.link}>Forgot password?</Link>
-                <Link href="/auth/register" className={styles.link}>Don't have an account? Sign up</Link>
+                <Link href="/auth/login" className={styles.link}>Back to login</Link>
             </div>
         </div>
     )

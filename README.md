@@ -2,17 +2,18 @@
 
 Author: Paulina Svetic & Borna Sepic
 
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-
-
 ## Change log 10.03.2025.
 
-- Folder structure ✨
+- Basic folder structure
 - Components
 - Pages
+
+## Change log 13.03.2025.
+
+- Desktop has "mobile" view
+- Header component ✅
+- Login ✅
+- Started with: Register, Forgot password, Profile page
 
 ### Notes
 - /pages/analytics will be used for admin reports (/reports was already taken)
