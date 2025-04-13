@@ -1,0 +1,128 @@
+.card {
+    width: 100%;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid black;
+    position: relative;
+    background-color: #fbbf24;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: #fbbf24; /* amber-400 */
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+}
+
+.dateInfo {
+    font-weight: 500;
+}
+
+.slotInfo {
+    margin: 0 16px;
+}
+
+.department {
+    font-weight: 500;
+    color: #1f2937; /* gray-800 */
+}
+
+.toggleButton {
+    background: transparent;
+    border: none;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.toggleButton:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.rotateIcon {
+    transform: rotate(180deg);
+    transition: transform 0.2s ease;
+}
+
+.badgeContainer {
+    position: relative;
+    top: -18px;
+    left: 16px;
+    z-index: 1;
+}
+
+.availableBadge, .unavailableBadge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    color: white;
+    font-size: 14px;
+}
+
+.availableBadge {
+    background-color: #10b981; /* green-500 */
+}
+
+.unavailableBadge {
+    background-color: #ef4444; /* red-500 */
+}
+
+.expandedContent {
+    padding: 0 16px 16px;
+    background-color: #fbbf24; /* amber-400 */
+}
+
+.usersList {
+    margin-bottom: 16px;
+    margin-top: -4px;
+}
+
+.userSlot {
+    padding: 0;
+    border-bottom: 1px solid #000;
+}
+
+.userSlot:last-child {
+    border-bottom: none;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.registerButton {
+    background-color: #92400e; /* amber-800 */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.registerButton:hover {
+    background-color: #78350f; /* amber-900 */
+}
+
+.penIcon {
+    width: 16px;
+    height: 16px;
+}
