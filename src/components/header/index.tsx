@@ -2,7 +2,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import styles from "./Header.module.css";
+import styles from "./styles.module.css";
 
 export const Header = () => {
     const { user } = useAuth();
