@@ -1,49 +1,60 @@
 .card {
+    font-size: 14px;
     width: 100%;
     margin-bottom: 16px;
     border-radius: 8px;
     overflow: hidden;
-    border: 2px solid var(--text-color, black);
+    border: 1px solid var(--text-color, black);
     position: relative;
     background-color: var(--card-background, #fbbf24);
+    padding: 8px 16px;
 }
 
 .cardHeader {
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     justify-content: space-between;
     align-items: center;
-    padding: 16px;
-    background-color: var(--card-background, #fbbf24); /* amber-400 */
+    background-color: var(--card-background, #fbbf24);
+    /* amber-400 */
 }
 
-.headerLeft {
+.cardContent {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 8px;
 }
 
 .dateInfo {
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .slotInfo {
-    margin: 0 16px;
+    text-align: center
 }
 
 .department {
-    font-weight: 500;
-    color: var(--text-color, #1f2937); /* gray-800 */
+    text-align: right;
+    color: var(--text-color, #1f2937);
+    /* gray-800 */
 }
 
 .toggleButton {
     background: transparent;
     border: none;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     cursor: pointer;
+    border: 1px solid var(--text-color, #000);
 }
 
 .toggleButton:hover {
@@ -51,18 +62,17 @@
 }
 
 .rotateIcon {
-    transform: rotate(180deg);
     transition: transform 0.2s ease;
 }
 
-.badgeContainer {
-    position: relative;
-    top: -18px;
-    left: 16px;
-    z-index: 1;
+.rotateIcon__rotated {
+    transform: rotate(180deg);
 }
 
-.availableBadge, .unavailableBadge {
+.badgeContainer {}
+
+.availableBadge,
+.unavailableBadge {
     display: inline-block;
     padding: 4px 16px;
     border-radius: 4px;
@@ -72,21 +82,22 @@
 }
 
 .availableBadge {
-    background-color: var(--success-color, #10b981); /* green-500 */
+    background-color: var(--success-color, #10b981);
+    /* green-500 */
 }
 
 .unavailableBadge {
-    background-color: var(--error-color, #ef4444); /* red-500 */
+    background-color: var(--error-color, #ef4444);
+    /* red-500 */
 }
 
 .expandedContent {
-    padding: 0 16px 16px;
-    background-color: var(--card-background, #fbbf24); /* amber-400 */
+    background-color: var(--card-background, #fbbf24);
+    /* amber-400 */
 }
 
 .usersList {
     margin-bottom: 16px;
-    margin-top: -4px;
 }
 
 .userSlot {
@@ -105,7 +116,8 @@
 }
 
 .registerButton {
-    background-color: var(--button-secondary, #92400e); /* amber-800 */
+    background-color: var(--button-secondary, #92400e);
+    /* amber-800 */
     color: white;
     padding: 8px 16px;
     border-radius: 6px;
@@ -119,7 +131,8 @@
 }
 
 .registerButton:hover {
-    background-color: var(--button-secondary-hover, #78350f); /* amber-900 */
+    background-color: var(--button-secondary-hover, #78350f);
+    /* amber-900 */
 }
 
 .penIcon {

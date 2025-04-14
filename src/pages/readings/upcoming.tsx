@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import ReadingCard from '../../components/readings/ReadingCard';
+import ReadingCard from '../../components/reading-card';
 import styles from './readings.module.css';
 
 interface Reading {

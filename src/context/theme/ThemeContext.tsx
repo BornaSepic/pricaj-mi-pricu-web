@@ -4,7 +4,7 @@ export type ThemeType = 'red-yellow' | 'black-white' | 'blue-green' | 'purple-pi
 
 export const themes = {
     'red-yellow': {
-        primary: 'darkred',
+        primary: '#D3302F',
         secondary: '#efefef',
         text: '#333',
         background: 'white',
@@ -15,7 +15,7 @@ export const themes = {
         buttonSecondary: '#92400e',
         buttonSecondaryHover: '#78350f',
         cardBackground: '#fbbf24',
-        successColor: '#10b981',
+        successColor: '#009E5C',
         errorColor: '#ef4444',
     },
     'black-white': {
@@ -30,7 +30,7 @@ export const themes = {
         buttonSecondary: '#555',
         buttonSecondaryHover: '#444',
         cardBackground: '#e5e5e5',
-        successColor: '#10b981',
+        successColor: '#009E5C',
         errorColor: '#ef4444',
     },
     'blue-green': {
