@@ -28,11 +28,5 @@ export const AuthProvider: FC<Props> = ({ children }) => {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return <>{children}</>;
 }
-
-export default AuthProvider

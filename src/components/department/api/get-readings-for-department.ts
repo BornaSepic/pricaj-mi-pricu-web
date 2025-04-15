@@ -3,7 +3,7 @@ import { API_URL } from "../../../core/constants"
 import { ReadingsPerDepartmentResponse } from "../../../core/types/readings"
 
 export const getReadingsForDepartment = async (id: string, status: 'active' | 'inactive') => {
-  const response = await authenticatedFetch(`${API_URL}/readings/department/${id}/${status}`, {
+  const response = await authenticatedFetch(`${API_URL}/readings/list?departmentId=${id}&status=${status}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -16,11 +16,12 @@ export const getReadingsForDepartment = async (id: string, status: 'active' | 'i
 
   const rawData = await response.json()
 
-  const { success, data } = ReadingsPerDepartmentResponse.safeParse(rawData)
+  const { success, data, error } = ReadingsPerDepartmentResponse.safeParse(rawData)
 
   if (!success) {
-    throw new Error("Failed to parse departments")
+    throw new Error("Failed to parse departments", error)
   }
+
 
   return data
 }
