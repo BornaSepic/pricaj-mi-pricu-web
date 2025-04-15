@@ -2,7 +2,7 @@ import {keepPreviousData, useQuery} from "@tanstack/react-query"
 import { authenticatedFetch } from "../core/authenticated-fetch"
 import { API_URL } from "../core/constants"
 import { ProfileSuccessResponse, User } from "../core/types/auth"
-
+import { getUserFromToken } from "../core/jwt/decode-user-token"
 
 const getUser = (): Promise<User | null> => {
   return authenticatedFetch(`${API_URL}/auth/profile`, {
@@ -17,9 +17,7 @@ const getUser = (): Promise<User | null> => {
 
       return data
     })
-    .catch((error) => {
-      // Handle error here
-      console.error("Error fetching user data:", error);
+    .catch(() => {
       return null; // or handle the error as needed
     })
 }
@@ -28,11 +26,10 @@ export const useAuth = () => {
   const { data, isLoading, refetch } = useQuery({
     queryKey: [`get-user`],
     queryFn: () => getUser(),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    //initialData: getUserFromToken()
   })
 
-
-  console.log("User data:", data, isLoading)
   return {
     user: data,
     isLoading,
