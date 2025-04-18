@@ -1,8 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { getDepartments } from "./api/get-departments"
 import { useAuth } from "../../hooks/useAuth"
 import { useRouter } from "next/router"
-import { getReadingsForDepartment } from "./api/get-readings-for-department"
 import { Department } from "../../components/department"
 
 
