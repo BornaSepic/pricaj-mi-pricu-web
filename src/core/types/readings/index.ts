@@ -7,7 +7,10 @@ export const Reading = z.object({
   blocked: z.boolean(),
   date: z.string(),
   user: User,
-  department: Department
+  department: Department,
+  report: z.object({
+    
+  }).nullable(),
 })
 
 export type Reading = z.infer<typeof Reading>
