@@ -1,29 +1,30 @@
 import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
-import clsx from 'clsx';
-import { useAuth } from '../../hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { getReadingsForTimeframe } from './api/get-readings-for-timeframe';
 import { capitalizeWord } from '../../core/string/capitalize-word';
+import { ReadingCard } from '../reading-card';
+import { read } from 'fs';
 
-export const Hours: FC = () => {
-    const { user } = useAuth();
+interface Props {
+
+}
+
+export const PastReadings: FC<Props> = () => {
+    const [currentDate] = useState(new Date());
     const [date, setDate] = useState(new Date());
 
-    const startOfMonth = new Date(date.getFullYear(), date.getMonth());
-    const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const isCurrentMonthSelected = useMemo(() => {
+        return date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear();
+    }, [date, currentDate]);
 
-    const { data: allReadings } = useQuery({
-        queryKey: [`get-all-readings`],
-        queryFn: () => getReadingsForTimeframe(
-            new Date(2023, 0, 1),
-            new Date(2030, 11, 31)
-        ),
-        placeholderData: (prev) => prev || []
-    })
+    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const endOfMonth = isCurrentMonthSelected
+        ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1)
+        : new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
     const { data: readingsForTimeframe } = useQuery({
-        queryKey: [`get-readings-for-timeframe`, date],
+        queryKey: [`get-past-readings-for-timeframe`, date],
         queryFn: () => getReadingsForTimeframe(startOfMonth, endOfMonth),
         placeholderData: (prev) => prev || []
     })
@@ -38,40 +39,10 @@ export const Hours: FC = () => {
         setDate(nextMonth);
     }
 
-    const totalHoursForTimeframe = useMemo(() => {
-        if(!readingsForTimeframe) {
-            return 0;
-        }
-
-        return readingsForTimeframe.reduce((acc, reading) => {
-            const readingForUser = reading.readings.find(reading => user && user.id === reading.user.id);
-            if (readingForUser && readingForUser.report) {
-                return acc + 2;
-            }
-
-            return acc;
-        }, 0);
-    }, [readingsForTimeframe]);
-
-    const totalHours = useMemo(() => {
-        if(!allReadings) {
-            return 0;
-        }
-
-        return allReadings.reduce((acc, reading) => {
-            const readingForUser = reading.readings.find(reading => user && user.id === reading.user.id);
-            if (readingForUser && readingForUser.report) {
-                return acc + 2;
-            }
-
-            return acc;
-        }, 0);
-    }, [allReadings]);
-
     return (
         <div className={styles.card}>
             <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>Moji sati</h2>
+                <h2 className={styles.cardTitle}>Prošla čitanja</h2>
 
                 <div className={styles.monthSelector}>
                     <button
@@ -93,6 +64,7 @@ export const Hours: FC = () => {
                         {capitalizeWord(date.toLocaleString('hr-HR', { month: 'long' }))} {date.getFullYear()}.
                     </span>
                     <button
+                        disabled={isCurrentMonthSelected}
                         onClick={selectNextMonth}
                         className={styles.monthSelector__button}
                     >
@@ -112,11 +84,22 @@ export const Hours: FC = () => {
             </div>
 
             <div className={styles.cardContent}>
-                <p className={styles.cardContent__currentMonth}>{capitalizeWord(date.toLocaleString('hr-HR', { month: 'long' }))}: {totalHoursForTimeframe} sat(a/i)</p>
+                {readingsForTimeframe?.map((groupedReadings, index) => {
+                    const reading = groupedReadings.readings.find(reading => reading.department);
 
-                <p className={styles.cardContent__total}>
-                    Ukupno: {totalHours} sat(a/i)
-                </p>
+                    if (!reading) {
+                        return null;
+                    }
+
+                    return (
+                        <ReadingCard
+                            key={`${reading.date}-${index}`}
+                            department={reading.department}
+                            readings={groupedReadings.readings}
+                            date={groupedReadings.date}
+                        />
+                    )
+                })}
             </div>
         </div>
     );

@@ -1,6 +1,8 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { Hours } from "../components/hours";
+import { PastReadings } from "../components/past-readings";
+import { FutureReadings } from "../components/future-readings";
 
 export default function Home() {
   return (
@@ -11,6 +13,8 @@ export default function Home() {
       </Head>
 
       <Hours />
+      <FutureReadings />
+      <PastReadings />
 
     </div>
   );

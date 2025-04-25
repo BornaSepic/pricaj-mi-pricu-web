@@ -3,7 +3,7 @@ import { API_URL } from "../../../core/constants";
 import { ReadingsByDate } from "../../../core/types/readings";
 
 export const getReadingsForTimeframe = async (from: Date, to: Date) => {
-  const startOfMonth = `${from.getFullYear()}-${String(from.getMonth() + 1).padStart(2, '0')}-01`;
+  const startOfMonth = `${from.getFullYear()}-${String(from.getMonth() + 1).padStart(2, '0')}-${String(from.getDate()).padStart(2, '0')}`;
   const endOfMonth = `${to.getFullYear()}-${String(to.getMonth() + 1).padStart(2, '0')}-${String(to.getDate()).padStart(2, '0')}`;
 
   return authenticatedFetch(`${API_URL}/readings/user?from=${startOfMonth}&to=${endOfMonth}`, {

@@ -15,7 +15,7 @@ export const Reading = z.object({
 
 export type Reading = z.infer<typeof Reading>
 
-export const ReadingsPerDepartmentResponse = z.array(
+export const ReadingsByDate = z.array(
   z.object({
     date: z.string(),
     readings: z.array(Reading),
