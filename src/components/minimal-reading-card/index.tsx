@@ -4,45 +4,53 @@ import { Reading } from '../../core/types/readings';
 import clsx from 'clsx';
 import { useAuth } from '../../hooks/useAuth';
 import type { Department } from '../../core/types/department';
-import { signupForReading } from './api/signup-for-reading';
 
 interface Props {
     department: Department;
     date: string;
     readings: Reading[];
+    category: "past" | "future";
     onChange?: () => void;
 }
 
 export const MAX_READINGS_COUNT = 3 as const;
 
-export const ReadingCard: FC<Props> = ({
+export const MinimalReadingCard: FC<Props> = ({
     department,
     date: dateAsString,
     readings,
+    category,
     onChange
 }) => {
-    const { user } = useAuth()
+const { user } = useAuth()
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
 
     const date = new Date(dateAsString);
-    const isAvailable = readings.length < MAX_READINGS_COUNT;
+    const isItPast = category === 'past';
 
-    const handleSignupForReading = () => {
+    const handleCancelingReading = () => {
         if (!user) {
             return;
         }
         setIsLoading(true);
+        setIsLoading(false);
 
-        signupForReading(dateAsString, department.id)
+        /*cancelReading(dateAsString, department.id, user.id)
             .then(() => {
                 setIsLoading(false);
 
                 if(onChange) {
                     onChange();
                 }
-            })
+            })*/
+    }
+
+    const submitReport = () => {
+        if (!user) {
+            return;
+        }
     }
 
     return (
@@ -58,23 +66,14 @@ export const ReadingCard: FC<Props> = ({
                     </span>
                     <span>
                         ({date.toLocaleDateString('hr-HR', {
-                            year: undefined,
-                            month: undefined,
-                            day: undefined,
-                            weekday: 'long'
-                        })})
+                        year: undefined,
+                        month: undefined,
+                        day: undefined,
+                        weekday: 'long'
+                    })})
                     </span>
                 </div>
-                <div className={styles.slotInfo}>{readings.length}/{MAX_READINGS_COUNT}</div>
                 <div className={styles.department}>{department.name}</div>
-            </div>
-
-            <div className={styles.cardContent}>
-                <div className={styles.badgeContainer}>
-                    <div className={isAvailable ? styles.availableBadge : styles.unavailableBadge}>
-                        {isAvailable ? 'SLOBODNO' : 'ZAUZETO'}
-                    </div>
-                </div>
                 <button
                     onClick={() => setIsExpanded(!isExpanded)}
                     aria-label="Toggle details"
@@ -116,22 +115,35 @@ export const ReadingCard: FC<Props> = ({
                         })}
                     </div>
 
-                    {isAvailable && (
-                        <div className={styles.buttonContainer}>
+                    <div className={styles.buttonContainer}>
+                        {!isItPast ? (
                             <button
                                 onClick={() => {
-                                    handleSignupForReading()
+                                    handleCancelingReading();
                                 }}
                                 className={styles.registerButton}
                                 type="button"
                             >
-                                {isLoading ? 'UPISUJEMO TE' : 'UPIŠI ME'}
-                                <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
+                                {isLoading ? 'ISPISUJEMO TE' : 'ISPIŠI ME'}
+                                <svg className={styles.cancelIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/>
                                 </svg>
                             </button>
-                        </div>
-                    )}
+                        ) : (
+                            <button
+                                onClick={() => {
+                                    submitReport();
+                                }}
+                                className={styles.registerButton}
+                                type="button"
+                            >
+                                IZVJEŠĆE
+                                <svg className={styles.notepadIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
                 </div>
             )}
         </div>

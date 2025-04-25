@@ -3,6 +3,7 @@ import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
 import { getReadingsForTimeframe } from './api/get-readings-for-timeframe';
 import { ReadingCard } from '../reading-card';
+import {MinimalReadingCard} from "../minimal-reading-card";
 
 interface Props {
 
@@ -33,11 +34,12 @@ export const FutureReadings: FC<Props> = () => {
                     }
 
                     return (
-                        <ReadingCard
+                        <MinimalReadingCard
                             key={`${reading.date}-${index}`}
                             department={reading.department}
                             readings={groupedReadings.readings}
                             date={groupedReadings.date}
+                            category={"future"}
                         />
                     )
                 })}

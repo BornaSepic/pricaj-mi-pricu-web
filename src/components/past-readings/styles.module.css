@@ -6,7 +6,7 @@
     border: 1px solid var(--text-color, black);
     position: relative;
     background-color: var(--card-bg, #fff);
-    padding: 16px;
+    padding: 16px 16px 0;
 }
 
 .cardHeader {
