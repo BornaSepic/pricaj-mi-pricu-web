@@ -13,8 +13,11 @@ export default function Home() {
       </Head>
 
       <Hours />
+      <div className={styles.separatorLine}></div>
       <FutureReadings />
+      <div className={styles.separatorLine}></div>
       <PastReadings />
+      <div className={styles.separatorLine}></div>
 
     </div>
   );

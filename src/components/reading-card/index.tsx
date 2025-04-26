@@ -125,10 +125,14 @@ export const ReadingCard: FC<Props> = ({
                                 className={styles.registerButton}
                                 type="button"
                             >
-                                {isLoading ? 'UPISUJEMO TE' : 'UPIŠI ME'}
-                                <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
-                                </svg>
+                                {isLoading ? 'UPISUJEMO TE' : (
+                                    <>
+                                        UPIŠI ME
+                                        <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
+                                        </svg>
+                                    </>
+                                )}
                             </button>
                         </div>
                     )}

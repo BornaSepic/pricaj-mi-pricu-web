@@ -5,6 +5,7 @@ import { AuthProvider } from "../context/auth";
 import { Header } from "../components/header";
 import { ThemeProvider } from "../context/theme/ThemeContext";
 import styles from "../styles/Global.module.css"
+import {Footer} from "../components/footer";
 
 const queryClient = new QueryClient({})
 
@@ -17,6 +18,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                     <main className={styles.main__wrapper}>
                         <Component {...pageProps} />
                     </main>
+                    <Footer />
                 </ThemeProvider>
             </AuthProvider>
         </QueryClientProvider>

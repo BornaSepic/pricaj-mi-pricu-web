@@ -130,6 +130,13 @@
   height: 1em;
 }
 
+.separatorLine {
+  width: 60%;
+  height: 3px;
+  background-color: #e9d3d3;
+  margin: 0 auto 16px auto;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
