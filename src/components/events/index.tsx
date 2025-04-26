@@ -1,7 +1,7 @@
 import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
-import { getReadingsForTimeframe } from './api/get-events';
+import { getEvents } from './api/get-events';
 import { capitalizeWord } from '../../core/string/capitalize-word';
 import {MinimalReadingCard} from "../minimal-reading-card";
 
@@ -26,9 +26,9 @@ export const Events: FC<Props> = () => {
         ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1)
         : new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
-    const { data: readingsForTimeframe } = useQuery({
+    const { data: events } = useQuery({
         queryKey: [`get-past-readings-for-timeframe`, date],
-        queryFn: () => getReadingsForTimeframe(startOfMonth, endOfMonth),
+        queryFn: () => getEvents(),
         placeholderData: (prev) => prev || []
     })
 
@@ -92,8 +92,8 @@ export const Events: FC<Props> = () => {
                 </div>
             </div>
 
-            <div className={styles.cardContent}>
-                {readingsForTimeframe?.map((groupedReadings, index) => {
+            {/*<div className={styles.cardContent}>
+                {events?.map((groupedReadings, index) => {
                     const reading = groupedReadings.readings.find(reading => reading.department);
 
                     if (!reading) {
@@ -110,7 +110,7 @@ export const Events: FC<Props> = () => {
                         />
                     )
                 })}
-            </div>
+            </div>*/}
         </div>
     );
 }

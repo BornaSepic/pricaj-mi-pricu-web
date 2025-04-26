@@ -1,16 +1,13 @@
 import { authenticatedFetch } from "../../../core/authenticated-fetch";
 import { API_URL } from "../../../core/constants";
-import { ReadingsByDate } from "../../../core/types/readings";
+import {Events} from "../../../core/types/event";
 
-export const getReadingsForTimeframe = async (from: Date, to: Date) => {
-    const startOfMonth = `${from.getFullYear()}-${String(from.getMonth() + 1).padStart(2, '0')}-01`;
-    const endOfMonth = `${to.getFullYear()}-${String(to.getMonth() + 1).padStart(2, '0')}-${String(to.getDate()).padStart(2, '0')}`;
-
-    return authenticatedFetch(`${API_URL}/readings/user?from=${startOfMonth}&to=${endOfMonth}`, {
+export const getEvents = async () => {
+    return authenticatedFetch(`${API_URL}/events`, {
         method: "GET",
     }).then(res => res.json())
         .then(rawData => {
-            const { success, data, error } = ReadingsByDate.safeParse(rawData)
+            const { success, data, error } = Events.safeParse(rawData)
 
             if (!success) {
                 return null
