@@ -9,9 +9,14 @@
     padding: 8px 16px;
     background-color: white;
     border-top: 2px solid var(--primary-color, #D3302F);
+    transition: border-color 0.3s ease-in-out;
     width: 100%;
     height: 60px;
     overflow: visible;
+}
+
+.active {
+    border-color: #ededed;
 }
 
 .menuContainer {
@@ -113,12 +118,12 @@
     transition: transform 0.3s ease, opacity 0.3s ease, visibility 0s linear;
 }
 
-.slideUpMenu.menuClosing {
+/*.slideUpMenu.menuClosing {
     transform: translateY(100%);
     opacity: 0;
     visibility: visible;
     transition: transform 0.3s ease, opacity 0.3s ease, visibility 0s linear 0.3s;
-}
+}*/
 
 .menuContent {
     padding: 20px 16px;

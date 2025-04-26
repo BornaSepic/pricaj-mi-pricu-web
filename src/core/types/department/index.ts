@@ -6,3 +6,5 @@ export const Department = z.object({
 })
 
 export type Department = z.infer<typeof Department>
+
+export const Departments = z.array(Department)

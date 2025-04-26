@@ -49,6 +49,36 @@ export const Header = () => {
                     </Link>
                 )}
             </div>
+
+            {/* Mobile Menu */}
+            {menuOpen && (
+                <div className={styles.mobileMenu}>
+                    <nav className={styles.mobileNav}>
+                        <ul className={styles.navList}>
+                            <li className={styles.navItem}>
+                                <Link href="/" className={styles.navLink} onClick={toggleMenu}>
+                                    Naslovna
+                                </Link>
+                            </li>
+                            <li className={styles.navItem}>
+                                <Link href="/services" className={styles.navLink} onClick={toggleMenu}>
+                                    Odjeli
+                                </Link>
+                            </li>
+                            <li className={styles.navItem}>
+                                <Link href="/about" className={styles.navLink} onClick={toggleMenu}>
+                                    Događaji
+                                </Link>
+                            </li>
+                            <li className={styles.navItem}>
+                                <Link href="/contact" className={styles.navLink} onClick={toggleMenu}>
+                                    Portić - kontakt
+                                </Link>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            )}
         </header>
     );
 };

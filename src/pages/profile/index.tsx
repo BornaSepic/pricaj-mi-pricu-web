@@ -66,10 +66,10 @@ export default function ProfilePage() {
             // Refetch user data to update the state across the app
             await refetch()
             setIsEditing(false)
-            setSuccess('Profile updated successfully')
+            setSuccess('Uspješno ste ažurirali svoj profil.')
         } catch (err: any) {
             console.error('Error updating profile:', err)
-            setError(err.message || 'Failed to update profile. Please try again.')
+            setError(err.message || 'Došlo je do pogreške prilikom ažuriranja profila.')
         } finally {
             setIsSaving(false)
         }
@@ -78,7 +78,7 @@ export default function ProfilePage() {
     if (isLoading) {
         return (
             <div className={styles.profileContainer}>
-                <div className={styles.loadingSpinner}>Loading profile...</div>
+                <div className={styles.loadingSpinner}>Pričekajte...</div>
             </div>
         )
     }
@@ -87,7 +87,7 @@ export default function ProfilePage() {
         return (
             <div className={styles.profileContainer}>
                 <div className={styles.errorMessage}>
-                    You need to be logged in to view this page.
+                    Molimo vas da se prijavite kako biste pristupili ovoj stranici.
                     <div className={styles.linkContainer}>
                         <Link href="/auth/login" className={styles.link}>Log in</Link>
                     </div>
@@ -99,7 +99,7 @@ export default function ProfilePage() {
     return (
         <div className={styles.profileContainer}>
             <h1 className={styles.profileTitle}>
-                {isEditing ? 'Edit Profile' : 'Your Profile'}
+                {isEditing ? 'Uređivanje profila' : 'Profil'}
             </h1>
 
             <ThemePicker />
@@ -117,17 +117,17 @@ export default function ProfilePage() {
                     // View mode
                     <div className={styles.profileDetails}>
                         <div className={styles.profileField}>
-                            <label className={styles.fieldLabel}>Name</label>
+                            <label className={styles.fieldLabel}>Ime i prezime</label>
                             <div className={styles.fieldValue}>{user.name}</div>
                         </div>
 
                         <div className={styles.profileField}>
-                            <label className={styles.fieldLabel}>Email</label>
+                            <label className={styles.fieldLabel}>E-mail</label>
                             <div className={styles.fieldValue}>{user.email}</div>
                         </div>
 
                         <div className={styles.profileField}>
-                            <label className={styles.fieldLabel}>Seniority</label>
+                            <label className={styles.fieldLabel}>Status</label>
                             <div className={styles.fieldValue}>{user.seniority}</div>
                         </div>
                     </div>
@@ -135,7 +135,7 @@ export default function ProfilePage() {
                     // Edit mode
                     <div className={styles.profileForm}>
                         <div className={styles.formGroup}>
-                            <label htmlFor="name" className={styles.formLabel}>Name</label>
+                            <label htmlFor="name" className={styles.formLabel}>Ime i prezime</label>
                             <input
                                 type="text"
                                 id="name"
@@ -147,7 +147,7 @@ export default function ProfilePage() {
                         </div>
 
                         <div className={styles.formGroup}>
-                            <label htmlFor="email" className={styles.formLabel}>Email</label>
+                            <label htmlFor="email" className={styles.formLabel}>E-mail</label>
                             <input
                                 type="email"
                                 id="email"
@@ -159,7 +159,7 @@ export default function ProfilePage() {
                         </div>
 
                         <div className={styles.formGroup}>
-                            <label htmlFor="seniority" className={styles.formLabel}>Seniority</label>
+                            <label htmlFor="seniority" className={styles.formLabel}>Status</label>
                             <select
                                 id="seniority"
                                 value={seniority}
@@ -185,13 +185,13 @@ export default function ProfilePage() {
                                 onClick={() => setIsEditing(true)}
                                 className={styles.editButton}
                             >
-                                Edit Profile
+                                Uredi Profil
                             </button>
                             <button
                                 /*onClick={logout}*/
                                 className={styles.logoutButton}
                             >
-                                Logout
+                                Odjava
                             </button>
                         </>
                     ) : (
@@ -201,7 +201,7 @@ export default function ProfilePage() {
                                 disabled={isSaving}
                                 className={styles.saveButton}
                             >
-                                {isSaving ? 'Saving...' : 'Save Changes'}
+                                {isSaving ? 'Spremanje...' : 'Spremi'}
                             </button>
                             <button
                                 onClick={() => {
@@ -212,7 +212,7 @@ export default function ProfilePage() {
                                 disabled={isSaving}
                                 className={styles.cancelButton}
                             >
-                                Cancel
+                                Odustani
                             </button>
                         </>
                     )}
@@ -220,7 +220,7 @@ export default function ProfilePage() {
             </div>
 
             <div className={styles.profileNavigation}>
-                <Link href="/" className={styles.link}>Back to Home</Link>
+                <Link href="/" className={styles.link}>Natrag na početnu</Link>
             </div>
         </div>
     )

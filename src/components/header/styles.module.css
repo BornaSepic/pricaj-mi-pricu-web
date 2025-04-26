@@ -73,3 +73,64 @@
 .loginLink:hover {
     color: #4b5563;
 }
+
+/* Mobile Menu Styles */
+.mobileMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    z-index: 2;
+    border-top: 1px solid #cfcfcf;
+}
+
+.mobileNav {
+    padding: 16px;
+}
+
+.navList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navItem {
+    margin-bottom: 16px;
+}
+
+.navItem:last-child {
+    margin-bottom: 0;
+}
+
+.navLink {
+    display: block;
+    padding: 8px 0;
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.navLink:hover {
+    color: #4b5563;
+}
+
+/* Animation for menu appearance */
+.mobileMenu {
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

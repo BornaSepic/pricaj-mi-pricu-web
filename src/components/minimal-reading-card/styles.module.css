@@ -1,6 +1,6 @@
 .card {
     font-size: 14px;
-    width: 110%;
+    width: calc(100% + 32px);
     margin-bottom: 16px;
     border-radius: 8px;
     overflow: hidden;
