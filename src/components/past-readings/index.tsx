@@ -15,6 +15,10 @@ export const PastReadings: FC<Props> = () => {
     const [currentDate] = useState(new Date());
     const [date, setDate] = useState(new Date());
 
+    // Check if selected month is current month
+    const isCurrentMonth = date.getMonth() === currentDate.getMonth() &&
+        date.getFullYear() === currentDate.getFullYear();
+
     const isCurrentMonthSelected = useMemo(() => {
         return date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear();
     }, [date, currentDate]);
@@ -64,23 +68,29 @@ export const PastReadings: FC<Props> = () => {
                     <span className={styles.monthSelector__label}>
                         {capitalizeWord(date.toLocaleString('hr-HR', { month: 'long' }))} {date.getFullYear()}.
                     </span>
-                    <button
-                        disabled={isCurrentMonthSelected}
-                        onClick={selectNextMonth}
-                        className={styles.monthSelector__button}
-                    >
-                        <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clipPath="url(#clip0_4_174)">
-                                <path d="M7.70704 8.70626C8.09766 8.31563 8.09766 7.68126 7.70704 7.29063L1.70704 1.29063C1.31641 0.900005 0.682037 0.900005 0.291412 1.29063C-0.0992126 1.68126 -0.0992126 2.31563 0.291412 2.70626L5.58516 8.00001L0.294537 13.2938C-0.0960879 13.6844 -0.0960879 14.3188 0.294537 14.7094C0.685162 15.1 1.31954 15.1 1.71016 14.7094L7.71016 8.70938L7.70704 8.70626Z" fill="#563327" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_4_174">
-                                    <rect x="-0.0015564" y="16.0023" width="16.0047" height="8.00156" rx="4.00078" transform="rotate(-90 -0.0015564 16.0023)" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-
-                    </button>
+                    {!isCurrentMonth && (
+                        <button
+                            disabled={isCurrentMonthSelected}
+                            onClick={selectNextMonth}
+                            className={styles.monthSelector__button}
+                        >
+                            <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clipPath="url(#clip0_4_174)">
+                                    <path d="M7.70704 8.70626C8.09766 8.31563 8.09766 7.68126 7.70704 7.29063L1.70704 1.29063C1.31641 0.900005 0.682037 0.900005 0.291412 1.29063C-0.0992126 1.68126 -0.0992126 2.31563 0.291412 2.70626L5.58516 8.00001L0.294537 13.2938C-0.0960879 13.6844 -0.0960879 14.3188 0.294537 14.7094C0.685162 15.1 1.31954 15.1 1.71016 14.7094L7.71016 8.70938L7.70704 8.70626Z" fill="#563327" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_4_174">
+                                        <rect x="-0.0015564" y="16.0023" width="16.0047" height="8.00156" rx="4.00078" transform="rotate(-90 -0.0015564 16.0023)" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                        </button>
+                    )}
+                    {isCurrentMonth && (
+                        <div className={styles.monthSelector__button} style={{ visibility: 'hidden' }}>
+                            {/* Empty space to maintain layout */}
+                        </div>
+                    )}
                 </div>
             </div>
 

@@ -1,15 +1,17 @@
 .footer {
-    position: sticky;
+    position: fixed;
     bottom: 0;
-    z-index: 3;
+    z-index: 10;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     padding: 8px 16px;
     background-color: white;
-    border-bottom: 1px solid #e5e7eb;
+    border-top: 2px solid var(--primary-color, #D3302F);
     width: 100%;
+    height: 60px;
+    overflow: visible;
 }
 
 .menuContainer {
@@ -50,6 +52,15 @@
     position: relative;
     top: -20px;
     background-color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    z-index: 11;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.logoContainer.active {
+    background-color: #f8f8f8;
+    transform: rotate(45deg);
 }
 
 .userContainer {
@@ -77,4 +88,77 @@
 
 .loginLink:hover {
     color: #4b5563;
+}
+
+.slideUpMenu {
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #e5e7eb;
+    z-index: 9;
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.slideUpMenu.menuOpen {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0s linear;
+}
+
+.slideUpMenu.menuClosing {
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: visible;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.menuContent {
+    padding: 20px 16px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.menuContent ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.menuContent li {
+    font-size: 16px;
+}
+
+.menuContent a,
+.menuContent button {
+    color: #1f2937;
+    text-decoration: none;
+    font-weight: 500;
+    display: block;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.menuContent a:hover,
+.menuContent button:hover {
+    background-color: #f3f4f6;
 }

@@ -17,7 +17,7 @@ const ThemePicker: React.FC = () => {
 
     const getThemeDisplayName = (themeKey: ThemeType): string => {
         switch (themeKey) {
-            case 'red-yellow': return 'Crimson';
+            case 'red-yellow': return 'Default';
             case 'black-white': return 'Monochrome';
             case 'blue-green': return 'Ocean';
             case 'purple-pink': return 'Berry';
