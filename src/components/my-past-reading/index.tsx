@@ -1,61 +1,54 @@
 import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
-import { getEvents } from './api/get-events';
-import { capitalizeWord } from '../../core/string/capitalize-word';
+import { getPastReadings } from './api/get-past-readings';
 import {MinimalReadingCard} from "../minimal-reading-card";
-import Link from "next/link";
 
 interface Props {
 
 }
 
-export const Events: FC<Props> = () => {
+export const PastReadingsPage: FC<Props> = () => {
     const [currentDate] = useState(new Date());
     const [date, setDate] = useState(new Date());
 
-    // Check if selected month is current month
-    const isCurrentMonth = date.getMonth() === currentDate.getMonth() &&
-        date.getFullYear() === currentDate.getFullYear();
+    // Check if selected year is current year
+    const isCurrentYear = date.getFullYear() === currentDate.getFullYear();
 
-    const isCurrentMonthSelected = useMemo(() => {
-        return date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear();
+    const isCurrentYearSelected = useMemo(() => {
+        return date.getFullYear() === currentDate.getFullYear();
     }, [date, currentDate]);
 
-    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const endOfMonth = isCurrentMonthSelected
+    const startOfYear = new Date(date.getFullYear(), 0, 1);
+    const endOfYear = isCurrentYearSelected
         ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1)
-        : new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        : new Date(date.getFullYear(), 11, 31);
 
-    const { data: events } = useQuery({
-        queryKey: [`get-past-readings-for-timeframe`, date],
-        queryFn: () => getEvents(),
+    const { data: readingsForTimeframe } = useQuery({
+        queryKey: [`get-past-readings`, date],
+        queryFn: () => getPastReadings(startOfYear, endOfYear),
         placeholderData: (prev) => prev || []
     })
 
-    const selectPreviousMonth = () => {
-        const previousMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
-        setDate(previousMonth);
+    const selectPreviousYear = () => {
+        const previousYear = new Date(date.getFullYear() - 1, 0, 1);
+        setDate(previousYear);
     }
 
-    const selectNextMonth = () => {
-        const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
-        setDate(nextMonth);
+    const selectNextYear = () => {
+        const nextYear = new Date(date.getFullYear() + 1, 0, 1);
+        setDate(nextYear);
     }
 
     return (
         <div className={styles.card}>
             <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>
-                    <Link href="/events">
-                        Događaji
-                    </Link>
-                </h2>
+                <h2 className={styles.cardTitle}>Prošla čitanja</h2>
 
-                <div className={styles.monthSelector}>
+                <div className={styles.yearSelector}>
                     <button
-                        onClick={selectPreviousMonth}
-                        className={styles.monthSelector__button}
+                        onClick={selectPreviousYear}
+                        className={styles.yearSelector__button}
                     >
                         <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clipPath="url(#clip0_4_171)">
@@ -68,14 +61,14 @@ export const Events: FC<Props> = () => {
                             </defs>
                         </svg>
                     </button>
-                    <span className={styles.monthSelector__label}>
-                        {capitalizeWord(date.toLocaleString('hr-HR', { month: 'long' }))} {date.getFullYear()}.
+                    <span className={styles.yearSelector__label}>
+                        {date.getFullYear()}.
                     </span>
-                    {!isCurrentMonth && (
+                    {!isCurrentYear && (
                         <button
-                            disabled={isCurrentMonthSelected}
-                            onClick={selectNextMonth}
-                            className={styles.monthSelector__button}
+                            disabled={isCurrentYearSelected}
+                            onClick={selectNextYear}
+                            className={styles.yearSelector__button}
                         >
                             <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clipPath="url(#clip0_4_174)">
@@ -89,16 +82,16 @@ export const Events: FC<Props> = () => {
                             </svg>
                         </button>
                     )}
-                    {isCurrentMonth && (
-                        <div className={styles.monthSelector__button} style={{ visibility: 'hidden' }}>
+                    {isCurrentYear && (
+                        <div className={styles.yearSelector__button} style={{ visibility: 'hidden' }}>
                             {/* Empty space to maintain layout */}
                         </div>
                     )}
                 </div>
             </div>
 
-            {/*<div className={styles.cardContent}>
-                {events?.map((groupedReadings, index) => {
+            <div className={styles.cardContent}>
+                {readingsForTimeframe?.map((groupedReadings, index) => {
                     const reading = groupedReadings.readings.find(reading => reading.department);
 
                     if (!reading) {
@@ -115,7 +108,7 @@ export const Events: FC<Props> = () => {
                         />
                     )
                 })}
-            </div>*/}
+            </div>
         </div>
     );
 }

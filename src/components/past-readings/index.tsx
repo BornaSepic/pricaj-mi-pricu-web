@@ -6,6 +6,7 @@ import { capitalizeWord } from '../../core/string/capitalize-word';
 import { ReadingCard } from '../reading-card';
 import { read } from 'fs';
 import {MinimalReadingCard} from "../minimal-reading-card";
+import Link from "next/link";
 
 interface Props {
 
@@ -47,7 +48,11 @@ export const PastReadings: FC<Props> = () => {
     return (
         <div className={styles.card}>
             <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>Prošla čitanja</h2>
+                <h2 className={styles.cardTitle}>
+                    <Link href="/my-past-readings">
+                        Prošla čitanja
+                    </Link>
+                </h2>
 
                 <div className={styles.monthSelector}>
                     <button

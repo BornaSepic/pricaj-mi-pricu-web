@@ -113,6 +113,10 @@
     font-weight: 500;
     text-decoration: none;
     transition: color 0.2s ease;
+
+    background-color: white;
+    border: none;
+    cursor: pointer;
 }
 
 .navLink:hover {

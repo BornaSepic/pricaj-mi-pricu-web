@@ -1,4 +1,5 @@
 import { useAuth } from "../../hooks/useAuth";
+import { useMenu } from "../../context/menu/MenuContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -6,6 +7,7 @@ import styles from "./styles.module.css";
 
 export const Header = () => {
     const { user } = useAuth();
+    const { toggleFooterMenu } = useMenu();
     const [menuOpen, setMenuOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -61,18 +63,25 @@ export const Header = () => {
                                 </Link>
                             </li>
                             <li className={styles.navItem}>
-                                <Link href="/services" className={styles.navLink} onClick={toggleMenu}>
+                                <button
+                                    className={styles.navLink}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        toggleFooterMenu();
+                                        toggleMenu();
+                                    }}
+                                >
                                     Odjeli
-                                </Link>
+                                </button>
                             </li>
                             <li className={styles.navItem}>
-                                <Link href="/about" className={styles.navLink} onClick={toggleMenu}>
+                                <Link href="/events" className={styles.navLink} onClick={toggleMenu}>
                                     Događaji
                                 </Link>
                             </li>
                             <li className={styles.navItem}>
                                 <Link href="/contact" className={styles.navLink} onClick={toggleMenu}>
-                                    Portić - kontakt
+                                    Portić kontakt
                                 </Link>
                             </li>
                         </ul>
