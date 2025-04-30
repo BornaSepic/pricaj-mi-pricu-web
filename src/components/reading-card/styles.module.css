@@ -10,10 +10,19 @@
     padding: 8px 16px;
 }
 
-.cardHeader {
+.cardHeaderGrid {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--card-background, #faa71b);
+    /* amber-400 */
+}
+
+.cardHeaderFlex {
+    width: 100%;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: var(--card-background, #faa71b);

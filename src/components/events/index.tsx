@@ -28,7 +28,7 @@ export const Events: FC<Props> = () => {
         : new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
     const { data: events } = useQuery({
-        queryKey: [`get-past-readings-for-timeframe`, date],
+        queryKey: [`get-events`, date],
         queryFn: () => getEvents(),
         placeholderData: (prev) => prev || []
     })
@@ -97,25 +97,21 @@ export const Events: FC<Props> = () => {
                 </div>
             </div>
 
-            {/*<div className={styles.cardContent}>
-                {events?.map((groupedReadings, index) => {
-                    const reading = groupedReadings.readings.find(reading => reading.department);
-
-                    if (!reading) {
-                        return null;
-                    }
-
+            <div className={styles.cardContent}>
+                {events?.map((item) => {
                     return (
                         <MinimalReadingCard
-                            key={`${reading.date}-${index}`}
-                            department={reading.department}
-                            readings={groupedReadings.readings}
-                            date={groupedReadings.date}
-                            category={"past"}
+                            department={{ id: 1, name: item.title }}
+                            key={item.id}
+                            date={item.date}
+                            timeframe={"future"}
+                            category={"event"}
+                            readings={[]}
+                            onChange={() => {}}
                         />
-                    )
+                    );
                 })}
-            </div>*/}
+            </div>
         </div>
     );
 }

@@ -39,7 +39,8 @@ export const FutureReadings: FC<Props> = () => {
                             department={reading.department}
                             readings={groupedReadings.readings}
                             date={groupedReadings.date}
-                            category={"future"}
+                            timeframe={"future"}
+                            category={"reading"}
                         />
                     )
                 })}

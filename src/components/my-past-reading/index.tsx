@@ -104,7 +104,8 @@ export const PastReadingsPage: FC<Props> = () => {
                             department={reading.department}
                             readings={groupedReadings.readings}
                             date={groupedReadings.date}
-                            category={"past"}
+                            timeframe={"past"}
+                            category={"reading"}
                         />
                     )
                 })}

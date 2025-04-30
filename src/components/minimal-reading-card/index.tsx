@@ -9,7 +9,8 @@ interface Props {
     department: Department;
     date: string;
     readings: Reading[];
-    category: "past" | "future";
+    timeframe: "past" | "future";
+    category: "reading" | "event"
     onChange?: () => void;
 }
 
@@ -19,6 +20,7 @@ export const MinimalReadingCard: FC<Props> = ({
     department,
     date: dateAsString,
     readings,
+    timeframe,
     category,
     onChange
 }) => {
@@ -28,7 +30,8 @@ export const MinimalReadingCard: FC<Props> = ({
     const [isLoading, setIsLoading] = useState(false)
 
     const date = new Date(dateAsString);
-    const isItPast = category === 'past';
+    const isPast = timeframe === 'past';
+    const isEvent = category === 'event';
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -93,11 +96,11 @@ export const MinimalReadingCard: FC<Props> = ({
                     </span>
                     <span>
                         ({date.toLocaleDateString('hr-HR', {
-                        year: undefined,
-                        month: undefined,
-                        day: undefined,
-                        weekday: 'long'
-                    })})
+                            year: undefined,
+                            month: undefined,
+                            day: undefined,
+                            weekday: isEvent ? 'short' : 'long'
+                        })})
                     </span>
                 </div>
                 <div className={styles.department}>{department.name}</div>
@@ -141,7 +144,7 @@ export const MinimalReadingCard: FC<Props> = ({
                     </div>
 
                     <div className={styles.buttonContainer}>
-                        {!isItPast ? (
+                        {!isPast ? (
                             <button
                                 onClick={handleCancelingReading}
                                 className={styles.registerButton}
