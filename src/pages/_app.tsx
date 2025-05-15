@@ -8,10 +8,20 @@ import styles from "../styles/Global.module.css";
 import { Footer } from "../components/footer";
 import { MenuProvider, useMenu } from "../context/menu/MenuContext";
 import clsx from "clsx";
+import { useEffect } from "react";
 
 // Create a wrapper component that will handle the overlay
 const AppContent = ({ Component, pageProps }: { Component: any, pageProps: any }) => {
     const { footerMenuOpen } = useMenu();
+
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('/sw.js')
+                .then((reg) => console.log('Service Worker registered'))
+                .catch((err) => console.error('Service Worker registration failed', err));
+        }
+    }, []);
 
     return (
         <>
