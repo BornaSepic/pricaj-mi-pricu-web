@@ -1,3 +1,5 @@
+'use client'
+
 import {keepPreviousData, useQuery} from "@tanstack/react-query"
 import { authenticatedFetch } from "../core/authenticated-fetch"
 import { API_URL } from "../core/constants"

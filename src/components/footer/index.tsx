@@ -1,3 +1,5 @@
+'use client'
+
 import { useAuth } from "../../hooks/useAuth";
 import { useMenu } from "../../context/menu/MenuContext";
 import { useQuery } from "@tanstack/react-query";

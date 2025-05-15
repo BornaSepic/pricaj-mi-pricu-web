@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth';
-import { useRouter } from 'next/router';
+import { useRouter, usePathname } from 'next/navigation';
 
 type Props = {
   children: React.ReactNode;
@@ -11,13 +11,14 @@ const PUBLIC_ROUTES = ['/auth/login', '/auth/register', '/auth/forgot-password']
 export const AuthProvider: FC<Props> = ({ children }) => {
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     if (isLoading) return;
 
-    const isPublicRoute = PUBLIC_ROUTES.includes(router.pathname);
+    const isPublicRoute = pathname && PUBLIC_ROUTES.includes(pathname);
 
     if (!user && !isPublicRoute) {
       router.replace('/auth/login');
