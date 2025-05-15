@@ -1,3 +1,5 @@
+'use client'
+
 import { useQuery } from "@tanstack/react-query"
 import { FC } from "react"
 import { getReadingsForDepartment } from "./api/get-readings-for-department"
