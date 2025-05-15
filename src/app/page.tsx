@@ -5,10 +5,7 @@ import { FutureReadings } from '../components/future-readings';
 import { PastReadings } from '../components/past-readings';
 import { Events } from '../components/events';
 
-export type Props = {
-}
-
-const Home: FC<Props> = async () => {
+const Home = async () => {
   return (
     <div className={styles.container}>
       <Hours />

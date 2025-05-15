@@ -1,34 +1,7 @@
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { useAuth } from '../../hooks/useAuth'
 import styles from './contact.module.css'
 
 export default function ContactPage() {
-    const router = useRouter()
-    const { user, isLoading, refetch } = useAuth()
-
-    if (isLoading) {
-        return (
-            <div className={styles.profileContainer}>
-                <div className={styles.loadingSpinner}>Pričekajte...</div>
-            </div>
-        )
-    }
-
-    if (!user) {
-        return (
-            <div className={styles.profileContainer}>
-                <div className={styles.errorMessage}>
-                    Molimo vas da se prijavite kako biste pristupili ovoj stranici.
-                    <div className={styles.linkContainer}>
-                        <Link href="/auth/login" className={styles.link}>Log in</Link>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
     return (
         <div className={styles.profileContainer}>
             <h1 className={styles.profileTitle}>
@@ -50,7 +23,7 @@ export default function ContactPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Udruga portić
+                                Udruga Portić
                             </a>
                         </div>
                     </div>

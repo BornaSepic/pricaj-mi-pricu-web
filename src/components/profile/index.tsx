@@ -1,12 +1,14 @@
+'use client'
+
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { API_URL } from '../../core/constants'
 import { useAuth } from '../../hooks/useAuth'
 import styles from './profile.module.css'
 import ThemePicker from "../../components/theme/ThemePicker";
 
-export default function ProfilePage() {
+export const ProfilePage = () => {
     const router = useRouter()
     const { user, isLoading, refetch } = useAuth()
     const [isEditing, setIsEditing] = useState(false)

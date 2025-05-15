@@ -1,14 +1,12 @@
+'use client'
+
 import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
 import { getPastReadings } from './api/get-past-readings';
 import {MinimalReadingCard} from "../minimal-reading-card";
 
-interface Props {
-
-}
-
-export const PastReadingsPage: FC<Props> = () => {
+export const PastReadingsPage: FC = () => {
     const [currentDate] = useState(new Date());
     const [date, setDate] = useState(new Date());
 

@@ -1,6 +1,8 @@
+'use client'
+
 import { FormEvent, useState } from 'react'
 import { API_URL } from '../../core/constants'
-import styles from './auth.module.css'
+import styles from './styles.module.css'
 import Link from "next/link";
 
 export default function ForgotPasswordPage() {
