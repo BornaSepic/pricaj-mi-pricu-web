@@ -9,6 +9,7 @@ import { Footer } from "../components/footer";
 import { MenuProvider, useMenu } from "../context/menu/MenuContext";
 import clsx from "clsx";
 import { useEffect } from "react";
+import { AppInstallPrompt } from "../components/app-install-prompt";
 
 // Create a wrapper component that will handle the overlay
 const AppContent = ({ Component, pageProps }: { Component: any, pageProps: any }) => {
@@ -39,6 +40,7 @@ const AppContent = ({ Component, pageProps }: { Component: any, pageProps: any }
                 <Component {...pageProps} />
             </main>
             <Footer />
+            <AppInstallPrompt />
         </>
     );
 };
