@@ -2,8 +2,6 @@ self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open('my-cache').then((cache) => {
       return cache.addAll([
-        '/',
-        '/index.html',
         '/manifest.json',
         '/offline.html', // Offline access page
         // Add other static files here

@@ -18,7 +18,8 @@ export const Footer = () => {
     const { data: departments } = useQuery<Department[]>({
         queryKey: [`get-departments`],
         queryFn: () => getDepartments(),
-        placeholderData: (prev) => prev || []
+        placeholderData: (prev) => prev || [],
+        enabled: Boolean(user),
     });
 
     if (!user || !departments) {
