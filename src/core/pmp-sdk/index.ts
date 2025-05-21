@@ -1,4 +1,5 @@
 import { _createReading } from "./create-reading";
+import { _deleteReading } from "./delete-reading";
 import { _getDepartment } from "./get-department";
 import { _getDepartments } from "./get-departments";
 import { _getEvents } from "./get-events";
@@ -15,5 +16,6 @@ export const pmpSdk = {
   getReadingsForDepartment: _getReadingsForDepartment,
   getReadingsForTimeframe: _getReadingsForTimeframe,
   getEvents: _getEvents,
-  createReading: _createReading
+  createReading: _createReading,
+  deleteReading: _deleteReading,
 }

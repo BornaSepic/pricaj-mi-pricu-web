@@ -62,3 +62,4 @@ export const ReadingsByDate = z.array(
 )
 
 export const ReadingCreateResponse = z.object({})
+export const ReadingDeleteResponse = z.object({})

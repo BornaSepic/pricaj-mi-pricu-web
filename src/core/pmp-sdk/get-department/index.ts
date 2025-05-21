@@ -1,6 +1,6 @@
 import { Department } from "../types"
-import { get } from "../utilities"
+import { _get } from "../utilities"
 
 export const _getDepartment = async (id: string): Promise<Department | null> => {
-  return get(`/departments/${id}`, Department)
+  return _get(`/departments/${id}`, Department)
 }

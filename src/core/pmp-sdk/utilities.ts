@@ -2,7 +2,31 @@ import { z, ZodTypeAny } from "zod";
 import { authenticatedFetch } from "../authenticated-fetch";
 import { API_URL } from "../constants";
 
-export const post = async <Z extends ZodTypeAny>(path: string, body: unknown, schema: Z): Promise<z.infer<Z>> => {
+export const _delete = async <Z extends ZodTypeAny>(path: string, schema: Z): Promise<z.infer<Z>> => {
+  const response = await authenticatedFetch(`${API_URL}${path}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    console.error('Failed to post data', path, response.statusText);
+    throw new Error('Failed to post data');
+  }
+
+  const rawData = await response.json()
+
+  const { success, data, error } = schema.safeParse(rawData)
+
+  if (!success) {
+    console.error("Failed to parse data", path, error)
+  }
+
+  return data
+}
+
+export const _post = async <Z extends ZodTypeAny>(path: string, body: unknown, schema: Z): Promise<z.infer<Z>> => {
   const response = await authenticatedFetch(`${API_URL}${path}`, {
     method: 'POST',
     headers: {
@@ -27,7 +51,7 @@ export const post = async <Z extends ZodTypeAny>(path: string, body: unknown, sc
   return data
 }
 
-export const get = async <Z extends ZodTypeAny>(path: string, schema: Z): Promise<z.infer<Z>> => {
+export const _get = async <Z extends ZodTypeAny>(path: string, schema: Z): Promise<z.infer<Z>> => {
   const response = await authenticatedFetch(`${API_URL}${path}`, {
     method: "GET",
     headers: {

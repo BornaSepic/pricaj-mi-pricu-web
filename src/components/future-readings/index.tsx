@@ -9,7 +9,7 @@ import { pmpSdk } from '../../core/pmp-sdk';
 export const FutureReadings: FC = () => {
     const [currentDate] = useState(new Date());
 
-    const { data: readingsForTimeframe } = useQuery({
+    const { data: readingsForTimeframe, refetch } = useQuery({
         queryKey: [`get-future-readings`],
         queryFn: () => pmpSdk.getReadingsForTimeframe(currentDate, new Date(2030, 11, 31)),
         placeholderData: (prev) => prev || []
@@ -37,6 +37,7 @@ export const FutureReadings: FC = () => {
                             date={groupedReadings.date}
                             timeframe={"future"}
                             category={"reading"}
+                            onChange={() => refetch()}
                         />
                     )
                 })}

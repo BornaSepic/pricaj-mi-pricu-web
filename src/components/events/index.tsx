@@ -4,7 +4,7 @@ import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
 import { capitalizeWord } from '../../core/string/capitalize-word';
-import {MinimalReadingCard} from "../minimal-reading-card";
+import { MinimalReadingCard } from "../minimal-reading-card";
 import Link from "next/link";
 import { pmpSdk } from '../../core/pmp-sdk';
 
@@ -20,12 +20,7 @@ export const Events: FC = () => {
         return date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear();
     }, [date, currentDate]);
 
-    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const endOfMonth = isCurrentMonthSelected
-        ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1)
-        : new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-    const { data: events } = useQuery({
+    const { data: events, refetch } = useQuery({
         queryKey: [`get-events`, date],
         queryFn: () => pmpSdk.getEvents(),
         placeholderData: (prev) => prev || []
@@ -105,7 +100,7 @@ export const Events: FC = () => {
                             timeframe={"future"}
                             category={"event"}
                             readings={[]}
-                            onChange={() => {}}
+                            onChange={() => refetch()}
                         />
                     );
                 })}

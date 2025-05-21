@@ -1,6 +1,6 @@
 import { Events } from "../types";
-import { get } from "../utilities";
+import { _get } from "../utilities";
 
 export const _getEvents = async () => {
-  return get(`/events`, Events)
+  return _get(`/events`, Events)
 }

@@ -4,7 +4,7 @@ import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
 import { capitalizeWord } from '../../core/string/capitalize-word';
-import {MinimalReadingCard} from "../minimal-reading-card";
+import { MinimalReadingCard } from "../minimal-reading-card";
 import Link from "next/link";
 import { pmpSdk } from '../../core/pmp-sdk';
 
@@ -25,7 +25,7 @@ export const PastReadings: FC = () => {
         ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1)
         : new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
-    const { data: readingsForTimeframe } = useQuery({
+    const { data: readingsForTimeframe, refetch } = useQuery({
         queryKey: [`get-past-readings-for-timeframe`, date],
         queryFn: () => pmpSdk.getReadingsForTimeframe(startOfMonth, endOfMonth),
         placeholderData: (prev) => prev || []
@@ -111,6 +111,7 @@ export const PastReadings: FC = () => {
                             date={groupedReadings.date}
                             timeframe={"past"}
                             category={"reading"}
+                            onChange={() => refetch()}
                         />
                     )
                 })}

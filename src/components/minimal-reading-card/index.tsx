@@ -3,6 +3,8 @@ import styles from './styles.module.css';
 import clsx from 'clsx';
 import { useAuth } from '../../hooks/useAuth';
 import { Department, Reading } from '../../core/pmp-sdk/types';
+import { pmpSdk } from '../../core/pmp-sdk';
+import { useQueryClient } from '@tanstack/react-query';
 
 export type Props = {
     department: Department;
@@ -23,6 +25,8 @@ export const MinimalReadingCard: FC<Props> = ({
     category,
     onChange
 }) => {
+    const queryClient = useQueryClient()
+
     const { user } = useAuth()
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -44,25 +48,23 @@ export const MinimalReadingCard: FC<Props> = ({
     };
 
     const handleCancelingReading = (e: React.MouseEvent) => {
-        // Stop event propagation to prevent card expansion when clicking the button
-        e.stopPropagation();
+        const readingToCancel = readings.find(reading => reading.user.id === user?.id);
 
-        if (!user) {
+        if (!readingToCancel) {
             return;
         }
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 2000);
 
-        /*cancelReading(dateAsString, department.id, user.id)
+        setIsLoading(true);
+
+        pmpSdk.deleteReading(readingToCancel.id)
             .then(() => {
                 setIsLoading(false);
-
-                if(onChange) {
+                if (onChange) {
                     onChange();
                 }
-            })*/
+
+                queryClient.invalidateQueries({ queryKey: ['get-future-readings'] })
+            })
     }
 
     const submitReport = (e: React.MouseEvent) => {
@@ -153,7 +155,7 @@ export const MinimalReadingCard: FC<Props> = ({
                                     <>
                                         ISPIŠI ME
                                         <svg className={styles.cancelIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/>
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z" />
                                         </svg>
                                     </>
                                 )}

@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useAuth } from '../../hooks/useAuth';
 import { Department, Reading } from '../../core/pmp-sdk/types';
 import { pmpSdk } from '../../core/pmp-sdk';
+import { useQueryClient } from '@tanstack/react-query';
 
 export type Props = {
     department: Department;
@@ -20,6 +21,7 @@ export const ReadingCard: FC<Props> = ({
     readings,
     onChange
 }) => {
+    const queryClient = useQueryClient()
     const { user } = useAuth()
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -41,6 +43,8 @@ export const ReadingCard: FC<Props> = ({
                 if (onChange) {
                     onChange();
                 }
+
+                queryClient.invalidateQueries({ queryKey: ['get-future-readings'] })
             })
             .catch((error) => {
                 setIsLoading(false);

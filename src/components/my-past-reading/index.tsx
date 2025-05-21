@@ -22,7 +22,7 @@ export const PastReadingsPage: FC = () => {
         ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1)
         : new Date(date.getFullYear(), 11, 31);
 
-    const { data: readingsForTimeframe } = useQuery({
+    const { data: readingsForTimeframe, refetch } = useQuery({
         queryKey: [`get-past-readings`, date],
         queryFn: () => pmpSdk.getReadingsForTimeframe(startOfYear, endOfYear),
         placeholderData: (prev) => prev || []
@@ -104,6 +104,7 @@ export const PastReadingsPage: FC = () => {
                             date={groupedReadings.date}
                             timeframe={"past"}
                             category={"reading"}
+                            onChange={() => refetch()}
                         />
                     )
                 })}

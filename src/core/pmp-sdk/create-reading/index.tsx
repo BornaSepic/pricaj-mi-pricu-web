@@ -1,8 +1,8 @@
 import { ReadingCreateResponse } from "../types";
-import { post } from "../utilities";
+import { _post } from "../utilities";
 
 export const _createReading = async (date: string, departmentId: number) => {
-  return post('/readings', {
+  return _post('/readings', {
     date: date,
     departmentId: departmentId,
     test: true
