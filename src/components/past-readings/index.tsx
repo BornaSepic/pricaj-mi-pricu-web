@@ -3,18 +3,12 @@
 import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
-import { getReadingsForTimeframe } from './api/get-readings-for-timeframe';
 import { capitalizeWord } from '../../core/string/capitalize-word';
-import { ReadingCard } from '../reading-card';
-import { read } from 'fs';
 import {MinimalReadingCard} from "../minimal-reading-card";
 import Link from "next/link";
+import { pmpSdk } from '../../core/pmp-sdk';
 
-interface Props {
-
-}
-
-export const PastReadings: FC<Props> = () => {
+export const PastReadings: FC = () => {
     const [currentDate] = useState(new Date());
     const [date, setDate] = useState(new Date());
 
@@ -33,7 +27,7 @@ export const PastReadings: FC<Props> = () => {
 
     const { data: readingsForTimeframe } = useQuery({
         queryKey: [`get-past-readings-for-timeframe`, date],
-        queryFn: () => getReadingsForTimeframe(startOfMonth, endOfMonth),
+        queryFn: () => pmpSdk.getReadingsForTimeframe(startOfMonth, endOfMonth),
         placeholderData: (prev) => prev || []
     })
 

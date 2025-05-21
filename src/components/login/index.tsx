@@ -2,11 +2,10 @@
 
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { API_URL } from '../../core/constants'
-import { LoginSuccessResponse } from '../../core/types/auth'
 import styles from './styles.module.css'
 import Link from "next/link";
 import {useAuth} from "../../hooks/useAuth";
+import { pmpSdk } from '../../core/pmp-sdk'
 
 export default function LoginPage() {
     const router = useRouter()
@@ -23,35 +22,28 @@ export default function LoginPage() {
         const email = formData.get('email')
         const password = formData.get('password')
 
+        if(!email || !password) {
+            setError('Email and password are required')
+            setIsLoading(false)
+            return
+        }
+
         try {
-            const response = await fetch(`${API_URL}/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            })
+            const response = await pmpSdk.logIn(email, password)
 
-            if (!response.ok) {
-                if (response.status === 401) {
-                    setError('Invalid email or password')
-                    setIsLoading(false)
-                    return
-                } else {
-                    setError(`Login failed: ${response.statusText}`)
-                    setIsLoading(false)
-                    return
-                }
-            }
+            // if (!response.ok) {
+            //     if (response.status === 401) {
+            //         setError('Invalid email or password')
+            //         setIsLoading(false)
+            //         return
+            //     } else {
+            //         setError(`Login failed: ${response.statusText}`)
+            //         setIsLoading(false)
+            //         return
+            //     }
+            // }
 
-            const rawData = await response.json()
-            const result = LoginSuccessResponse.safeParse(rawData)
-
-            if (!result.success) {
-                setError('Something went wrong. Please try again later.')
-                setIsLoading(false)
-                return
-            }
-
-            localStorage.setItem('access_token', result.data.access_token)
+            localStorage.setItem('access_token', response.access_token)
 
             await refetch()
 

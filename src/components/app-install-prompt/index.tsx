@@ -57,7 +57,7 @@ export const AppInstallPrompt: FC = () => {
             }
           });
         }}
-      >Add to Home Screen</button>
+      >Install</button>
       {isIOS && (
         <p>
           To install this app on your iOS device, tap the share button

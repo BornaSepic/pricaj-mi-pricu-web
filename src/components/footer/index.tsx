@@ -3,10 +3,10 @@
 import { useAuth } from "../../hooks/useAuth";
 import { useMenu } from "../../context/menu/MenuContext";
 import { useQuery } from "@tanstack/react-query";
-import { getDepartments } from "./api/get-departments";
 import Link from "next/link";
 import styles from "./styles.module.css";
 import clsx from "clsx";
+import { pmpSdk } from "../../core/pmp-sdk";
 
 type Department = {
     id: string | number;
@@ -19,7 +19,7 @@ export const Footer = () => {
 
     const { data: departments } = useQuery<Department[]>({
         queryKey: [`get-departments`],
-        queryFn: () => getDepartments(),
+        queryFn: () => pmpSdk.getDepartments(),
         placeholderData: (prev) => prev || [],
         enabled: Boolean(user),
     });

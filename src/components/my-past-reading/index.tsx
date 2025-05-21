@@ -3,8 +3,8 @@
 import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
-import { getPastReadings } from './api/get-past-readings';
-import {MinimalReadingCard} from "../minimal-reading-card";
+import { MinimalReadingCard } from "../minimal-reading-card";
+import { pmpSdk } from '../../core/pmp-sdk';
 
 export const PastReadingsPage: FC = () => {
     const [currentDate] = useState(new Date());
@@ -24,7 +24,7 @@ export const PastReadingsPage: FC = () => {
 
     const { data: readingsForTimeframe } = useQuery({
         queryKey: [`get-past-readings`, date],
-        queryFn: () => getPastReadings(startOfYear, endOfYear),
+        queryFn: () => pmpSdk.getReadingsForTimeframe(startOfYear, endOfYear),
         placeholderData: (prev) => prev || []
     })
 

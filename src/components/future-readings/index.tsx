@@ -3,21 +3,15 @@
 import { FC, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
-import { getReadingsForTimeframe } from './api/get-readings-for-timeframe';
-import { ReadingCard } from '../reading-card';
 import {MinimalReadingCard} from "../minimal-reading-card";
+import { pmpSdk } from '../../core/pmp-sdk';
 
-interface Props {
-
-}
-
-export const FutureReadings: FC<Props> = () => {
+export const FutureReadings: FC = () => {
     const [currentDate] = useState(new Date());
-    console.log('currentDate', currentDate);
 
     const { data: readingsForTimeframe } = useQuery({
         queryKey: [`get-future-readings`],
-        queryFn: () => getReadingsForTimeframe(currentDate, new Date(2030, 11, 31)),
+        queryFn: () => pmpSdk.getReadingsForTimeframe(currentDate, new Date(2030, 11, 31)),
         placeholderData: (prev) => prev || []
     })
 

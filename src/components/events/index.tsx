@@ -3,16 +3,12 @@
 import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
-import { getEvents } from './api/get-events';
 import { capitalizeWord } from '../../core/string/capitalize-word';
 import {MinimalReadingCard} from "../minimal-reading-card";
 import Link from "next/link";
+import { pmpSdk } from '../../core/pmp-sdk';
 
-interface Props {
-
-}
-
-export const Events: FC<Props> = () => {
+export const Events: FC = () => {
     const [currentDate] = useState(new Date());
     const [date, setDate] = useState(new Date());
 
@@ -31,7 +27,7 @@ export const Events: FC<Props> = () => {
 
     const { data: events } = useQuery({
         queryKey: [`get-events`, date],
-        queryFn: () => getEvents(),
+        queryFn: () => pmpSdk.getEvents(),
         placeholderData: (prev) => prev || []
     })
 

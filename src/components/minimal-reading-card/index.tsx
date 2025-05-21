@@ -1,11 +1,10 @@
 import { FC, useState, KeyboardEvent } from 'react';
 import styles from './styles.module.css';
-import { Reading } from '../../core/types/readings';
 import clsx from 'clsx';
 import { useAuth } from '../../hooks/useAuth';
-import type { Department } from '../../core/types/department';
+import { Department, Reading } from '../../core/pmp-sdk/types';
 
-interface Props {
+export type Props = {
     department: Department;
     date: string;
     readings: Reading[];

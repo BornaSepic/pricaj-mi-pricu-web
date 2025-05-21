@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { API_URL } from '../../core/constants'
 import { useAuth } from '../../hooks/useAuth'
-import styles from './profile.module.css'
+import styles from './styles.module.css'
 import ThemePicker from "../../components/theme/ThemePicker";
 
 export const ProfilePage = () => {
@@ -19,6 +19,8 @@ export const ProfilePage = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [seniority, setSeniority] = useState<'senior' | 'junior'>('junior')
+
+    const { logout } = useAuth()
 
     useEffect(() => {
         if (user) {
@@ -190,7 +192,7 @@ export const ProfilePage = () => {
                                 Uredi Profil
                             </button>
                             <button
-                                /*onClick={logout}*/
+                                onClick={() => logout()}
                                 className={styles.logoutButton}
                             >
                                 Odjava

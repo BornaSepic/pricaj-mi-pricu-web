@@ -4,12 +4,12 @@ import { useQuery } from "@tanstack/react-query"
 import { FC } from "react"
 import { ReadingCard } from "../reading-card"
 import styles from "./styles.module.css"
-import {getEvents} from "./api/get-events";
+import { pmpSdk } from "../../core/pmp-sdk"
 
 export const Event: FC = ({}) => {
     const { data: events, refetch } = useQuery({
         queryKey: [`get-events`],
-        queryFn: () => getEvents(),
+        queryFn: () => pmpSdk.getEvents(),
         placeholderData: (prev) => prev || []
     })
 

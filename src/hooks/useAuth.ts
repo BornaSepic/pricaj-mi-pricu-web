@@ -1,6 +1,6 @@
 'use client'
 
-import {keepPreviousData, useQuery} from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { authenticatedFetch } from "../core/authenticated-fetch"
 import { API_URL } from "../core/constants"
 import { ProfileSuccessResponse, User } from "../core/types/auth"
@@ -32,6 +32,13 @@ export const useAuth = () => {
     //initialData: getUserFromToken()
   })
 
+
+const logout = () => {
+  localStorage.removeItem("access_token")
+
+  refetch()
+}
+
   return {
     user: data,
     isLoading,
@@ -41,5 +48,6 @@ export const useAuth = () => {
     isSenior: data?.seniority === "senior",
     isJunior: data?.seniority === "junior",
     refetch: refetch,
+    logout: logout
   }
 }

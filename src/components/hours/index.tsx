@@ -2,11 +2,10 @@
 
 import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
-import clsx from 'clsx';
 import { useAuth } from '../../hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
-import { getReadingsForTimeframe } from './api/get-readings-for-timeframe';
 import { capitalizeWord } from '../../core/string/capitalize-word';
+import { pmpSdk } from '../../core/pmp-sdk';
 
 export const Hours: FC = () => {
     const { user } = useAuth();
@@ -24,7 +23,7 @@ export const Hours: FC = () => {
 
     const { data: allReadings } = useQuery({
         queryKey: [`get-all-readings`],
-        queryFn: () => getReadingsForTimeframe(
+        queryFn: () => pmpSdk.getReadingsForTimeframe(
             new Date(2023, 0, 1),
             new Date(2030, 11, 31)
         ),
@@ -33,7 +32,7 @@ export const Hours: FC = () => {
 
     const { data: readingsForTimeframe } = useQuery({
         queryKey: [`get-readings-for-timeframe`, date],
-        queryFn: () => getReadingsForTimeframe(startOfMonth, endOfMonth),
+        queryFn: () => pmpSdk.getReadingsForTimeframe(startOfMonth, endOfMonth),
         placeholderData: (prev) => prev || []
     })
 

@@ -1,12 +1,11 @@
 import { FC, useState } from 'react';
 import styles from './styles.module.css';
-import { Reading } from '../../core/types/readings';
 import clsx from 'clsx';
 import { useAuth } from '../../hooks/useAuth';
-import type { Department } from '../../core/types/department';
-import { signupForReading } from './api/signup-for-reading';
+import { Department, Reading } from '../../core/pmp-sdk/types';
+import { pmpSdk } from '../../core/pmp-sdk';
 
-interface Props {
+export type Props = {
     department: Department;
     date: string;
     readings: Reading[];
@@ -35,19 +34,22 @@ export const ReadingCard: FC<Props> = ({
         }
         setIsLoading(true);
 
-        signupForReading(dateAsString, department.id)
+        pmpSdk.createReading(dateAsString, department.id)
             .then(() => {
                 setIsLoading(false);
 
-                if(onChange) {
+                if (onChange) {
                     onChange();
                 }
             })
+            .catch((error) => {
+                setIsLoading(false);
+            });
     }
 
     return (
         <div className={styles.card}>
-            <div className={styles.cardHeader}>
+            <div className={styles.cardHeaderGrid}>
                 <div className={styles.dateInfo}>
                     <span>
                         {date.toLocaleDateString('hr-HR', {

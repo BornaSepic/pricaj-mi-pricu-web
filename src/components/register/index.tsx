@@ -6,6 +6,7 @@ import { API_URL } from '../../core/constants'
 import { LoginSuccessResponse } from '../../core/types/auth'
 import styles from './styles.module.css'
 import Link from "next/link";
+import { pmpSdk } from '../../core/pmp-sdk'
 
 export default function RegisterPage() {
     const router = useRouter()
@@ -24,6 +25,12 @@ export default function RegisterPage() {
         const password = formData.get('password')
         const confirmPassword = formData.get('confirmPassword')
 
+        if (!email || !password) {
+            setError('Email and password are required')
+            setIsLoading(false)
+            return
+        }
+
         if (password !== confirmPassword) {
             setPasswordMatch(false)
             setError('Passwords do not match')
@@ -32,36 +39,21 @@ export default function RegisterPage() {
         }
 
         try {
-            const response = await fetch(`${API_URL}/auth/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password }),
-            })
+            const response = await pmpSdk.register(email, password)
 
-            if (!response.ok) {
-                if (response.status === 409) {
-                    setError('Email already exists')
-                    setIsLoading(false)
-                    return
-                } else {
-                    setError(`Registration failed: ${response.statusText}`)
-                    setIsLoading(false)
-                    return
-                }
-            }
+            // if (!response.ok) {
+            //     if (response.status === 409) {
+            //         setError('Email already exists')
+            //         setIsLoading(false)
+            //         return
+            //     } else {
+            //         setError(`Registration failed: ${response.statusText}`)
+            //         setIsLoading(false)
+            //         return
+            //     }
+            // }
 
-            const rawData = await response.json()
-            const result = LoginSuccessResponse.safeParse(rawData)
-
-            if (!result.success) {
-                setError('Something went wrong. Please try again later.')
-                setIsLoading(false)
-                return
-            }
-
-            localStorage.setItem('access_token', result.data.access_token)
-
-            // Redirect to dashboard or home page
+            localStorage.setItem('access_token', response.access_token)
             router.push('/')
         } catch (err) {
             console.error('Registration error:', err)

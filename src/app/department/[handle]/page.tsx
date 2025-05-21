@@ -1,4 +1,3 @@
-import { FC } from "react"
 import { Department } from "../../../components/department"
 
 export default async function Page({
