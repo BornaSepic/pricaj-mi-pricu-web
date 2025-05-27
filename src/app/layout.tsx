@@ -6,6 +6,7 @@ import styles from "../styles/Global.module.css";
 import { Header } from '../components/header';
 import { Footer } from '../components/footer';
 import { AppInstallPrompt } from '../components/app-install-prompt';
+import { MainWrapper } from '../components/main-wrapper';
 
 export const metadata: Metadata = {
   title: 'Pricaj mi priču',
@@ -27,7 +28,7 @@ const RootLayout: FC<Props> = ({ children }) => {
       <body>
         <Providers>
           <Header />
-          <main className={styles.main__wrapper}>{children}</main>
+          <MainWrapper>{children}</MainWrapper>
           <Footer />
           <AppInstallPrompt />
         </Providers>

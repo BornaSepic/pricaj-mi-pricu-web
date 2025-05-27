@@ -25,7 +25,7 @@ export type Department = z.infer<typeof Department>
 
 export const Departments = z.array(Department)
 
-export const Event = z.object({
+export const Activity = z.object({
   id: z.number(),
   title: z.string(),
   date: z.string(),
@@ -34,12 +34,13 @@ export const Event = z.object({
     id: z.number(),
     name: z.string(),
     email: z.string(),
+    seniority: z.enum(["senior", "junior"]),
   })),
 })
 
-export type Event = z.infer<typeof Event>
+export type Activity = z.infer<typeof Activity>
 
-export const Events = z.array(Event)
+export const Activities = z.array(Activity)
 
 export const Reading = z.object({
   id: z.number(),

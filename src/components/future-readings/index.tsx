@@ -36,7 +36,6 @@ export const FutureReadings: FC = () => {
                             readings={groupedReadings.readings}
                             date={groupedReadings.date}
                             timeframe={"future"}
-                            category={"reading"}
                             onChange={() => refetch()}
                         />
                     )

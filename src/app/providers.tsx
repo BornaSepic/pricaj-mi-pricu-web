@@ -9,6 +9,8 @@ import {
 import { AuthProvider } from '../context/auth'
 import { ThemeProvider } from '../context/theme/ThemeContext'
 import { MenuProvider } from '../context/menu/MenuContext'
+import { Toaster } from "react-hot-toast";
+import { toastConfig } from '../config/toast'
 
 const makeQueryClient = () => {
   return new QueryClient({
@@ -53,6 +55,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         <ThemeProvider>
           <MenuProvider>
             {children}
+            <Toaster {...toastConfig} />
           </MenuProvider>
         </ThemeProvider>
       </AuthProvider>

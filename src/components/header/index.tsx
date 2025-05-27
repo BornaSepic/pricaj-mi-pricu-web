@@ -9,11 +9,22 @@ import styles from "./styles.module.css";
 
 export const Header = () => {
     const { user } = useAuth();
-    const { toggleFooterMenu } = useMenu();
+    const { footerMenuOpen, toggleFooterMenu } = useMenu();
     const [menuOpen, setMenuOpen] = useState(false);
 
     const toggleMenu = () => {
+        // If footer menu is open, close it when opening header menu
+        if (footerMenuOpen && !menuOpen) {
+            toggleFooterMenu();
+        }
         setMenuOpen(!menuOpen);
+    };
+
+    const closeAllMenus = () => {
+        setMenuOpen(false);
+        if (footerMenuOpen) {
+            toggleFooterMenu();
+        }
     };
 
     return (
@@ -31,7 +42,7 @@ export const Header = () => {
             </div>
 
             <div className={styles.logoContainer}>
-                <Link href="/">
+                <Link href="/" onClick={closeAllMenus}>
                     <Image
                         src="/portic_logo.png"
                         alt="Portic Logo"
@@ -44,11 +55,11 @@ export const Header = () => {
 
             <div className={styles.userContainer}>
                 {user ? (
-                    <Link href="/profile" className={styles.userInfo}>
+                    <Link href="/profile" className={styles.userInfo} onClick={closeAllMenus}>
                         <span className={styles.userName}>{user.name}</span>
                     </Link>
                 ) : (
-                    <Link href="/auth/login" className={styles.loginLink}>
+                    <Link href="/auth/login" className={styles.loginLink} onClick={closeAllMenus}>
                         <span>Login</span>
                     </Link>
                 )}
@@ -60,7 +71,7 @@ export const Header = () => {
                     <nav className={styles.mobileNav}>
                         <ul className={styles.navList}>
                             <li className={styles.navItem}>
-                                <Link href="/" className={styles.navLink} onClick={toggleMenu}>
+                                <Link href="/" className={styles.navLink} onClick={closeAllMenus}>
                                     Naslovna
                                 </Link>
                             </li>
@@ -70,19 +81,19 @@ export const Header = () => {
                                     onClick={(e) => {
                                         e.preventDefault();
                                         toggleFooterMenu();
-                                        toggleMenu();
+                                        setMenuOpen(false);
                                     }}
                                 >
                                     Odjeli
                                 </button>
                             </li>
                             <li className={styles.navItem}>
-                                <Link href="/events" className={styles.navLink} onClick={toggleMenu}>
+                                <Link href="/events" className={styles.navLink} onClick={closeAllMenus}>
                                     Događaji
                                 </Link>
                             </li>
                             <li className={styles.navItem}>
-                                <Link href="/contact" className={styles.navLink} onClick={toggleMenu}>
+                                <Link href="/contact" className={styles.navLink} onClick={closeAllMenus}>
                                     Portić kontakt
                                 </Link>
                             </li>

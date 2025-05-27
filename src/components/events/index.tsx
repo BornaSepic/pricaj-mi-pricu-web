@@ -7,6 +7,7 @@ import { capitalizeWord } from '../../core/string/capitalize-word';
 import { MinimalReadingCard } from "../minimal-reading-card";
 import Link from "next/link";
 import { pmpSdk } from '../../core/pmp-sdk';
+import {MinimalReadingCardEvent} from "../minimal-reading-card-event";
 
 export const Events: FC = () => {
     const [currentDate] = useState(new Date());
@@ -93,12 +94,11 @@ export const Events: FC = () => {
             <div className={styles.cardContent}>
                 {events?.map((item) => {
                     return (
-                        <MinimalReadingCard
+                        <MinimalReadingCardEvent
                             department={{ id: 1, name: item.title }}
                             key={item.id}
                             date={item.date}
                             timeframe={"future"}
-                            category={"event"}
                             readings={[]}
                             onChange={() => refetch()}
                         />

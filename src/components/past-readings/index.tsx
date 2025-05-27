@@ -110,7 +110,6 @@ export const PastReadings: FC = () => {
                             readings={groupedReadings.readings}
                             date={groupedReadings.date}
                             timeframe={"past"}
-                            category={"reading"}
                             onChange={() => refetch()}
                         />
                     )

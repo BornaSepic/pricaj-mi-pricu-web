@@ -1,10 +1,11 @@
-import { FC, useState } from 'react';
+import {FC, useEffect, useState} from 'react';
 import styles from './styles.module.css';
 import clsx from 'clsx';
 import { useAuth } from '../../hooks/useAuth';
 import { Department, Reading } from '../../core/pmp-sdk/types';
 import { pmpSdk } from '../../core/pmp-sdk';
 import { useQueryClient } from '@tanstack/react-query';
+import {useToast} from "../../hooks/useToast";
 
 export type Props = {
     department: Department;
@@ -25,10 +26,21 @@ export const ReadingCard: FC<Props> = ({
     const { user } = useAuth()
 
     const [isExpanded, setIsExpanded] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [isCancelLoading, setIsCancelLoading] = useState(false);
+    const [optimisticIsUserSignedUp, setOptimisticIsUserSignedUp] = useState<boolean|null>(null);
 
     const date = new Date(dateAsString);
     const isAvailable = readings.length < MAX_READINGS_COUNT;
+
+    const userReading = readings.find(reading => reading.user.id === user?.id);
+    const isUserSignedUp = optimisticIsUserSignedUp === null ? !!userReading : optimisticIsUserSignedUp;
+
+    useEffect(() => {
+        setOptimisticIsUserSignedUp(null);
+    }, [readings, setOptimisticIsUserSignedUp]);
+
+    const toast = useToast();
 
     const handleSignupForReading = () => {
         if (!user) {
@@ -38,7 +50,9 @@ export const ReadingCard: FC<Props> = ({
 
         pmpSdk.createReading(dateAsString, department.id)
             .then(() => {
+                setOptimisticIsUserSignedUp(true);
                 setIsLoading(false);
+                toast.success('Successfully signed up for reading');
 
                 if (onChange) {
                     onChange();
@@ -47,7 +61,41 @@ export const ReadingCard: FC<Props> = ({
                 queryClient.invalidateQueries({ queryKey: ['get-future-readings'] })
             })
             .catch((error) => {
+                const errorMessage = error?.message || 'Greška pri upisu';
+
+                if (error?.status === 409) {
+                    toast.warning(errorMessage);
+                } else {
+                    toast.error(errorMessage);
+                }
+
                 setIsLoading(false);
+            });
+    }
+
+    const handleCancelReading = () => {
+        if (!userReading) {
+            return;
+        }
+
+        setIsCancelLoading(true);
+
+        pmpSdk.deleteReading(userReading.id)
+            .then(() => {
+                setOptimisticIsUserSignedUp(false);
+                setIsCancelLoading(false);
+                toast.success('Successfully canceled reading');
+
+                if (onChange) {
+                    onChange();
+                }
+
+                queryClient.invalidateQueries({ queryKey: ['get-future-readings'] })
+            })
+            .catch((error) => {
+                const errorMessage = error?.message || 'Greška pri odjavi';
+                toast.error(errorMessage);
+                setIsCancelLoading(false);
             });
     }
 
@@ -67,7 +115,7 @@ export const ReadingCard: FC<Props> = ({
                             year: undefined,
                             month: undefined,
                             day: undefined,
-                            weekday: 'long'
+                            weekday: 'short'
                         })})
                     </span>
                 </div>
@@ -122,7 +170,43 @@ export const ReadingCard: FC<Props> = ({
                         })}
                     </div>
 
-                    {isAvailable && (
+                    <div className={styles.buttonContainer}>
+                        {isUserSignedUp ? (
+                            <button
+                                onClick={handleCancelReading}
+                                className={styles.registerButton}
+                                type="button"
+                                disabled={isCancelLoading}
+                            >
+                                {isCancelLoading ? 'ISPISUJEMO TE' : (
+                                    <>
+                                        ISPIŠI ME
+                                        <svg className={styles.cancelIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z" />
+                                        </svg>
+                                    </>
+                                )}
+                            </button>
+                        ) : isAvailable ? (
+                            <button
+                                onClick={handleSignupForReading}
+                                className={styles.registerButton}
+                                type="button"
+                                disabled={isLoading}
+                            >
+                                {isLoading ? 'UPISUJEMO TE' : (
+                                    <>
+                                        UPIŠI ME
+                                        <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
+                                        </svg>
+                                    </>
+                                )}
+                            </button>
+                        ) : null}
+                    </div>
+
+                    {/*{isAvailable && (
                         <div className={styles.buttonContainer}>
                             <button
                                 onClick={() => {
@@ -141,7 +225,7 @@ export const ReadingCard: FC<Props> = ({
                                 )}
                             </button>
                         </div>
-                    )}
+                    )}*/}
                 </div>
             )}
         </div>

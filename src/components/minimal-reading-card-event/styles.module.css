@@ -1,0 +1,143 @@
+.card {
+    font-size: 14px;
+    width: calc(100% + 32px);
+    margin-bottom: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--text-color, black);
+    position: relative;
+    background-color: var(--card-background, #faa71b);
+    padding: 5px 16px;
+}
+
+.cardHeader {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 32px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--card-background, #faa71b);
+    /* amber-400 */
+}
+
+.cardContent {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.dateInfo {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.slotInfo {
+    text-align: center
+}
+
+.department {
+    text-align: right;
+    color: var(--text-color, #1f2937);
+    margin-right: 5px;
+    /* gray-800 */
+}
+
+.toggleButton {
+    background: transparent;
+    border: none;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid var(--text-color, #000);
+}
+
+.toggleButton:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.rotateIcon {
+    transition: transform 0.2s ease;
+}
+
+.rotateIcon__rotated {
+    transform: rotate(180deg);
+}
+
+.badgeContainer {}
+
+.availableBadge,
+.unavailableBadge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    color: white;
+    font-size: 14px;
+}
+
+.availableBadge {
+    background-color: var(--success-color, #10b981);
+    /* green-500 */
+}
+
+.unavailableBadge {
+    background-color: var(--error-color, #ef4444);
+    /* red-500 */
+}
+
+.expandedContent {
+    background-color: var(--card-background, #faa71b);
+    /* amber-400 */
+}
+
+.usersList {
+    margin-bottom: 16px;
+}
+
+.userSlot {
+    padding: 0;
+    border-bottom: 1px solid var(--text-color, #000);
+}
+
+.userSlot:last-child {
+    border-bottom: none;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.registerButton {
+    background-color: var(--button-secondary, #7c2f00);
+    /* amber-800 */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 3px;
+}
+
+.registerButton:hover {
+    background-color: var(--button-secondary-hover, #8c3400);
+    /* amber-900 */
+}
+
+.penIcon {
+    width: 16px;
+    height: 16px;
+}
