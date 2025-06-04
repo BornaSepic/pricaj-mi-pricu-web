@@ -4,6 +4,15 @@ export const AuthSuccessResponse = z.object({
   access_token: z.string(),
 })
 
+export const Report = z.object({
+  id: z.number(),
+  title: z.string(),
+  description: z.string(),
+  readingId: z.number(),
+})
+
+export type Report = z.infer<typeof Report>
+
 export const User = z.object({
   id: z.number(),
   email: z.string(),
@@ -24,6 +33,14 @@ export const Department = z.object({
 export type Department = z.infer<typeof Department>
 
 export const Departments = z.array(Department)
+
+export const CreateActivityPayload = z.object({
+  title: z.string(),
+  date: z.string(),
+  description: z.string(),
+})
+
+export type CreateActivityPayload = z.infer<typeof CreateActivityPayload>
 
 export const Activity = z.object({
   id: z.number(),
@@ -62,5 +79,8 @@ export const ReadingsByDate = z.array(
   })
 )
 
+export const GenericResponse = z.object({})
 export const ReadingCreateResponse = z.object({})
 export const ReadingDeleteResponse = z.object({})
+export const ReportDeleteResponse = z.object({})
+export const ReportCreateResponse = z.object({})
