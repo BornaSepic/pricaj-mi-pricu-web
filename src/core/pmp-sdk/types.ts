@@ -65,9 +65,7 @@ export const Reading = z.object({
   date: z.string(),
   user: User,
   department: Department,
-  report: z.object({
-
-  }).nullable().optional(),
+  report: Report.nullable().optional(),
 })
 
 export type Reading = z.infer<typeof Reading>

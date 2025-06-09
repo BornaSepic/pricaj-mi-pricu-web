@@ -82,12 +82,29 @@ export const MinimalReadingCard: FC<Props> = ({
         setIsReportModalOpen(false);
     };
 
+    const currentUserReading = readings.find(reading => reading.user.id === user?.id);
+    const hasSubmittedReport = currentUserReading?.report != null;
+
     const handleSubmitReport = async (reportText: string) => {
+
+        const currentUserReading = readings.find(reading => reading.user.id === user?.id);
+
+        if (!currentUserReading) {
+            toast.error('Nije pronađeno vaše čitanje za ovaj datum');
+            return;
+        }
+
+        // TODO should be able to modify report
+
         setIsSubmittingReport(true);
 
         try {
-            // Replace this with your actual API call
-            // await pmpSdk.submitReport(dateAsString, department.id, reportText);
+            await pmpSdk.createReport({
+                id: 111,
+                title: 'title',
+                description: reportText,
+                readingId: currentUserReading.id
+            });
 
             toast.success('Izvješće je uspješno poslano');
             setIsReportModalOpen(false);
@@ -96,8 +113,7 @@ export const MinimalReadingCard: FC<Props> = ({
                 onChange();
             }
 
-            // You might want to invalidate some queries here
-            // queryClient.invalidateQueries({ queryKey: ['get-reports'] });
+            await queryClient.invalidateQueries({queryKey: ['get-reports']});
 
         } catch (error: any) {
             const errorMessage = error?.message || 'Greška pri slanju izvješća';

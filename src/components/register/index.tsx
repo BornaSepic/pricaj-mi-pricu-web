@@ -23,10 +23,11 @@ export default function RegisterPage() {
         const name = formData.get('name')
         const email = formData.get('email')
         const password = formData.get('password')
+        const code = formData.get('code')
         const confirmPassword = formData.get('confirmPassword')
 
-        if (!email || !password) {
-            setError('Email and password are required')
+        if (!email || !password || !code) {
+            setError('Email, password and code are required')
             setIsLoading(false)
             return
         }
@@ -39,7 +40,7 @@ export default function RegisterPage() {
         }
 
         try {
-            const response = await pmpSdk.register(email, password)
+            const response = await pmpSdk.register(email, password, code)
 
             // if (!response.ok) {
             //     if (response.status === 409) {
@@ -124,12 +125,12 @@ export default function RegisterPage() {
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label htmlFor="code" className={styles.formLabel}>Secret code</label>
+                    <label htmlFor="code" className={styles.formLabel}>Code</label>
                     <input
                         type="text"
                         id="code"
                         name="code"
-                        placeholder="Secret code"
+                        placeholder="Code"
                         required
                         disabled={isLoading}
                         className={styles.formInput}

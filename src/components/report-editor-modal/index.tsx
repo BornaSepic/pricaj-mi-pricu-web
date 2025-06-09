@@ -127,15 +127,6 @@ export const ReportEditorModal: FC<Props> = ({
                         rows={12}
                         disabled={isLoading}
                     />
-
-                    <div className={styles.helpText}>
-                        <span>Ctrl/Cmd + Enter za slanje • Esc za zatvaranje</span>
-                        {reportText.trim() && (
-                            <span className={styles.autoSaveIndicator}>
-                                ✓ Automatski spremljeno
-                            </span>
-                        )}
-                    </div>
                 </div>
 
                 <div className={styles.modalFooter}>
