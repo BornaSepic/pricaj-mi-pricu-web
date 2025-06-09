@@ -7,6 +7,7 @@ import { LoginSuccessResponse } from '../../core/types/auth'
 import styles from './styles.module.css'
 import Link from "next/link";
 import { pmpSdk } from '../../core/pmp-sdk'
+import {toast} from 'react-hot-toast'
 
 export default function RegisterPage() {
     const router = useRouter()
@@ -26,40 +27,49 @@ export default function RegisterPage() {
         const code = formData.get('code')
         const confirmPassword = formData.get('confirmPassword')
 
-        if (!email || !password || !code) {
-            setError('Email, password and code are required')
+        if (!name || !email || !password || !code) {
+            const errorMsg = 'Name, Email, password and code are required'
+            setError(errorMsg)
+            toast.error(errorMsg)
             setIsLoading(false)
             return
         }
 
         if (password !== confirmPassword) {
             setPasswordMatch(false)
-            setError('Passwords do not match')
+            const errorMsg = 'Passwords do not match'
+            setError(errorMsg)
+            toast.error(errorMsg)
             setIsLoading(false)
             return
         }
 
         try {
-            const response = await pmpSdk.register(email, password, code)
+            const response = await pmpSdk.register(name, "user", "junior", "active", email, password, code)
 
-            // if (!response.ok) {
-            //     if (response.status === 409) {
-            //         setError('Email already exists')
-            //         setIsLoading(false)
-            //         return
-            //     } else {
-            //         setError(`Registration failed: ${response.statusText}`)
-            //         setIsLoading(false)
-            //         return
-            //     }
-            // }
+            console.log(response)
 
-            localStorage.setItem('access_token', response.access_token)
-            router.push('/')
-        } catch (err) {
+            // Success case - user is now registered
+            toast.success('Account created successfully!')
+            // router.push('/auth/login')
+
+        } catch (err: any) {
             console.error('Registration error:', err)
-            setError('An unexpected error occurred. Please try again.')
             setIsLoading(false)
+
+            let errorMessage = 'An unexpected error occurred. Please try again.'
+
+            if (err.response) {
+                // Server responded with error status
+                const status = err.response.status
+                errorMessage = err.response.message
+
+            } else if (err.message) {
+                errorMessage = err.message
+            }
+
+            setError(errorMessage)
+            toast.error(errorMessage)
         }
     }
 
