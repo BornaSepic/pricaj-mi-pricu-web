@@ -8,12 +8,15 @@ import styles from './styles.module.css'
 import Link from "next/link";
 import { pmpSdk } from '../../core/pmp-sdk'
 import {toast} from 'react-hot-toast'
+import { useAuth } from '../../hooks/useAuth'
 
 export default function RegisterPage() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [passwordMatch, setPasswordMatch] = useState(true)
+    const {refetch} = useAuth()
+
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -50,8 +53,11 @@ export default function RegisterPage() {
             console.log(response)
 
             // Success case - user is now registered
+            localStorage.setItem('access_token', response.access_token)
+
             toast.success('Account created successfully!')
-            // router.push('/auth/login')
+            refetch()
+            router.push('/')
 
         } catch (err: any) {
             console.error('Registration error:', err)
