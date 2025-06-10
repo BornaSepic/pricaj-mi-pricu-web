@@ -2,8 +2,6 @@
 
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { API_URL } from '../../core/constants'
-import { LoginSuccessResponse } from '../../core/types/auth'
 import styles from './styles.module.css'
 import Link from "next/link";
 import { pmpSdk } from '../../core/pmp-sdk'
