@@ -1,4 +1,4 @@
-import { ReadingsByDate } from "../../types/readings"
+import { ReadingsByDate } from "../types"
 import { _get } from "../utilities"
 
 export const _getReadingsForDepartment = async (id: string, status: 'active' | 'inactive') => {

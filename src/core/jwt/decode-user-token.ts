@@ -1,5 +1,4 @@
-import { cookies } from "next/headers";
-import { User } from "../types/auth";
+import { User } from "../pmp-sdk/types";
 import { decodeJwt } from "./decode-jwt";
 
 export const getUserFromToken = (): User | null => {
