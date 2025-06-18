@@ -19,12 +19,12 @@ export type Props = {
 export const MAX_READINGS_COUNT = 3 as const;
 
 export const MinimalReadingCard: FC<Props> = ({
-                                                  department,
-                                                  date: dateAsString,
-                                                  readings,
-                                                  timeframe,
-                                                  onChange
-                                              }) => {
+    department,
+    date: dateAsString,
+    readings,
+    timeframe,
+    onChange
+}) => {
     const queryClient = useQueryClient()
     const { user } = useAuth()
     const toast = useToast();
@@ -100,7 +100,6 @@ export const MinimalReadingCard: FC<Props> = ({
 
         try {
             await pmpSdk.createReport({
-                id: 111,
                 title: 'title',
                 description: reportText,
                 readingId: currentUserReading.id
@@ -113,15 +112,17 @@ export const MinimalReadingCard: FC<Props> = ({
                 onChange();
             }
 
-            await queryClient.invalidateQueries({queryKey: ['get-reports']});
+            await queryClient.invalidateQueries({ queryKey: ['get-reports'] });
 
-        } catch (error: any) {
-            const errorMessage = error?.message || 'Greška pri slanju izvješća';
-            toast.error(errorMessage);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                const errorMessage = error?.message || 'Greška pri slanju izvješća';
+                toast.error(errorMessage);
+            }
         } finally {
             setIsSubmittingReport(false);
         }
-    };
+    }
 
     return (
         <>
@@ -145,11 +146,11 @@ export const MinimalReadingCard: FC<Props> = ({
                         </span>
                         <span>
                             ({date.toLocaleDateString('hr-HR', {
-                            year: undefined,
-                            month: undefined,
-                            day: undefined,
-                            weekday: 'short'
-                        })})
+                                year: undefined,
+                                month: undefined,
+                                day: undefined,
+                                weekday: 'short'
+                            })})
                         </span>
                     </div>
                     <div className={styles.department}>{department.name}</div>
