@@ -3,8 +3,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { authenticatedFetch } from "../core/authenticated-fetch"
 import { API_URL } from "../core/constants"
-import { ProfileSuccessResponse, User } from "../core/types/auth"
-import { getUserFromToken } from "../core/jwt/decode-user-token"
+import { ProfileSuccessResponse, User } from "../core/pmp-sdk/types"
 
 const getUser = (): Promise<User | null> => {
   return authenticatedFetch(`${API_URL}/auth/profile`, {
