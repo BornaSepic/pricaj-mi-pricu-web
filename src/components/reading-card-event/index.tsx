@@ -125,7 +125,7 @@ export const ReadingCardEvent: FC<Props> = ({
                             return (
                                 <div key={index} className={styles.userSlot}>
                                     <p>
-                                        {index + 1}. (${user.seniority === 'junior' ? 'J' : 'S'}) ${user.name}
+                                        {index + 1}. ({user.seniority === 'junior' ? 'J' : 'S'}) {user.name}
                                     </p>
                                 </div>
                             )

@@ -44,7 +44,7 @@ export const themes = {
         buttonPrimaryHover: '#0d62cb',
         buttonSecondary: '#00897b',
         buttonSecondaryHover: '#00695c',
-        cardBackground: '#b1e4b3',
+        cardBackground: '#81d5e9',
         successColor: '#00a946',
         errorColor: '#d50000',
     },

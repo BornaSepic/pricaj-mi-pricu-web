@@ -35,6 +35,7 @@
 }
 
 .menuIcon {
+    display: flex;
     width: 24px;
     height: 24px;
     color: #374151;
