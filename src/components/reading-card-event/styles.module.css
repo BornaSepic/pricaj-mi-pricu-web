@@ -33,7 +33,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-top: 8px;
+    margin: 8px 0;
 }
 
 .dateInfo {
@@ -147,4 +147,26 @@
 .penIcon {
     width: 16px;
     height: 16px;
+}
+
+.descriptionSection {
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #f8f9fa5e;
+    border-radius: 8px;
+}
+
+.descriptionTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.descriptionText {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #555;
+    margin: 0;
 }

@@ -102,6 +102,11 @@ export const MinimalActivityCard: FC<Props> = ({
 
             {isExpanded && (
                 <div className={styles.expandedContent} onClick={e => e.stopPropagation()}>
+                    <div className={styles.descriptionSection}>
+                        <h4 className={styles.descriptionTitle}>Opis aktivnosti:</h4>
+                        <p className={styles.descriptionText}>{activity.description}</p>
+                    </div>
+
                     <div className={styles.usersList}>
                         {Array.from({ length: activity.users.length + 3 }).map((_, index) => {
                             const user = activity.users[index];

@@ -17,10 +17,10 @@ const ThemePicker: React.FC = () => {
 
     const getThemeDisplayName = (themeKey: ThemeType): string => {
         switch (themeKey) {
-            case 'red-yellow': return 'Default';
-            case 'black-white': return 'Monochrome';
-            case 'blue-green': return 'Ocean';
-            case 'purple-pink': return 'Berry';
+            case 'red-yellow': return 'Portić tema';
+            case 'black-white': return 'Crno-bijela tema';
+            case 'blue-green': return 'Plava tema';
+            case 'purple-pink': return 'Ljubičasta tema';
             default: return themeKey;
         }
     };

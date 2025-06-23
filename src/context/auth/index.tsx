@@ -6,7 +6,7 @@ type Props = {
   children: React.ReactNode;
 }
 
-const PUBLIC_ROUTES = ['/auth/login', '/auth/register', '/auth/forgot-password'];
+const PUBLIC_ROUTES = ['/auth/login', '/auth/register', '/auth/forgot-password', '/auth/reset-password'];
 
 export const AuthProvider: FC<Props> = ({ children }) => {
   const { user, isLoading } = useAuth();

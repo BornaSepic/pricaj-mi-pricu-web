@@ -23,7 +23,7 @@ export default function LoginPage() {
         const password = formData.get('password')
 
         if(!email || !password) {
-            setError('Email and password are required')
+            setError('Email i lozinka su obavezni')
             setIsLoading(false)
             return
         }
@@ -49,14 +49,14 @@ export default function LoginPage() {
 
         } catch (err) {
             console.error('Login error:', err)
-            setError('An unexpected error occurred. Please try again.')
+            setError('Došlo je do greške prilikom prijave. Molimo pokušajte ponovno.')
             setIsLoading(false)
         }
     }
 
     return (
         <div className={styles.authContainer}>
-            <h1 className={styles.authTitle}>Welcome Back</h1>
+            <h1 className={styles.authTitle}>Dobrodošli!</h1>
 
             {error && (
                 <div className={styles.errorMessage}>{error}</div>
@@ -69,7 +69,7 @@ export default function LoginPage() {
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="Your email"
+                        placeholder="email"
                         required
                         disabled={isLoading}
                         className={styles.formInput}
@@ -82,7 +82,7 @@ export default function LoginPage() {
                         type="password"
                         id="password"
                         name="password"
-                        placeholder="Your password"
+                        placeholder="Lozinka"
                         required
                         disabled={isLoading}
                         className={styles.formInput}
@@ -94,13 +94,13 @@ export default function LoginPage() {
                     disabled={isLoading}
                     className={styles.authButton}
                 >
-                    {isLoading ? 'Logging in...' : 'Log In'}
+                    {isLoading ? 'Prijava...' : 'Prijavi se'}
                 </button>
             </form>
 
             <div className={styles.additionalOptions}>
-                <Link href="/auth/forgot-password" className={styles.link}>Forgot password?</Link>
-                <Link href="/auth/register" className={styles.link}>Don't have an account? Sign up</Link>
+                <Link href="/auth/forgot-password" className={styles.link}>Zaboravljena lozinka?</Link>
+                <Link href="/auth/register" className={styles.link}>Registriraj se</Link>
             </div>
         </div>
     )

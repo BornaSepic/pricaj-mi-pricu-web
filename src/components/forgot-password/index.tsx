@@ -43,7 +43,7 @@ export default function ForgotPasswordPage() {
             event.currentTarget.reset()
         } catch (err) {
             console.error('Forgot password error:', err)
-            setError('An unexpected error occurred. Please try again.')
+            setError('Došlo je do greške prilikom slanja zahtjeva. Molimo pokušajte ponovno.')
         } finally {
             setIsLoading(false)
         }
@@ -51,9 +51,9 @@ export default function ForgotPasswordPage() {
 
     return (
         <div className={styles.authContainer}>
-            <h1 className={styles.authTitle}>Reset Your Password</h1>
+            <h1 className={styles.authTitle}>Promjena lozinke</h1>
             <p className={styles.authDescription}>
-                Enter your email address below and we'll send you a link to reset your password.
+                Unesite svoju email adresu kako biste primili link za resetiranje lozinke.
             </p>
 
             {error && (
@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
 
             {success && (
                 <div className={styles.successMessage}>
-                    Password reset link has been sent to your email. Please check your inbox.
+                    Uspješno ste poslali zahtjev za resetiranje lozinke. Provjerite svoj email.
                 </div>
             )}
 
@@ -73,7 +73,7 @@ export default function ForgotPasswordPage() {
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="Your email"
+                        placeholder="email"
                         required
                         disabled={isLoading || success}
                         className={styles.formInput}
@@ -85,12 +85,12 @@ export default function ForgotPasswordPage() {
                     disabled={isLoading || success}
                     className={styles.authButton}
                 >
-                    {isLoading ? 'Sending...' : 'Send Reset Link'}
+                    {isLoading ? 'Slanje...' : 'Pošalji link za resetiranje lozinke'}
                 </button>
             </form>
 
             <div className={styles.additionalOptions}>
-                <Link href="/auth/login" className={styles.link}>Back to login</Link>
+                <Link href="/auth/login" className={styles.link}>Natrag na prijavu</Link>
             </div>
         </div>
     )

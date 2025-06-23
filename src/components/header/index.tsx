@@ -60,7 +60,7 @@ export const Header = () => {
                     </Link>
                 ) : (
                     <Link href="/auth/login" className={styles.loginLink} onClick={closeAllMenus}>
-                        <span>Login</span>
+                        <span>Prijava</span>
                     </Link>
                 )}
             </div>

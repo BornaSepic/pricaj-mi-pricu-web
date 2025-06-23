@@ -313,6 +313,50 @@
     animation: spin 1s linear infinite;
 }
 
+.userSlot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.userInfo {
+    flex: 1;
+}
+
+.reportButton {
+    padding: 4px 8px;
+    border: 1px solid #6c757d;
+    border-radius: 4px;
+    background: #f8f9fa;
+    color: #6c757d;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.reportButton:hover:not(:disabled) {
+    background-color: #6c757d;
+    color: white;
+    border-color: #5a6268;
+}
+
+.reportButtonDisabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    color: #adb5bd;
+}
+
+.readOnlyTextarea {
+    background-color: #f8f9fa;
+    cursor: default;
+}
+
 @keyframes spin {
     from {
         transform: rotate(0deg);

@@ -33,6 +33,8 @@ export const ReadingCard: FC<Props> = ({
     const date = new Date(dateAsString);
     const isAvailable = readings.length < MAX_READINGS_COUNT;
 
+    console.log("date", readings)
+
     const userReading = readings.find(reading => reading.user.id === user?.id);
     const isUserSignedUp = optimisticIsUserSignedUp === null ? !!userReading : optimisticIsUserSignedUp;
 
@@ -52,7 +54,7 @@ export const ReadingCard: FC<Props> = ({
             .then(() => {
                 setOptimisticIsUserSignedUp(true);
                 setIsLoading(false);
-                toast.success('Successfully signed up for reading');
+                toast.success('Uspješno ste se prijavili na čitanje');
 
                 if (onChange) {
                     onChange();
@@ -84,7 +86,7 @@ export const ReadingCard: FC<Props> = ({
             .then(() => {
                 setOptimisticIsUserSignedUp(false);
                 setIsCancelLoading(false);
-                toast.success('Successfully canceled reading');
+                toast.success('Uspješno ste otkazali čitanje');
 
                 if (onChange) {
                     onChange();

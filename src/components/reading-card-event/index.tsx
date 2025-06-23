@@ -11,55 +11,62 @@ export type Props = {
     activity: Activity;
     date: string;
     activities: Activity[];
+    description?: string;
     onChange?: () => void;
 }
 
 export const MAX_READINGS_COUNT = 3 as const;
 
 export const ReadingCardEvent: FC<Props> = ({
-   activity,
-   date: dateAsString,
-   activities,
-   onChange
-}) => {
+                                                activity,
+                                                date: dateAsString,
+                                                activities,
+                                                description,
+                                                onChange
+                                            }) => {
 
     const queryClient = useQueryClient()
     const { user } = useAuth()
+    const toast = useToast();
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
 
     const date = new Date(dateAsString);
 
-    const toast = useToast();
+    // Check if current user is signed up for this activity
+    const isSignedUp = user && activity.users.some(signedUpUser => user.id === signedUpUser.id);
 
-    const handleSignupForReading = () => {
-        if (!user) {
-            return;
-        }
+    const handleSignUp = () => {
         setIsLoading(true);
 
-        // TODO change to event creation
-        pmpSdk.createReading(dateAsString, activity.id)
+        pmpSdk.signUpForActivity(activity.id)
             .then(() => {
                 setIsLoading(false);
-
                 if (onChange) {
                     onChange();
                 }
-
-                toast.success('Successfully signed up for reading');
-                queryClient.invalidateQueries({ queryKey: ['get-events'] })
             })
             .catch((error) => {
                 const errorMessage = error?.message || 'Greška pri upisu';
+                toast.error(errorMessage);
+                setIsLoading(false);
+            });
+    }
 
-                if (error?.status === 409) {
-                    toast.warning(errorMessage);
-                } else {
-                    toast.error(errorMessage);
+    const handleSignOff = () => {
+        setIsLoading(true);
+
+        pmpSdk.signOffForActivity(activity.id)
+            .then(() => {
+                setIsLoading(false);
+                if (onChange) {
+                    onChange();
                 }
-
+            })
+            .catch((error) => {
+                const errorMessage = error?.message || 'Greška pri odjavi';
+                toast.error(errorMessage);
                 setIsLoading(false);
             });
     }
@@ -107,6 +114,11 @@ export const ReadingCardEvent: FC<Props> = ({
 
             {isExpanded && (
                 <div className={styles.expandedContent}>
+                    <div className={styles.descriptionSection}>
+                        <h4 className={styles.descriptionTitle}>Opis aktivnosti:</h4>
+                        <p className={styles.descriptionText}>{activity.description}</p>
+                    </div>
+
                     <div className={styles.usersList}>
                         {Array.from({ length: (activity.users.length > 0) ? activity.users.length + 1 : MAX_READINGS_COUNT }).map((_, index) => {
 
@@ -133,22 +145,40 @@ export const ReadingCardEvent: FC<Props> = ({
                     </div>
 
                     <div className={styles.buttonContainer}>
-                        <button
-                            onClick={() => {
-                                handleSignupForReading()
-                            }}
-                            className={styles.registerButton}
-                            type="button"
-                        >
-                            {isLoading ? 'UPISUJEMO TE' : (
-                                <>
-                                    UPIŠI ME
-                                    <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
-                                    </svg>
-                                </>
-                            )}
-                        </button>
+                        {
+                            isSignedUp ? (
+                                <button
+                                    onClick={handleSignOff}
+                                    className={styles.registerButton}
+                                    type="button"
+                                >
+                                    {isLoading ? 'ISPISUJEMO TE' : (
+                                        <>
+                                            ISPIŠI ME
+                                            <svg className={styles.cancelIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z" />
+                                            </svg>
+                                        </>
+                                    )}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleSignUp}
+                                    className={styles.registerButton}
+                                    type="button"
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'UPISUJEMO TE' : (
+                                        <>
+                                            UPIŠI ME
+                                            <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
+                                            </svg>
+                                        </>
+                                    )}
+                                </button>
+                            )
+                        }
                     </div>
                 </div>
             )}

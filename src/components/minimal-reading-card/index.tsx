@@ -19,12 +19,12 @@ export type Props = {
 export const MAX_READINGS_COUNT = 3 as const;
 
 export const MinimalReadingCard: FC<Props> = ({
-    department,
-    date: dateAsString,
-    readings,
-    timeframe,
-    onChange
-}) => {
+                                                  department,
+                                                  date: dateAsString,
+                                                  readings,
+                                                  timeframe,
+                                                  onChange
+                                              }) => {
     const queryClient = useQueryClient()
     const { user } = useAuth()
     const toast = useToast();
@@ -33,6 +33,7 @@ export const MinimalReadingCard: FC<Props> = ({
     const [isLoading, setIsLoading] = useState(false);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+    const [selectedReadingForReport, setSelectedReadingForReport] = useState<Reading | null>(null);
 
     const date = new Date(dateAsString);
     const isPast = timeframe === 'past';
@@ -73,40 +74,46 @@ export const MinimalReadingCard: FC<Props> = ({
             });
     }
 
-    const openReportModal = (e: React.MouseEvent) => {
-        e.stopPropagation();
+    const openReportModal = (reading: Reading) => {
+        setSelectedReadingForReport(reading);
         setIsReportModalOpen(true);
     };
 
     const closeReportModal = () => {
         setIsReportModalOpen(false);
+        setSelectedReadingForReport(null);
     };
 
-    const currentUserReading = readings.find(reading => reading.user.id === user?.id);
-    const hasSubmittedReport = currentUserReading?.report != null;
-
     const handleSubmitReport = async (reportText: string) => {
-
-        const currentUserReading = readings.find(reading => reading.user.id === user?.id);
-
-        if (!currentUserReading) {
-            toast.error('Nije pronađeno vaše čitanje za ovaj datum');
+        if (!selectedReadingForReport) {
+            toast.error('Nije pronađeno čitanje za ovaj datum');
             return;
         }
-
-        // TODO should be able to modify report
 
         setIsSubmittingReport(true);
 
         try {
-            await pmpSdk.createReport({
-                title: 'title',
-                description: reportText,
-                readingId: currentUserReading.id
-            });
+            // Check if report already exists (for editing)
+            if (selectedReadingForReport.report) {
+                // TODO: Implement report update endpoint
+                // await pmpSdk.updateReport(selectedReadingForReport.report.id, {
+                //     title: 'title',
+                //     description: reportText
+                // });
+                toast.error('Uređivanje izvješća još nije implementirano');
+                return;
+            } else {
+                // Create new report
+                await pmpSdk.createReport({
+                    title: 'title',
+                    description: reportText,
+                    readingId: selectedReadingForReport.id
+                });
+            }
 
             toast.success('Izvješće je uspješno poslano');
             setIsReportModalOpen(false);
+            setSelectedReadingForReport(null);
 
             if (onChange) {
                 onChange();
@@ -123,6 +130,52 @@ export const MinimalReadingCard: FC<Props> = ({
             setIsSubmittingReport(false);
         }
     }
+
+    const getReportButtonText = (reading: Reading) => {
+        const isCurrentUser = reading.user.id === user?.id;
+        const hasReport = reading.report != null;
+
+        if (isCurrentUser) {
+            return hasReport ? 'UREDI' : 'DODAJ';
+        } else {
+            return hasReport ? 'ČITAJ' : 'NEMA';
+        }
+    };
+
+    const getReportButtonIcon = (reading: Reading) => {
+        const isCurrentUser = reading.user.id === user?.id;
+        const hasReport = reading.report != null;
+
+        if (isCurrentUser && hasReport) {
+            // Edit icon
+            return (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                </svg>
+            );
+        } else if (isCurrentUser && !hasReport) {
+            // Add icon
+            return (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+            );
+        } else if (!isCurrentUser && hasReport) {
+            // Read icon
+            return (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                </svg>
+            );
+        } else {
+            // No report icon
+            return (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            );
+        }
+    };
 
     return (
         <>
@@ -146,11 +199,11 @@ export const MinimalReadingCard: FC<Props> = ({
                         </span>
                         <span>
                             ({date.toLocaleDateString('hr-HR', {
-                                year: undefined,
-                                month: undefined,
-                                day: undefined,
-                                weekday: 'short'
-                            })})
+                            year: undefined,
+                            month: undefined,
+                            day: undefined,
+                            weekday: 'short'
+                        })})
                         </span>
                     </div>
                     <div className={styles.department}>{department.name}</div>
@@ -168,7 +221,6 @@ export const MinimalReadingCard: FC<Props> = ({
                     <div className={styles.expandedContent} onClick={e => e.stopPropagation()}>
                         <div className={styles.usersList}>
                             {Array.from({ length: MAX_READINGS_COUNT }).map((_, index) => {
-
                                 const reading = readings[index];
 
                                 if (!reading) {
@@ -182,19 +234,41 @@ export const MinimalReadingCard: FC<Props> = ({
                                 }
 
                                 const user = reading.user;
+                                const isCurrentUser = reading.user.id === user?.id;
+                                const hasReport = reading.report != null;
+                                const canInteractWithReport = isPast && (isCurrentUser || hasReport);
 
                                 return (
                                     <div key={index} className={styles.userSlot}>
-                                        <p>
-                                            {index + 1}. {readings[index] ? `(${user.seniority === 'junior' ? 'J' : 'S'}) ${user.name}` : ''}
-                                        </p>
+                                        <div className={styles.userInfo}>
+                                            <p>
+                                                {index + 1}. ({user.seniority === 'junior' ? 'J' : 'S'}) {user.name}
+                                            </p>
+                                        </div>
+                                        {canInteractWithReport && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    openReportModal(reading);
+                                                }}
+                                                className={clsx(
+                                                    styles.reportButton,
+                                                    !hasReport && !isCurrentUser && styles.reportButtonDisabled
+                                                )}
+                                                type="button"
+                                                disabled={!hasReport && !isCurrentUser}
+                                            >
+                                                {getReportButtonText(reading)}
+                                                {getReportButtonIcon(reading)}
+                                            </button>
+                                        )}
                                     </div>
                                 )
                             })}
                         </div>
 
-                        <div className={styles.buttonContainer}>
-                            {!isPast ? (
+                        {!isPast && (
+                            <div className={styles.buttonContainer}>
                                 <button
                                     onClick={handleCancelingReading}
                                     className={styles.registerButton}
@@ -209,32 +283,28 @@ export const MinimalReadingCard: FC<Props> = ({
                                         </>
                                     )}
                                 </button>
-                            ) : (
-                                <button
-                                    onClick={openReportModal}
-                                    className={styles.registerButton}
-                                    type="button"
-                                >
-                                    IZVJEŠĆE
-                                    <svg className={styles.notepadIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
-                                    </svg>
-                                </button>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
 
             {/* Report Modal */}
-            <ReportEditorModal
-                isOpen={isReportModalOpen}
-                onClose={closeReportModal}
-                onSubmit={handleSubmitReport}
-                departmentName={department.name}
-                date={dateAsString}
-                isLoading={isSubmittingReport}
-            />
+            {selectedReadingForReport && (
+                <ReportEditorModal
+                    isOpen={isReportModalOpen}
+                    onClose={closeReportModal}
+                    onSubmit={handleSubmitReport}
+                    departmentName={department.name}
+                    date={dateAsString}
+                    isLoading={isSubmittingReport}
+                    readingId={selectedReadingForReport.id}
+                    userId={selectedReadingForReport.user.id}
+                    userName={selectedReadingForReport.user.name}
+                    existingReport={selectedReadingForReport.report?.description}
+                    isReadOnly={selectedReadingForReport.user.id !== user?.id}
+                />
+            )}
         </>
     );
 }

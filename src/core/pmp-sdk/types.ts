@@ -7,7 +7,10 @@ export const AuthSuccessResponse = z.object({
 export const Report = z.object({
   id: z.number(),
   title: z.string(),
-  description: z.string()
+  description: z.string(),
+  /*reading,
+  created_at,
+  updated_at*/
 })
 
 export type Report = z.infer<typeof Report>

@@ -29,7 +29,7 @@ export default function RegisterPage() {
         const confirmPassword = formData.get('confirmPassword')
 
         if (!name || !email || !password || !code) {
-            const errorMsg = 'Name, Email, password and code are required'
+            const errorMsg = 'Ime, email, lozinka i kod su obavezni'
             setError(errorMsg)
             toast.error(errorMsg)
             setIsLoading(false)
@@ -38,7 +38,7 @@ export default function RegisterPage() {
 
         if (password !== confirmPassword) {
             setPasswordMatch(false)
-            const errorMsg = 'Passwords do not match'
+            const errorMsg = 'Lozinke se ne podudaraju'
             setError(errorMsg)
             toast.error(errorMsg)
             setIsLoading(false)
@@ -53,7 +53,7 @@ export default function RegisterPage() {
             // Success case - user is now registered
             localStorage.setItem('access_token', response.access_token)
 
-            toast.success('Account created successfully!')
+            toast.success('Uspješno ste se registrirali!')
             refetch()
             router.push('/')
 
@@ -61,7 +61,7 @@ export default function RegisterPage() {
             console.error('Registration error:', err)
             setIsLoading(false)
 
-            let errorMessage = 'An unexpected error occurred. Please try again.'
+            let errorMessage = 'Nešto je pošlo po zlu prilikom registracije. Molimo pokušajte ponovno.'
 
             if (err.response) {
                 // Server responded with error status
@@ -79,7 +79,7 @@ export default function RegisterPage() {
 
     return (
         <div className={styles.authContainer}>
-            <h1 className={styles.authTitle}>Create Account</h1>
+            <h1 className={styles.authTitle}>Registracija</h1>
 
             {error && (
                 <div className={styles.errorMessage}>{error}</div>
@@ -87,12 +87,12 @@ export default function RegisterPage() {
 
             <form onSubmit={handleSubmit} autoComplete="off" className={styles.authForm}>
                 <div className={styles.formGroup}>
-                    <label htmlFor="name" className={styles.formLabel}>Full Name</label>
+                    <label htmlFor="name" className={styles.formLabel}>Ime i prezime</label>
                     <input
                         type="text"
                         id="name"
                         name="name"
-                        placeholder="Your full name"
+                        placeholder="Ime i prezime"
                         required
                         disabled={isLoading}
                         className={styles.formInput}
@@ -105,7 +105,7 @@ export default function RegisterPage() {
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="Your email"
+                        placeholder="email"
                         required
                         disabled={isLoading}
                         className={styles.formInput}
@@ -113,12 +113,12 @@ export default function RegisterPage() {
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label htmlFor="password" className={styles.formLabel}>Password</label>
+                    <label htmlFor="password" className={styles.formLabel}>Lozinka</label>
                     <input
                         type="password"
                         id="password"
                         name="password"
-                        placeholder="Create a password"
+                        placeholder="Lozinka"
                         required
                         disabled={isLoading}
                         className={styles.formInput}
@@ -126,12 +126,12 @@ export default function RegisterPage() {
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label htmlFor="confirmPassword" className={styles.formLabel}>Confirm Password</label>
+                    <label htmlFor="confirmPassword" className={styles.formLabel}>Ponovi lozinku</label>
                     <input
                         type="password"
                         id="confirmPassword"
                         name="confirmPassword"
-                        placeholder="Confirm your password"
+                        placeholder="Ponovite lozinku"
                         required
                         disabled={isLoading}
                         className={`${styles.formInput} ${!passwordMatch ? styles.inputError : ''}`}
@@ -139,12 +139,12 @@ export default function RegisterPage() {
                 </div>
 
                 <div className={styles.formGroup}>
-                    <label htmlFor="code" className={styles.formLabel}>Code</label>
+                    <label htmlFor="code" className={styles.formLabel}>Kod</label>
                     <input
                         type="text"
                         id="code"
                         name="code"
-                        placeholder="Code"
+                        placeholder="Kod za registraciju"
                         required
                         disabled={isLoading}
                         className={styles.formInput}
@@ -156,12 +156,12 @@ export default function RegisterPage() {
                     disabled={isLoading}
                     className={styles.authButton}
                 >
-                    {isLoading ? 'Creating account...' : 'Create Account'}
+                    {isLoading ? 'Izrada...' : 'Registriraj se'}
                 </button>
             </form>
 
             <div className={styles.additionalOptions}>
-                <Link href="/auth/login" className={styles.link}>Already have an account? Log in</Link>
+                <Link href="/auth/login" className={styles.link}>Povratak na prijavu</Link>
             </div>
         </div>
     )
