@@ -1,9 +1,9 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import { API_URL } from '../../core/constants'
 import styles from './styles.module.css'
 import Link from "next/link";
+import { pmpSdk } from '../../core/pmp-sdk';
 
 export default function ForgotPasswordPage() {
     const [isLoading, setIsLoading] = useState(false)
@@ -19,41 +19,33 @@ export default function ForgotPasswordPage() {
         const formData = new FormData(event.currentTarget)
         const email = formData.get('email')
 
-        try {
-            const response = await fetch(`${API_URL}/auth/forgot-password`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
+        if (typeof email !== 'string' || !email) {
+            setError('Molimo unesite ispravnu email adresu.')
+            setIsLoading(false)
+            return
+        }
+
+        await pmpSdk.createPasswordReset({
+            email: email
+        }).catch((err) => {
+                console.error('Error creating password reset:', err)
+                if (err.response && err.response.status === 404) {
+                    setError('Email not found')
+                } else {
+                    setError('Došlo je do greške prilikom slanja zahtjeva. Molimo pokušajte ponovno.')
+                }
+                throw err
             })
 
-            if (!response.ok) {
-                if (response.status === 404) {
-                    setError('Email not found')
-                    setIsLoading(false)
-                    return
-                } else {
-                    setError(`Request failed: ${response.statusText}`)
-                    setIsLoading(false)
-                    return
-                }
-            }
-
-            // Reset form and show success message
-            setSuccess(true)
-            event.currentTarget.reset()
-        } catch (err) {
-            console.error('Forgot password error:', err)
-            setError('Došlo je do greške prilikom slanja zahtjeva. Molimo pokušajte ponovno.')
-        } finally {
-            setIsLoading(false)
-        }
+        setSuccess(true)
+        event.currentTarget.reset()
     }
 
     return (
         <div className={styles.authContainer}>
             <h1 className={styles.authTitle}>Promjena lozinke</h1>
             <p className={styles.authDescription}>
-                Unesite svoju email adresu kako biste primili link za resetiranje lozinke.
+                Unesite svoju email adresu kako biste primili link za promjenu lozinke.
             </p>
 
             {error && (
@@ -62,7 +54,7 @@ export default function ForgotPasswordPage() {
 
             {success && (
                 <div className={styles.successMessage}>
-                    Uspješno ste poslali zahtjev za resetiranje lozinke. Provjerite svoj email.
+                    Uspješno ste poslali zahtjev za promjenu lozinke. Provjerite svoj email.
                 </div>
             )}
 
@@ -73,7 +65,7 @@ export default function ForgotPasswordPage() {
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="email"
+                        placeholder="Email"
                         required
                         disabled={isLoading || success}
                         className={styles.formInput}
@@ -85,7 +77,7 @@ export default function ForgotPasswordPage() {
                     disabled={isLoading || success}
                     className={styles.authButton}
                 >
-                    {isLoading ? 'Slanje...' : 'Pošalji link za resetiranje lozinke'}
+                    {isLoading ? 'Slanje...' : 'Pošalji link za promjenu lozinke'}
                 </button>
             </form>
 

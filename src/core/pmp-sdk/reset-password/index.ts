@@ -1,8 +1,8 @@
 import { ResetPasswordPayload, GenericResponse } from "../types";
-import { _post } from "../utilities";
+import { _put } from "../utilities";
 
 export const _resetPassword = async (payload: ResetPasswordPayload) => {
-  return _post('/reset-password', {
+  return _put('/users/reset-password', {
     ...payload
   }, GenericResponse)
 }
