@@ -1,4 +1,5 @@
 import { _createActivity } from "./create-activity";
+import { _createPasswordReset } from "./create-password-reset";
 import { _createReading } from "./create-reading";
 import { _createReport } from "./create-report";
 import { _deleteActivity } from "./delete-activity";
@@ -11,6 +12,7 @@ import { _getReadingsForDepartment } from "./get-readings-for-department";
 import { _getReadingsForTimeframe } from "./get-readings-for-timeframe";
 import { _logIn } from "./log-in";
 import { _register } from "./register";
+import { _resetPassword } from "./reset-password";
 import { _signOffForActivity } from "./sign-off-for-activity";
 import { _signUpForActivity } from "./sign-up-for-activity";
 import { _updateActivity } from "./update-activity";
@@ -19,6 +21,8 @@ import { _updateReport } from "./update-report";
 export const pmpSdk = {
   logIn: _logIn,
   register: _register,
+  createPasswordReset: _createPasswordReset,
+  resetPassword: _resetPassword,
   getDepartment: _getDepartment,
   getDepartments: _getDepartments,
   getReadingsForDepartment: _getReadingsForDepartment,

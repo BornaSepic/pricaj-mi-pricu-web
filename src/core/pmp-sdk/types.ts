@@ -36,6 +36,19 @@ export type Department = z.infer<typeof Department>
 
 export const Departments = z.array(Department)
 
+export const ResetPasswordPayload = z.object({
+  token: z.string(),
+  password: z.string()
+})
+
+export type ResetPasswordPayload = z.infer<typeof ResetPasswordPayload>
+
+export const CreatePasswordResetPayload = z.object({
+  email: z.string().email(),
+})
+
+export type CreatePasswordResetPayload = z.infer<typeof CreatePasswordResetPayload>
+
 export const CreateActivityPayload = z.object({
   title: z.string(),
   date: z.string(),

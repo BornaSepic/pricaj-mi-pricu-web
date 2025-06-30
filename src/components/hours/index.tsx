@@ -46,23 +46,17 @@ export const Hours: FC = () => {
         setDate(nextMonth);
     }
 
-    const totalHoursForTimeframe = useMemo(() => {
-        if(!readingsForTimeframe) {
-            return 0;
+    const totalHoursForTimeframe = readingsForTimeframe ? readingsForTimeframe.reduce((acc, reading) => {
+        const readingForUser = reading.readings.find(reading => user && user.id === reading.user.id);
+        if (readingForUser && readingForUser.report) {
+            return acc + 2;
         }
 
-        return readingsForTimeframe.reduce((acc, reading) => {
-            const readingForUser = reading.readings.find(reading => user && user.id === reading.user.id);
-            if (readingForUser && readingForUser.report) {
-                return acc + 2;
-            }
-
-            return acc;
-        }, 0);
-    }, [readingsForTimeframe]);
+        return acc;
+    }, 0) : 0
 
     const totalHours = useMemo(() => {
-        if(!allReadings) {
+        if (!allReadings) {
             return 0;
         }
 
