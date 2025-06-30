@@ -17,11 +17,11 @@ export type Props = {
 export const MAX_READINGS_COUNT = 3 as const;
 
 export const ReadingCard: FC<Props> = ({
-    department,
-    date: dateAsString,
-    readings,
-    onChange
-}) => {
+                                           department,
+                                           date: dateAsString,
+                                           readings,
+                                           onChange
+                                       }) => {
     const queryClient = useQueryClient()
     const { user } = useAuth()
 
@@ -32,6 +32,19 @@ export const ReadingCard: FC<Props> = ({
 
     const date = new Date(dateAsString);
     const isAvailable = readings.length < MAX_READINGS_COUNT;
+
+    // Check if it's today and past 2pm
+    const isToday = () => {
+        const today = new Date();
+        return date.toDateString() === today.toDateString();
+    };
+
+    const isPast2PM = () => {
+        const now = new Date();
+        return now.getHours() >= 14; // 14:00 = 2PM
+    };
+
+    const isTodayAndPast2PM = isToday() && isPast2PM();
 
     console.log("date", readings)
 
@@ -48,6 +61,12 @@ export const ReadingCard: FC<Props> = ({
         if (!user) {
             return;
         }
+
+        if (isTodayAndPast2PM) {
+            toast.warning('Ne možete se prijaviti za današnje čitanje nakon 14:00h');
+            return;
+        }
+
         setIsLoading(true);
 
         pmpSdk.createReading(dateAsString, department.id)
@@ -77,6 +96,11 @@ export const ReadingCard: FC<Props> = ({
 
     const handleCancelReading = () => {
         if (!userReading) {
+            return;
+        }
+
+        if (isTodayAndPast2PM) {
+            toast.warning('Ne možete otkazati današnje čitanje nakon 14:00h');
             return;
         }
 
@@ -114,11 +138,11 @@ export const ReadingCard: FC<Props> = ({
                     </span>
                     <span>
                         ({date.toLocaleDateString('hr-HR', {
-                            year: undefined,
-                            month: undefined,
-                            day: undefined,
-                            weekday: 'short'
-                        })})
+                        year: undefined,
+                        month: undefined,
+                        day: undefined,
+                        weekday: 'short'
+                    })})
                     </span>
                 </div>
                 <div className={styles.slotInfo}>{readings.length}/{MAX_READINGS_COUNT}</div>
@@ -127,8 +151,19 @@ export const ReadingCard: FC<Props> = ({
 
             <div className={styles.cardContent}>
                 <div className={styles.badgeContainer}>
-                    <div className={isAvailable ? styles.availableBadge : styles.unavailableBadge}>
-                        {isAvailable ? 'SLOBODNO' : 'ZAUZETO'}
+                    <div className={
+                        isTodayAndPast2PM
+                            ? styles.blockedBadge
+                            : isAvailable
+                                ? styles.availableBadge
+                                : styles.unavailableBadge
+                    }>
+                        {isTodayAndPast2PM
+                            ? <span>NEDOSTUPNO</span>
+                            : isAvailable
+                                ? <span>SLOBODNO</span>
+                                : <span>ZAUZETO</span>
+                        }
                     </div>
                 </div>
                 <button
@@ -176,9 +211,10 @@ export const ReadingCard: FC<Props> = ({
                         {isUserSignedUp ? (
                             <button
                                 onClick={handleCancelReading}
-                                className={styles.registerButton}
+                                className={clsx(styles.registerButton, isTodayAndPast2PM && styles.disabledButton)}
                                 type="button"
-                                disabled={isCancelLoading}
+                                disabled={isCancelLoading || isTodayAndPast2PM}
+                                title={isTodayAndPast2PM ? 'Ne možete otkazati nakon 14:00h' : undefined}
                             >
                                 {isCancelLoading ? 'ISPISUJEMO TE' : (
                                     <>
@@ -192,9 +228,10 @@ export const ReadingCard: FC<Props> = ({
                         ) : isAvailable ? (
                             <button
                                 onClick={handleSignupForReading}
-                                className={styles.registerButton}
+                                className={clsx(styles.registerButton, isTodayAndPast2PM && styles.disabledButton)}
                                 type="button"
-                                disabled={isLoading}
+                                disabled={isLoading || isTodayAndPast2PM}
+                                title={isTodayAndPast2PM ? 'Ne možete se prijaviti nakon 14:00h' : undefined}
                             >
                                 {isLoading ? 'UPISUJEMO TE' : (
                                     <>
@@ -207,27 +244,6 @@ export const ReadingCard: FC<Props> = ({
                             </button>
                         ) : null}
                     </div>
-
-                    {/*{isAvailable && (
-                        <div className={styles.buttonContainer}>
-                            <button
-                                onClick={() => {
-                                    handleSignupForReading()
-                                }}
-                                className={styles.registerButton}
-                                type="button"
-                            >
-                                {isLoading ? 'UPISUJEMO TE' : (
-                                    <>
-                                        UPIŠI ME
-                                        <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
-                                        </svg>
-                                    </>
-                                )}
-                            </button>
-                        </div>
-                    )}*/}
                 </div>
             )}
         </div>

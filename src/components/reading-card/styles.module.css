@@ -81,7 +81,8 @@
 .badgeContainer {}
 
 .availableBadge,
-.unavailableBadge {
+.unavailableBadge,
+.blockedBadge {
     display: inline-block;
     padding: 4px 16px;
     border-radius: 4px;
@@ -98,6 +99,11 @@
 .unavailableBadge {
     background-color: var(--error-color, #ef4444);
     /* red-500 */
+}
+
+.blockedBadge {
+    background-color: var(--blocked-color, #5c5c5c);
+    /* amber-500 */
 }
 
 .expandedContent {
@@ -147,4 +153,13 @@
 .penIcon {
     width: 16px;
     height: 16px;
+}
+
+.disabledButton {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.disabledButton:hover {
+    background: inherit !important;
 }

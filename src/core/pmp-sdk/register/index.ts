@@ -3,7 +3,7 @@ import { _post } from "../utilities"
 
 export const _register = async (
     name: FormDataEntryValue, role: FormDataEntryValue, seniority: FormDataEntryValue, status: FormDataEntryValue,
-    email: FormDataEntryValue, password: FormDataEntryValue, code: FormDataEntryValue
+    phone: FormDataEntryValue | null, email: FormDataEntryValue, password: FormDataEntryValue, code: FormDataEntryValue
 ) => {
   return _post('/users', {
     name: name,
@@ -11,6 +11,7 @@ export const _register = async (
     seniority: seniority,
     status: status,
     email: email,
+    phone: phone,
     password: password,
     code: code
   }, AuthSuccessResponse)

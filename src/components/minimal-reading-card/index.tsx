@@ -95,12 +95,18 @@ export const MinimalReadingCard: FC<Props> = ({
         try {
             // Check if report already exists (for editing)
             if (selectedReadingForReport.report) {
-                // TODO: Implement report update endpoint
-                // await pmpSdk.updateReport(selectedReadingForReport.report.id, {
-                //     title: 'title',
-                //     description: reportText
-                // });
-                toast.error('Uređivanje izvješća još nije implementirano');
+                await pmpSdk.updateReport({
+                    id: selectedReadingForReport.report.id,
+                    title: 'title',
+                    description: reportText
+                });
+                toast.success('Izvješće je uspješno ažurirano');
+                setIsReportModalOpen(false);
+                setSelectedReadingForReport(null);
+                if (onChange) {
+                    onChange();
+                }
+                await queryClient.invalidateQueries({ queryKey: ['get-reports'] });
                 return;
             } else {
                 // Create new report

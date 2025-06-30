@@ -29,27 +29,41 @@ export const ReportEditorModal: FC<Props> = ({
                                                  isReadOnly = false
                                              }) => {
     const [reportText, setReportText] = useState('');
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     // Create unique key for localStorage based on reading ID
     const storageKey = readingId ? `report_draft_${readingId}` : `report_draft_${departmentName}_${date}`;
 
+    // Check if current content differs from what's saved in the database
+    useEffect(() => {
+        const originalContent = existingReport || '';
+        setHasUnsavedChanges(reportText !== originalContent);
+    }, [reportText, existingReport]);
+
     // Load existing report or saved draft on component mount and when modal opens
     useEffect(() => {
         if (isOpen) {
-            if (existingReport) {
-                // Load existing report
-                setReportText(existingReport);
-            } else if (!isReadOnly) {
-                // Load saved draft only if not read-only
+            if (!isReadOnly) {
+                // First try to load saved draft
                 try {
                     const savedDraft = localStorage.getItem(storageKey);
                     if (savedDraft) {
                         setReportText(savedDraft);
+                    } else if (existingReport) {
+                        // Only use existing report if no draft exists
+                        setReportText(existingReport);
                     }
                 } catch (error) {
                     console.warn('Could not load saved draft:', error);
+                    // Fallback to existing report if draft loading fails
+                    if (existingReport) {
+                        setReportText(existingReport);
+                    }
                 }
+            } else if (existingReport) {
+                // In read-only mode, always use existing report
+                setReportText(existingReport);
             }
 
             // Focus textarea when modal opens (only if not read-only)
@@ -63,7 +77,7 @@ export const ReportEditorModal: FC<Props> = ({
 
     // Auto-save draft while typing (debounced) - only if not read-only
     useEffect(() => {
-        if (!isOpen || !reportText.trim() || isReadOnly || existingReport) return;
+        if (!isOpen || !reportText.trim() || isReadOnly) return;
 
         const timeoutId = setTimeout(() => {
             try {
@@ -74,18 +88,16 @@ export const ReportEditorModal: FC<Props> = ({
         }, 1000); // Save after 1 second of no typing
 
         return () => clearTimeout(timeoutId);
-    }, [reportText, storageKey, isOpen, isReadOnly, existingReport]);
+    }, [reportText, storageKey, isOpen, isReadOnly]);
 
     const handleSubmit = () => {
         if (reportText.trim() && !isReadOnly) {
             onSubmit(reportText.trim());
             // Clear saved draft after successful submission
-            if (!existingReport) {
-                try {
-                    localStorage.removeItem(storageKey);
-                } catch (error) {
-                    console.warn('Could not clear draft:', error);
-                }
+            try {
+                localStorage.removeItem(storageKey);
+            } catch (error) {
+                console.warn('Could not clear draft:', error);
             }
             setReportText('');
         }
@@ -127,6 +139,9 @@ export const ReportEditorModal: FC<Props> = ({
                 <div className={styles.modalHeader}>
                     <h3 className={styles.modalTitle}>
                         {modalTitle}
+                        {hasUnsavedChanges && !isReadOnly && (
+                            <span className={styles.unsavedBadge}>Nije spremljeno</span>
+                        )}
                     </h3>
                     <span className={styles.modalDate}>
                         {new Date(date).toLocaleDateString('hr-HR', {
@@ -155,11 +170,20 @@ export const ReportEditorModal: FC<Props> = ({
                         onChange={(e) => !isReadOnly && setReportText(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder={isReadOnly ? "Nema izvješća..." : "Napišite izvješće o čitanju..."}
-                        className={`${styles.reportTextarea} ${isReadOnly ? styles.readOnlyTextarea : ''}`}
+                        className={`${styles.reportTextarea} ${isReadOnly ? styles.readOnlyTextarea : ''} ${hasUnsavedChanges && !isReadOnly ? styles.hasUnsavedChanges : ''}`}
                         rows={12}
                         disabled={isLoading}
                         readOnly={isReadOnly}
                     />
+                    {hasUnsavedChanges && !isReadOnly && (
+                        <div className={styles.unsavedIndicator}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10" opacity="0.3"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <span>Imate nespremljene promjene</span>
+                        </div>
+                    )}
                 </div>
 
                 <div className={styles.modalFooter}>
@@ -174,9 +198,9 @@ export const ReportEditorModal: FC<Props> = ({
                     {!isReadOnly && (
                         <button
                             onClick={handleSubmit}
-                            className={styles.submitButton}
+                            className={`${styles.submitButton} ${hasUnsavedChanges ? styles.hasChanges : ''}`}
                             type="button"
-                            disabled={!reportText.trim() || isLoading}
+                            disabled={!reportText.trim() || isLoading || !hasUnsavedChanges}
                         >
                             {isLoading ? (
                                 <>

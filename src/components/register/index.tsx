@@ -24,6 +24,7 @@ export default function RegisterPage() {
         const formData = new FormData(event.currentTarget)
         const name = formData.get('name')
         const email = formData.get('email')
+        const phone = formData.get('phone') as string | null
         const password = formData.get('password')
         const code = formData.get('code')
         const confirmPassword = formData.get('confirmPassword')
@@ -46,7 +47,7 @@ export default function RegisterPage() {
         }
 
         try {
-            const response = await pmpSdk.register(name, "user", "junior", "active", email, password, code)
+            const response = await pmpSdk.register(name, "user", "junior", "active", phone, email, password, code)
 
             console.log(response)
 
@@ -107,6 +108,18 @@ export default function RegisterPage() {
                         name="email"
                         placeholder="email"
                         required
+                        disabled={isLoading}
+                        className={styles.formInput}
+                    />
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label htmlFor="phone" className={styles.formLabel}>Broj mobitela</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Broj mobitela (opcionalno)"
                         disabled={isLoading}
                         className={styles.formInput}
                     />

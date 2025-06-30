@@ -18,6 +18,7 @@ export type Report = z.infer<typeof Report>
 export const User = z.object({
   id: z.number(),
   email: z.string(),
+  phone: z.string().nullable(),
   name: z.string(),
   role: z.enum(["admin", "user"]),
   seniority: z.enum(["senior", "junior"]),

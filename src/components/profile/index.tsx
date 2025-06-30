@@ -18,6 +18,7 @@ export const ProfilePage = () => {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
     const [seniority, setSeniority] = useState<'senior' | 'junior'>('junior')
 
     const { logout } = useAuth()
@@ -26,6 +27,7 @@ export const ProfilePage = () => {
         if (user) {
             setName(user.name)
             setEmail(user.email)
+            setPhone(user.phone || '')
             setSeniority(user.seniority)
         }
     }, [user])
@@ -52,6 +54,7 @@ export const ProfilePage = () => {
                 body: JSON.stringify({
                     name,
                     email,
+                    phone,
                     seniority
                 })
             })
@@ -131,6 +134,11 @@ export const ProfilePage = () => {
                         </div>
 
                         <div className={styles.profileField}>
+                            <label className={styles.fieldLabel}>Broj mobitela</label>
+                            <div className={styles.fieldValue}>{user.phone}</div>
+                        </div>
+
+                        <div className={styles.profileField}>
                             <label className={styles.fieldLabel}>Status</label>
                             <div className={styles.fieldValue}>{user.seniority}</div>
                         </div>
@@ -157,6 +165,18 @@ export const ProfilePage = () => {
                                 id="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                className={styles.formInput}
+                                disabled={isSaving}
+                            />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="phone" className={styles.formLabel}>Broj mobitela</label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
                                 className={styles.formInput}
                                 disabled={isSaving}
                             />
