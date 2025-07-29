@@ -17,10 +17,6 @@
     transition: transform 0.1s ease;
 }
 
-.clickableCard:hover {
-    transform: translateY(-1px);
-}
-
 .inactiveCard {
     background-color: var(--gray-card-background, #9ca3af) !important;
 }
@@ -208,4 +204,9 @@
 .statusInactive {
     background-color: #fee2e2;
     color: #991b1b;
+}
+
+.hiddenBadge {
+    opacity: 0;
+    visibility: hidden;
 }

@@ -1,7 +1,7 @@
 .card {
     font-size: 14px;
     width: 100%;
-    margin-bottom: 35px;
+    margin-bottom: 16px;
     border-radius: 8px;
     border: 1px solid var(--text-color, black);
     position: relative;
@@ -56,4 +56,13 @@
     margin: 8px 0 0;
     padding-top: 8px;
 
+}
+
+.addButton {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }

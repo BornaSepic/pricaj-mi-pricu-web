@@ -106,17 +106,11 @@ export const MinimalUserCard: FC<Props> = ({
                         </span>
                     </div>
                     <div className={styles.badgeContainer}>
-                        <div className={
-                            user.status === 'active'
-                                ? styles.availableBadge
-                                : styles.unavailableBadge
-                        }>
-                            <span>
-                                {user.status === 'active'
-                                    ? 'AKTIVAN'
-                                    : 'NEAKTIVAN'
-                                }
-                            </span>
+                        <div className={clsx(
+                            styles.unavailableBadge,
+                            user.status === 'active' && styles.hiddenBadge
+                        )}>
+                            <span>NEAKTIVAN</span>
                         </div>
                     </div>
                     <button
