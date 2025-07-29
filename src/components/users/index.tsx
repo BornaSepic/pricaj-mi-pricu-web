@@ -2,20 +2,10 @@
 
 import { FC, useState } from 'react';
 import styles from './styles.module.css';
-import { MinimalUserCard } from "../minimal-user-card";
+import { MinimalUserCard, User } from "../minimal-user-card";
 
 // Sample users data (replace with actual API call when backend is ready)
-const sampleUsers: {
-    id: number;
-    name: string;
-    email: string;
-    phone: string;
-    role: "admin" | "user";
-    seniority: "junior" | "senior";
-    status: "active" | "inactive";
-    created_at: string;
-    updated_at: string;
-}[] = [
+const sampleUsers: User[] = [
     {
         "id": 2,
         "name": "Borna S.",
@@ -85,7 +75,7 @@ const sampleUsers: {
 ];
 
 export const Users: FC = () => {
-    const [users] = useState(sampleUsers);
+    const [users] = useState<User[]>(sampleUsers);
 
     // TODO: Replace with actual API call when backend is ready
     // const { data: users, refetch } = useQuery({

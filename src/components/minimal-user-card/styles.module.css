@@ -113,7 +113,7 @@
 }
 
 .blockedBadge {
-    background-color: var(--warning-color, #f59e0b);
+    background-color: var(--warning-color, #f56d0b);
 }
 
 .expandedContent {

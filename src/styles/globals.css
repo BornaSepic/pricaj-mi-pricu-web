@@ -44,5 +44,6 @@ a {
   --gray-card-background: #b5b5b5;
   --success-color: #009E5C;
   --error-color: #ef4444;
+  --warning-color: #f56d0b;
   --blocked-color: #5c5c5c;
 }
