@@ -1,0 +1,59 @@
+.card {
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--text-color, black);
+    position: relative;
+    background-color: var(--card-bg, #fff);
+    padding: 16px 16px 0;
+}
+
+.cardHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.cardTitle {
+    margin: 0;
+}
+
+.monthSelector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.monthSelector__button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.monthSelector__label {
+}
+
+.cardContent {
+    font-weight: 500;
+}
+
+.cardContent__currentMonth {
+    margin: 0;
+}
+
+.cardContent__total {
+    border-top: 1px solid var(--text-color, black);
+    margin: 8px 0 0;
+    padding-top: 8px;
+
+}

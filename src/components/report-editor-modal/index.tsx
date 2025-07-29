@@ -103,10 +103,28 @@ export const ReportEditorModal: FC<Props> = ({
         }
     };
 
+    // Handle Cancel button - reverts to original content
+    const handleCancel = () => {
+        if (!isReadOnly) {
+            // Revert to original content
+            const originalContent = existingReport || '';
+            setReportText(originalContent);
+
+            // Clear any saved draft since we're reverting
+            try {
+                localStorage.removeItem(storageKey);
+            } catch (error) {
+                console.warn('Could not clear draft:', error);
+            }
+        }
+        onClose();
+    };
+
+    // Handle close (X button, overlay click) - preserves draft
     const handleClose = () => {
         onClose();
         // Reset text when closing
-        setReportText('');
+        //setReportText('');
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -117,7 +135,7 @@ export const ReportEditorModal: FC<Props> = ({
             e.preventDefault();
             handleSubmit();
         }
-        // Close with Escape
+        // Close with Escape - preserves draft
         if (e.key === 'Escape') {
             handleClose();
         }
@@ -139,10 +157,10 @@ export const ReportEditorModal: FC<Props> = ({
                 <div className={styles.modalHeader}>
                     <h3 className={styles.modalTitle}>
                         {modalTitle}
-                        {hasUnsavedChanges && !isReadOnly && (
-                            <span className={styles.unsavedBadge}>Nije spremljeno</span>
-                        )}
                     </h3>
+                    {/*{hasUnsavedChanges && !isReadOnly && (
+                        <span className={styles.unsavedBadge}>Nije spremljeno</span>
+                    )}*/}
                     <span className={styles.modalDate}>
                         {new Date(date).toLocaleDateString('hr-HR', {
                             weekday: 'long',
@@ -188,7 +206,7 @@ export const ReportEditorModal: FC<Props> = ({
 
                 <div className={styles.modalFooter}>
                     <button
-                        onClick={handleClose}
+                        onClick={handleCancel}
                         className={styles.cancelButton}
                         type="button"
                         disabled={isLoading}

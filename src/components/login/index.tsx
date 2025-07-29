@@ -69,7 +69,7 @@ export default function LoginPage() {
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="email"
+                        placeholder="Email"
                         required
                         disabled={isLoading}
                         className={styles.formInput}

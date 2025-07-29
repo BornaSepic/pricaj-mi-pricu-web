@@ -4,6 +4,7 @@ import { Hours } from '../components/hours';
 import { FutureReadings } from '../components/future-readings';
 import { PastReadings } from '../components/past-readings';
 import { Events } from '../components/events';
+import {Users} from "../components/users";
 
 const Home = async () => {
   return (
@@ -15,6 +16,8 @@ const Home = async () => {
       <PastReadings />
       <div className={styles.separatorLine}></div>
       <Events />
+      <div className={styles.separatorLine}></div>
+      <Users />
     </div>)
 }
 
