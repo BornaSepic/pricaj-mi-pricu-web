@@ -7,6 +7,7 @@ import { API_URL } from '../../core/constants'
 import { useAuth } from '../../hooks/useAuth'
 import styles from './styles.module.css'
 import ThemePicker from "../../components/theme/ThemePicker";
+import { pmpSdk } from '../../core/pmp-sdk'
 
 export const ProfilePage = () => {
     const router = useRouter()
@@ -37,49 +38,25 @@ export const ProfilePage = () => {
         setError(null)
         setSuccess(null)
 
-        const token = localStorage.getItem('access_token')
-
-        if (!token) {
-            router.push('/auth/login')
+        if (!user) {
             return
         }
 
-        try {
-            const response = await fetch(`${API_URL}/users/${user?.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    phone,
-                    seniority
-                })
-            })
-
-            if (!response.ok) {
-                /*if (response.status === 401) {
-                    logout()
-                    return
-                }*/
-                if (response.status === 409) {
-                    throw new Error('Email is already in use')
-                }
-                throw new Error(`Failed to update profile: ${response.statusText}`)
-            }
-
-            // Refetch user data to update the state across the app
+        pmpSdk.updateUser({
+            id: user.id,
+            name: name,
+            email: email,
+            phone: phone,
+            seniority: seniority
+        }).then(async () => {
             await refetch()
             setIsEditing(false)
             setSuccess('Uspješno ste ažurirali svoj profil.')
-        } catch (err: any) {
-            console.error('Error updating profile:', err)
-            setError(err.message || 'Došlo je do pogreške prilikom ažuriranja profila.')
-        } finally {
-            setIsSaving(false)
-        }
+        })
+            .catch((err) => {
+                console.error('Error updating profile:', err)
+                setError('Došlo je do greške prilikom ažuriranja profila. Molimo pokušajte ponovno kasnije.')
+            })
     }
 
     if (isLoading) {

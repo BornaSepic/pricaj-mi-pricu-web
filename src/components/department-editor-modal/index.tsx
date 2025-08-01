@@ -1,12 +1,6 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import styles from './styles.module.css';
-
-export type Department = {
-    id: number;
-    name: string;
-    created_at: string;
-    updated_at: string;
-}
+import { Department } from '../../core/pmp-sdk/types';
 
 export type DepartmentFormData = {
     name: string;
@@ -22,13 +16,13 @@ export type Props = {
 }
 
 export const DepartmentEditorModal: FC<Props> = ({
-                                                     isOpen,
-                                                     onClose,
-                                                     onSubmit,
-                                                     department,
-                                                     isLoading = false,
-                                                     isReadOnly = false
-                                                 }) => {
+    isOpen,
+    onClose,
+    onSubmit,
+    department,
+    isLoading = false,
+    isReadOnly = false
+}) => {
     const [formData, setFormData] = useState<DepartmentFormData>({
         name: ''
     });
@@ -181,16 +175,6 @@ export const DepartmentEditorModal: FC<Props> = ({
                     <h3 className={styles.modalTitle}>
                         {modalTitle}
                     </h3>
-                    <span className={styles.modalDate}>
-                        {department.id === 0 ?
-                            'Novi odjel' :
-                            `Stvoren: ${new Date(department.created_at).toLocaleDateString('hr-HR', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            })}`
-                        }
-                    </span>
                     <button
                         onClick={handleClose}
                         className={styles.closeButton}
@@ -198,7 +182,7 @@ export const DepartmentEditorModal: FC<Props> = ({
                         aria-label="Zatvori"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
                 </div>
@@ -226,8 +210,8 @@ export const DepartmentEditorModal: FC<Props> = ({
                         {hasUnsavedChanges && !isReadOnly && (
                             <div className={styles.unsavedIndicator}>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                    <circle cx="12" cy="12" r="10" opacity="0.3"/>
-                                    <circle cx="12" cy="12" r="3"/>
+                                    <circle cx="12" cy="12" r="10" opacity="0.3" />
+                                    <circle cx="12" cy="12" r="3" />
                                 </svg>
                                 <span>Imate nespremljene promjene</span>
                             </div>
@@ -252,7 +236,7 @@ export const DepartmentEditorModal: FC<Props> = ({
                                 {isLoading ? (
                                     <>
                                         <svg className={styles.spinner} width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                                         </svg>
                                         Spremam...
                                     </>

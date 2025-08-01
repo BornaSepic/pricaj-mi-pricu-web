@@ -27,13 +27,13 @@ export type Props = {
 }
 
 export const ActivityEditorModal: FC<Props> = ({
-                                                   isOpen,
-                                                   onClose,
-                                                   onSubmit,
-                                                   activity,
-                                                   isLoading = false,
-                                                   isReadOnly = false
-                                               }) => {
+    isOpen,
+    onClose,
+    onSubmit,
+    activity,
+    isLoading = false,
+    isReadOnly = false
+}) => {
     const [formData, setFormData] = useState<ActivityFormData>({
         title: '',
         description: '',
@@ -218,7 +218,7 @@ export const ActivityEditorModal: FC<Props> = ({
                         aria-label="Zatvori"
                     >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
                 </div>
@@ -281,8 +281,8 @@ export const ActivityEditorModal: FC<Props> = ({
                         {hasUnsavedChanges && !isReadOnly && (
                             <div className={styles.unsavedIndicator}>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                    <circle cx="12" cy="12" r="10" opacity="0.3"/>
-                                    <circle cx="12" cy="12" r="3"/>
+                                    <circle cx="12" cy="12" r="10" opacity="0.3" />
+                                    <circle cx="12" cy="12" r="3" />
                                 </svg>
                                 <span>Imate nespremljene promjene</span>
                             </div>
@@ -307,7 +307,7 @@ export const ActivityEditorModal: FC<Props> = ({
                                 {isLoading ? (
                                     <>
                                         <svg className={styles.spinner} width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                                         </svg>
                                         Spremam...
                                     </>
