@@ -47,7 +47,9 @@ export const Hours: FC = () => {
     }
 
     const totalHoursForTimeframe = readingsForTimeframe ? readingsForTimeframe.reduce((acc, reading) => {
-        const readingForUser = reading.readings.find(reading => user && user.id === reading.user.id);
+        const readingForUser = reading.readings.find(reading => {
+            return user && reading.user && user.id === reading.user.id;
+        });
         if (readingForUser && readingForUser.report) {
             return acc + 2;
         }
@@ -61,7 +63,9 @@ export const Hours: FC = () => {
         }
 
         return allReadings.reduce((acc, reading) => {
-            const readingForUser = reading.readings.find(reading => user && user.id === reading.user.id);
+            const readingForUser = reading.readings.find(reading => {
+                return user && reading.user && user.id === reading.user.id
+            });
             if (readingForUser && readingForUser.report) {
                 return acc + 2;
             }

@@ -11,6 +11,7 @@ import { _getDepartments } from "./get-departments";
 import { _getEvents } from "./get-events";
 import { _getReadingsForDepartment } from "./get-readings-for-department";
 import { _getReadingsForTimeframe } from "./get-readings-for-timeframe";
+import { _getUsers } from "./get-users";
 import { _logIn } from "./log-in";
 import { _register } from "./register";
 import { _resetPassword } from "./reset-password";
@@ -25,6 +26,7 @@ export const pmpSdk = {
   logIn: _logIn,
   register: _register,
   updateUser: _updateUser,
+  getUsers: _getUsers,
   createPasswordReset: _createPasswordReset,
   resetPassword: _resetPassword,
   getDepartment: _getDepartment,

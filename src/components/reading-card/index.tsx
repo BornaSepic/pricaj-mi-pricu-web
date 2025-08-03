@@ -1,11 +1,11 @@
-import {FC, useEffect, useState} from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './styles.module.css';
 import clsx from 'clsx';
 import { useAuth } from '../../hooks/useAuth';
 import { Department, Reading } from '../../core/pmp-sdk/types';
 import { pmpSdk } from '../../core/pmp-sdk';
 import { useQueryClient } from '@tanstack/react-query';
-import {useToast} from "../../hooks/useToast";
+import { useToast } from "../../hooks/useToast";
 
 export type Props = {
     department: Department;
@@ -17,18 +17,18 @@ export type Props = {
 export const MAX_READINGS_COUNT = 3 as const;
 
 export const ReadingCard: FC<Props> = ({
-                                           department,
-                                           date: dateAsString,
-                                           readings,
-                                           onChange
-                                       }) => {
+    department,
+    date: dateAsString,
+    readings,
+    onChange
+}) => {
     const queryClient = useQueryClient()
     const { user } = useAuth()
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isCancelLoading, setIsCancelLoading] = useState(false);
-    const [optimisticIsUserSignedUp, setOptimisticIsUserSignedUp] = useState<boolean|null>(null);
+    const [optimisticIsUserSignedUp, setOptimisticIsUserSignedUp] = useState<boolean | null>(null);
 
     const date = new Date(dateAsString);
     const isAvailable = readings.length < MAX_READINGS_COUNT;
@@ -48,7 +48,7 @@ export const ReadingCard: FC<Props> = ({
 
     console.log("date", readings)
 
-    const userReading = readings.find(reading => reading.user.id === user?.id);
+    const userReading = readings.find(reading => reading.user && user && reading.user.id === user.id);
     const isUserSignedUp = optimisticIsUserSignedUp === null ? !!userReading : optimisticIsUserSignedUp;
 
     useEffect(() => {
@@ -138,11 +138,11 @@ export const ReadingCard: FC<Props> = ({
                     </span>
                     <span>
                         ({date.toLocaleDateString('hr-HR', {
-                        year: undefined,
-                        month: undefined,
-                        day: undefined,
-                        weekday: 'short'
-                    })})
+                            year: undefined,
+                            month: undefined,
+                            day: undefined,
+                            weekday: 'short'
+                        })})
                     </span>
                 </div>
                 <div className={styles.slotInfo}>{readings.length}/{MAX_READINGS_COUNT}</div>
@@ -196,6 +196,10 @@ export const ReadingCard: FC<Props> = ({
                             }
 
                             const user = reading.user;
+
+                            if (!user) {
+                                return null
+                            }
 
                             return (
                                 <div key={index} className={styles.userSlot}>

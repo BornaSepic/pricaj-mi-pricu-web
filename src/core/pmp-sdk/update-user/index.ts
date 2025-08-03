@@ -1,13 +1,7 @@
-import { Department, GenericResponse, User } from "../types";
+import { GenericResponse, UserData } from "../types";
 import { _patch, _post } from "../utilities";
 
-export const _updateUser = async (user: {
-  id: number;
-  email: string;
-  phone: string;
-  name: string;
-  seniority: string;
-}) => {
+export const _updateUser = async (user: UserData) => {
   return _patch(`/users/${user.id}`, {
     email: user.email,
     phone: user.phone,

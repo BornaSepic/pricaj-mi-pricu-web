@@ -15,16 +15,21 @@ export const Report = z.object({
 
 export type Report = z.infer<typeof Report>
 
-export const User = z.object({
+export const UserData = z.object({
   id: z.number(),
   email: z.string(),
   phone: z.string().nullable(),
   name: z.string(),
   role: z.enum(["admin", "user"]),
   seniority: z.enum(["senior", "junior"]),
+  status: z.enum(["active", "inactive"]),
 })
 
+export const User = UserData.nullable()
+
+export type UserData = z.infer<typeof UserData>
 export type User = z.infer<typeof User>
+
 
 export const ProfileSuccessResponse = User.nullable()
 
