@@ -7,6 +7,7 @@ import Link from "next/link";
 import { pmpSdk } from '../../core/pmp-sdk';
 import { MinimalActivityCard } from "../minimal-activity-card";
 import { ActivityEditorModal, Activity, ActivityFormData } from "../event-editor-modal";
+import {AdminProvider} from "../admin-lock";
 
 // Create a "new activity" template for adding
 const createNewActivity = (): Activity => ({
@@ -55,9 +56,7 @@ export const Events: FC = () => {
         try {
             if (selectedActivity.id === 0) {
                 // Creating new activity
-                console.log('Creating new activity:', activityData);
-                // TODO: Implement API call to create activity
-                // await pmpSdk.createActivity(activityData);
+                await pmpSdk.createActivity(activityData);
             } else {
                 // Updating existing activity
                 console.log('Updating activity:', selectedActivity.id, activityData);
@@ -88,16 +87,18 @@ export const Events: FC = () => {
                             Događaji
                         </Link>
                     </h2>
-                    <button
-                        className={styles.addButton}
-                        onClick={handleAddEvent}
-                        type="button"
-                        title="Dodaj novi događaj"
-                    >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                        </svg>
-                    </button>
+                    <AdminProvider>
+                        <button
+                            className={styles.addButton}
+                            onClick={handleAddEvent}
+                            type="button"
+                            title="Dodaj novi događaj"
+                            >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                            </svg>
+                        </button>
+                    </AdminProvider>
                 </div>
 
                 <div className={styles.cardContent}>

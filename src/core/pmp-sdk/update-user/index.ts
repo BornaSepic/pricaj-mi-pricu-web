@@ -6,6 +6,7 @@ export const _updateUser = async (user: UserData) => {
     email: user.email,
     phone: user.phone,
     name: user.name,
-    seniority: user.seniority
+    seniority: user.seniority,
+    status: user.status,
   }, GenericResponse)
 }

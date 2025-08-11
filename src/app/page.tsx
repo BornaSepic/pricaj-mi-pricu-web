@@ -6,6 +6,7 @@ import { PastReadings } from '../components/past-readings';
 import { Events } from '../components/events';
 import {Users} from "../components/users";
 import {AdminDepartments} from "../components/admin-departments";
+import {AdminProvider} from "../components/admin-lock";
 
 const Home = async () => {
   return (
@@ -17,10 +18,12 @@ const Home = async () => {
       <PastReadings />
       <div className={styles.separatorLine}></div>
       <Events />
-      <div className={styles.separatorLine}></div>
-      <Users />
-      <div className={styles.separatorLine}></div>
-      <AdminDepartments />
+      <AdminProvider>
+        <div className={styles.separatorLine}></div>
+        <Users />
+        <div className={styles.separatorLine}></div>
+        <AdminDepartments />
+      </AdminProvider>
     </div>)
 }
 

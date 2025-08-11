@@ -147,6 +147,7 @@
     cursor: pointer;
     color: #6b7280;
     transition: all 0.2s;
+    display: flex;
 }
 
 .editButton:hover {
