@@ -47,7 +47,9 @@ export const ProfilePage = () => {
             name: name,
             email: email,
             phone: phone,
-            seniority: seniority
+            seniority: seniority,
+            role: user.role,
+            status: user.status
         }).then(async () => {
             await refetch()
             setIsEditing(false)
