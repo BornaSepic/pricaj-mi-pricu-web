@@ -6,6 +6,8 @@ import { Department, Reading } from '../../core/pmp-sdk/types';
 import { pmpSdk } from '../../core/pmp-sdk';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from "../../hooks/useToast";
+import {AdminProvider} from "../admin-lock";
+import {AdminUserSelectionModal} from "../admin-select-user-modal";
 
 export type Props = {
     department: Department;
@@ -17,11 +19,11 @@ export type Props = {
 export const MAX_READINGS_COUNT = 3 as const;
 
 export const ReadingCard: FC<Props> = ({
-    department,
-    date: dateAsString,
-    readings,
-    onChange
-}) => {
+                                           department,
+                                           date: dateAsString,
+                                           readings,
+                                           onChange
+                                       }) => {
     const queryClient = useQueryClient()
     const { user } = useAuth()
 
@@ -29,6 +31,10 @@ export const ReadingCard: FC<Props> = ({
     const [isLoading, setIsLoading] = useState(false);
     const [isCancelLoading, setIsCancelLoading] = useState(false);
     const [optimisticIsUserSignedUp, setOptimisticIsUserSignedUp] = useState<boolean | null>(null);
+
+    // Admin modal state
+    const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+    const [isAdminSignupLoading, setIsAdminSignupLoading] = useState(false);
 
     const date = new Date(dateAsString);
     const isAvailable = readings.length < MAX_READINGS_COUNT;
@@ -69,7 +75,7 @@ export const ReadingCard: FC<Props> = ({
 
         setIsLoading(true);
 
-        pmpSdk.createReading(dateAsString, department.id)
+        pmpSdk.createReading(user.id, dateAsString, department.id)
             .then(() => {
                 setOptimisticIsUserSignedUp(true);
                 setIsLoading(false);
@@ -125,131 +131,211 @@ export const ReadingCard: FC<Props> = ({
             });
     }
 
+    // Admin functionality
+    const handleAdminSignup = (userId: number) => {
+        if (isTodayAndPast2PM) {
+            toast.warning('Ne možete prijaviti korisnika za današnje čitanje nakon 14:00h');
+            return;
+        }
+
+        setIsAdminSignupLoading(true);
+
+        pmpSdk.createReading(userId, dateAsString, department.id)
+            .then(() => {
+                setIsAdminSignupLoading(false);
+                setIsAdminModalOpen(false);
+                toast.success('Uspješno ste upisali korisnika na čitanje');
+
+                if (onChange) {
+                    onChange();
+                }
+
+                queryClient.invalidateQueries({ queryKey: ['get-future-readings'] })
+                queryClient.invalidateQueries({ queryKey: [`get-readings-for-department`, department.id] })
+            })
+            .catch((error: { message: string; }) => {
+                const errorMessage = error?.message || 'Greška pri upisu korisnika';
+                toast.error(errorMessage);
+                setIsAdminSignupLoading(false);
+            });
+    };
+
+    // Get list of user IDs already signed up for this reading
+    const signedUpUserIds = readings
+        .filter(reading => reading.user)
+        .map(reading => reading.user!.id);
+
     return (
-        <div className={styles.card}>
-            <div className={styles.cardHeaderGrid}>
-                <div className={styles.dateInfo}>
-                    <span>
-                        {date.toLocaleDateString('hr-HR', {
-                            year: undefined,
-                            month: '2-digit',
-                            day: '2-digit'
-                        })}
-                    </span>
-                    <span>
-                        ({date.toLocaleDateString('hr-HR', {
+        <>
+            <div className={styles.card}>
+                <div className={styles.cardHeaderGrid}>
+                    <div className={styles.dateInfo}>
+                        <span>
+                            {date.toLocaleDateString('hr-HR', {
+                                year: undefined,
+                                month: '2-digit',
+                                day: '2-digit'
+                            })}
+                        </span>
+                        <span>
+                            ({date.toLocaleDateString('hr-HR', {
                             year: undefined,
                             month: undefined,
                             day: undefined,
                             weekday: 'short'
                         })})
-                    </span>
-                </div>
-                <div className={styles.slotInfo}>{readings.length}/{MAX_READINGS_COUNT}</div>
-                <div className={styles.department}>{department.name}</div>
-            </div>
-
-            <div className={styles.cardContent}>
-                <div className={styles.badgeContainer}>
-                    <div className={
-                        isTodayAndPast2PM
-                            ? styles.blockedBadge
-                            : isAvailable
-                                ? styles.availableBadge
-                                : styles.unavailableBadge
-                    }>
-                        {isTodayAndPast2PM
-                            ? <span>NEDOSTUPNO</span>
-                            : isAvailable
-                                ? <span>SLOBODNO</span>
-                                : <span>ZAUZETO</span>
-                        }
+                        </span>
                     </div>
+                    <div className={styles.slotInfo}>{readings.length}/{MAX_READINGS_COUNT}</div>
+                    <div className={styles.department}>{department.name}</div>
                 </div>
-                <button
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    aria-label="Toggle details"
-                    className={styles.toggleButton}
-                    type="button"
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={clsx(styles.rotateIcon, isExpanded && styles.rotateIcon__rotated)}>
-                        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </button>
-            </div>
 
-            {isExpanded && (
-                <div className={styles.expandedContent}>
-                    <div className={styles.usersList}>
-                        {Array.from({ length: MAX_READINGS_COUNT }).map((_, index) => {
+                <div className={styles.cardContent}>
+                    <div className={styles.badgeContainer}>
+                        <div className={
+                            isTodayAndPast2PM
+                                ? styles.blockedBadge
+                                : isAvailable
+                                    ? styles.availableBadge
+                                    : styles.unavailableBadge
+                        }>
+                            {isTodayAndPast2PM
+                                ? <span>NEDOSTUPNO</span>
+                                : isAvailable
+                                    ? <span>SLOBODNO</span>
+                                    : <span>ZAUZETO</span>
+                            }
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        aria-label="Toggle details"
+                        className={styles.toggleButton}
+                        type="button"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={clsx(styles.rotateIcon, isExpanded && styles.rotateIcon__rotated)}>
+                            <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
+                </div>
 
-                            const reading = readings[index];
+                {isExpanded && (
+                    <div className={styles.expandedContent}>
+                        <div className={styles.usersList}>
+                            {Array.from({ length: MAX_READINGS_COUNT }).map((_, index) => {
 
-                            if (!reading) {
+                                const reading = readings[index];
+
+                                if (!reading) {
+                                    return (
+                                        <div key={index} className={styles.userSlot}>
+                                            <p>
+                                                {index + 1}.
+                                            </p>
+                                        </div>
+                                    )
+                                }
+
+                                const user = reading.user;
+
+                                if (!user) {
+                                    return null
+                                }
+
                                 return (
                                     <div key={index} className={styles.userSlot}>
                                         <p>
-                                            {index + 1}.
+                                            {index + 1}. {readings[index] ? `(${user.seniority === 'junior' ? 'J' : 'S'}) ${user.name}` : ''}
                                         </p>
                                     </div>
                                 )
-                            }
+                            })}
+                        </div>
 
-                            const user = reading.user;
-
-                            if (!user) {
-                                return null
-                            }
-
-                            return (
-                                <div key={index} className={styles.userSlot}>
-                                    <p>
-                                        {index + 1}. {readings[index] ? `(${user.seniority === 'junior' ? 'J' : 'S'}) ${user.name}` : ''}
-                                    </p>
+                        <div className={styles.buttonContainer}>
+                            {isUserSignedUp ? (
+                                <div className={styles.availableButtons}>
+                                    <button
+                                        onClick={handleCancelReading}
+                                        className={clsx(styles.registerButton, isTodayAndPast2PM && styles.disabledButton)}
+                                        type="button"
+                                        disabled={isCancelLoading || isTodayAndPast2PM}
+                                        title={isTodayAndPast2PM ? 'Ne možete otkazati nakon 14:00h' : undefined}
+                                    >
+                                        {isCancelLoading ? 'ISPISUJEMO TE' : (
+                                            <>
+                                                ISPIŠI ME
+                                                <svg className={styles.cancelIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z" />
+                                                </svg>
+                                            </>
+                                        )}
+                                    </button>
+                                    {/* Admin-only button */}
+                                    <AdminProvider>
+                                        <button
+                                            onClick={() => setIsAdminModalOpen(true)}
+                                            className={clsx(styles.adminButton, isTodayAndPast2PM && styles.disabledButton)}
+                                            type="button"
+                                            disabled={isTodayAndPast2PM}
+                                            title={isTodayAndPast2PM ? 'Ne možete upisivati korisnike nakon 14:00h' : 'Upiši drugog korisnika (admin)'}
+                                        >
+                                            <>
+                                                UPIŠI KORISNIKA
+                                            </>
+                                        </button>
+                                    </AdminProvider>
                                 </div>
-                            )
-                        })}
-                    </div>
+                            ) : isAvailable ? (
+                                <div className={styles.availableButtons}>
+                                    <button
+                                        onClick={handleSignupForReading}
+                                        className={clsx(styles.registerButton, isTodayAndPast2PM && styles.disabledButton)}
+                                        type="button"
+                                        disabled={isLoading || isTodayAndPast2PM}
+                                        title={isTodayAndPast2PM ? 'Ne možete se prijaviti nakon 14:00h' : undefined}
+                                    >
+                                        {isLoading ? 'UPISUJEMO TE' : (
+                                            <>
+                                                UPIŠI ME
+                                                <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
+                                                </svg>
+                                            </>
+                                        )}
+                                    </button>
 
-                    <div className={styles.buttonContainer}>
-                        {isUserSignedUp ? (
-                            <button
-                                onClick={handleCancelReading}
-                                className={clsx(styles.registerButton, isTodayAndPast2PM && styles.disabledButton)}
-                                type="button"
-                                disabled={isCancelLoading || isTodayAndPast2PM}
-                                title={isTodayAndPast2PM ? 'Ne možete otkazati nakon 14:00h' : undefined}
-                            >
-                                {isCancelLoading ? 'ISPISUJEMO TE' : (
-                                    <>
-                                        ISPIŠI ME
-                                        <svg className={styles.cancelIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z" />
-                                        </svg>
-                                    </>
-                                )}
-                            </button>
-                        ) : isAvailable ? (
-                            <button
-                                onClick={handleSignupForReading}
-                                className={clsx(styles.registerButton, isTodayAndPast2PM && styles.disabledButton)}
-                                type="button"
-                                disabled={isLoading || isTodayAndPast2PM}
-                                title={isTodayAndPast2PM ? 'Ne možete se prijaviti nakon 14:00h' : undefined}
-                            >
-                                {isLoading ? 'UPISUJEMO TE' : (
-                                    <>
-                                        UPIŠI ME
-                                        <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
-                                        </svg>
-                                    </>
-                                )}
-                            </button>
-                        ) : null}
+                                    {/* Admin-only button */}
+                                    <AdminProvider>
+                                        <button
+                                            onClick={() => setIsAdminModalOpen(true)}
+                                            className={clsx(styles.adminButton, isTodayAndPast2PM && styles.disabledButton)}
+                                            type="button"
+                                            disabled={isTodayAndPast2PM}
+                                            title={isTodayAndPast2PM ? 'Ne možete upisivati korisnike nakon 14:00h' : 'Upiši drugog korisnika (admin)'}
+                                        >
+                                            <>
+                                                UPIŠI KORISNIKA
+                                            </>
+                                        </button>
+                                    </AdminProvider>
+                                </div>
+                            ) : null}
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+
+            {/* Admin User Selection Modal */}
+            <AdminUserSelectionModal
+                isOpen={isAdminModalOpen}
+                onClose={() => setIsAdminModalOpen(false)}
+                onUserSelect={handleAdminSignup}
+                date={dateAsString}
+                departmentName={department.name}
+                isLoading={isAdminSignupLoading}
+                excludeUserIds={signedUpUserIds}
+            />
+        </>
     );
 }

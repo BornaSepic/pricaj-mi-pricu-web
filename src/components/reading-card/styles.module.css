@@ -163,3 +163,51 @@
 .disabledButton:hover {
     background: inherit !important;
 }
+
+/* Add these styles to your existing ReadingCard styles.module.css */
+
+.availableButtons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.adminButton {
+    background-color: var(--button-secondary, #6b46c1);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 14px;
+}
+
+.adminButton:hover {
+    background-color: var(--button-secondary-hover, #5b21b6);
+}
+
+.adminIcon {
+    width: 16px;
+    height: 16px;
+}
+
+/* Mobile responsiveness for new button layout */
+@media (max-width: 640px) {
+    .availableButtons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .registerButton,
+    .adminButton {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

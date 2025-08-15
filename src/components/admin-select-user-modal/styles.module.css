@@ -1,0 +1,322 @@
+/* Reuse most styles from UserEditorModal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modalContent {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalHeader {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.modalTitle {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+    padding-right: 40px;
+}
+
+.modalDate {
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.closeButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #6b7280;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.closeButton:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.modalBody {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+}
+
+.instructionText {
+    margin: 0 0 16px 0;
+    color: #374151;
+    font-size: 14px;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6b7280;
+}
+
+.emptyState p {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.emptyStateSubtext {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #9ca3af !important;
+}
+
+.usersList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.userItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+}
+
+.userItem:hover {
+    border-color: #d1d5db;
+    background-color: #f9fafb;
+}
+
+.userItemSelected {
+    border-color: var(--primary-color, #D3302F) !important;
+    background-color: rgba(211, 48, 47, 0.05) !important;
+}
+
+.radioInput {
+    display: none; /* Hide native radio button */
+}
+
+.userInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.userName {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #1f2937;
+    font-size: 14px;
+}
+
+.seniorityBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.userItemSelected .seniorityBadge {
+    background-color: var(--primary-color, #D3302F);
+    color: white;
+}
+
+.userEmail {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.radioIndicator {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.radioCircle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-radius: 50%;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.userItemSelected .radioCircle {
+    border-color: var(--primary-color, #D3302F);
+    background-color: var(--primary-color, #D3302F);
+}
+
+.userItemSelected .radioCircle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.modalFooter {
+    padding: 20px 24px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.cancelButton {
+    padding: 10px 20px;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancelButton:hover:not(:disabled) {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.cancelButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.submitButton {
+    padding: 10px 20px;
+    background: #9ca3af;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.submitButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.hasSelection {
+    background: var(--primary-color, #D3302F) !important;
+    cursor: pointer !important;
+}
+
+.hasSelection:hover:not(:disabled) {
+    background: #b91c1c !important;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+    .modalContent {
+        margin: 10px;
+        max-height: calc(100vh - 20px);
+        max-width: none;
+        width: calc(100vw - 20px);
+    }
+
+    .modalHeader {
+        padding: 20px 20px 16px;
+    }
+
+    .modalBody {
+        padding: 20px;
+    }
+
+    .modalFooter {
+        padding: 16px 20px;
+        flex-direction: column-reverse;
+    }
+
+    .userItem {
+        padding: 10px;
+    }
+
+    .userName {
+        font-size: 13px;
+    }
+
+    .userEmail {
+        font-size: 11px;
+    }
+
+    .cancelButton,
+    .submitButton {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .usersList {
+        max-height: 250px;
+    }
+}
