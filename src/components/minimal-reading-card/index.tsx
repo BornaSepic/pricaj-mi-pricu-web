@@ -38,6 +38,12 @@ export const MinimalReadingCard: FC<Props> = ({
     const date = new Date(dateAsString);
     const isPast = timeframe === 'past';
 
+    // Check if current user has a reading without a report
+    const currentUserReading = readings.find(reading =>
+        reading.user && user && reading.user.id === user.id
+    );
+    const showNoReportBadge = isPast && currentUserReading && !currentUserReading.report;
+
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
     };
@@ -213,6 +219,13 @@ export const MinimalReadingCard: FC<Props> = ({
                                 weekday: 'short'
                             })})
                         </span>
+                    </div>
+                    <div className={styles.badgeContainer}>
+                        {showNoReportBadge && (
+                            <div className={styles.unavailableBadge}>
+                                <span>NEMA IZVJEŠĆA</span>
+                            </div>
+                        )}
                     </div>
                     <div className={styles.department}>{department.name}</div>
                     <button

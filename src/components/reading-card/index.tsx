@@ -35,6 +35,7 @@ export const ReadingCard: FC<Props> = ({
     // Admin modal state
     const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
     const [isAdminSignupLoading, setIsAdminSignupLoading] = useState(false);
+    const [removingUserId, setRemovingUserId] = useState<number | null>(null);
 
     const date = new Date(dateAsString);
     const isAvailable = readings.length < MAX_READINGS_COUNT;
@@ -160,6 +161,36 @@ export const ReadingCard: FC<Props> = ({
             });
     };
 
+    const handleAdminRemoveUser = (readingId: number) => {
+        if (isTodayAndPast2PM) {
+            toast.warning('Ne možete ukloniti korisnika za današnje čitanje nakon 14:00h');
+            return;
+        }
+
+        const reading = readings.find(r => r.id === readingId);
+        if (!reading?.user) return;
+
+        setRemovingUserId(reading.user.id);
+
+        pmpSdk.deleteReading(readingId)
+            .then(() => {
+                setRemovingUserId(null);
+                toast.success(`Uspješno ste uklonili ${reading.user!.name} s čitanja`);
+
+                if (onChange) {
+                    onChange();
+                }
+
+                queryClient.invalidateQueries({ queryKey: ['get-future-readings'] })
+                queryClient.invalidateQueries({ queryKey: [`get-readings-for-department`, department.id] })
+            })
+            .catch((error) => {
+                const errorMessage = error?.message || 'Greška pri uklanjanju korisnika';
+                toast.error(errorMessage);
+                setRemovingUserId(null);
+            });
+    };
+
     // Get list of user IDs already signed up for this reading
     const signedUpUserIds = readings
         .filter(reading => reading.user)
@@ -247,6 +278,25 @@ export const ReadingCard: FC<Props> = ({
                                         <p>
                                             {index + 1}. {readings[index] ? `(${user.seniority === 'junior' ? 'J' : 'S'}) ${user.name}` : ''}
                                         </p>
+                                        <AdminProvider>
+                                            <button
+                                                onClick={() => handleAdminRemoveUser(reading.id)}
+                                                className={clsx(styles.removeUserButton, isTodayAndPast2PM && styles.disabledButton)}
+                                                type="button"
+                                                disabled={removingUserId === user.id || isTodayAndPast2PM}
+                                                title={isTodayAndPast2PM ? 'Ne možete ukloniti nakon 14:00h' : `Ukloni ${user.name}`}
+                                            >
+                                                {removingUserId === user.id ? (
+                                                    <svg className={styles.spinner} width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                                    </svg>
+                                                ) : (
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                )}
+                                            </button>
+                                        </AdminProvider>
                                     </div>
                                 )
                             })}

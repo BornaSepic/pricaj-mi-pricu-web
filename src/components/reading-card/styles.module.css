@@ -174,7 +174,7 @@
 }
 
 .adminButton {
-    background-color: var(--button-secondary, #6b46c1);
+    background-color: var(--button-secondary, #7c2f00);
     color: white;
     padding: 8px 16px;
     border-radius: 6px;
@@ -189,7 +189,7 @@
 }
 
 .adminButton:hover {
-    background-color: var(--button-secondary-hover, #5b21b6);
+    background-color: var(--button-secondary-hover, #8c3400);
 }
 
 .adminIcon {
@@ -208,6 +208,105 @@
     .adminButton {
         width: 100%;
         justify-content: center;
+    }
+}
+
+/* Add these styles to your existing ReadingCard styles.module.css */
+
+.availableButtons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.adminButton {
+    background-color: var(--button-secondary, #7c2f00);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 14px;
+}
+
+.adminButton:hover {
+    background-color: var(--button-secondary-hover, #8c3400);
+}
+
+.adminIcon {
+    width: 16px;
+    height: 16px;
+}
+
+.userSlot {
+    padding: 0;
+    border-bottom: 1px solid var(--text-color, #000);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.removeUserButton {
+    background: transparent;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 4px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
+.removeUserButton:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    color: #ef4444;
+    border-color: #9ca3af;
+}
+
+.removeUserButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.removeUserButton .spinner {
+    color: #ef4444;
+}
+
+/* Mobile responsiveness for new button layout */
+@media (max-width: 640px) {
+    .availableButtons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .registerButton,
+    .adminButton {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .userSlot {
+        padding: 8px 0;
+    }
+
+    .removeUserButton {
+        width: 20px;
+        height: 20px;
+    }
+
+    .removeUserButton svg {
+        width: 10px;
+        height: 10px;
     }
 }
 
