@@ -7,10 +7,15 @@ import { Events } from '../components/events';
 import {Users} from "../components/users";
 import {AdminDepartments} from "../components/admin-departments";
 import {AdminProvider} from "../components/admin-lock";
+import {AdminLoginCode} from "../components/admin-login-code";
 
 const Home = async () => {
   return (
     <div className={styles.container}>
+      <AdminProvider>
+        <AdminLoginCode />
+          <div className={styles.separatorLine}></div>
+      </AdminProvider>
       <Hours />
       <div className={styles.separatorLine}></div>
       <FutureReadings />

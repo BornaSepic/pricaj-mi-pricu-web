@@ -1,0 +1,244 @@
+.card {
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--text-color, black);
+    position: relative;
+    background-color: var(--card-bg, #fff);
+    padding: 16px;
+}
+
+.cardHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.cardTitle {
+    margin: 0;
+}
+
+.monthSelector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.monthSelector__button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.monthSelector__label {
+}
+
+.cardContent {
+    font-weight: 500;
+}
+
+.cardContent__currentMonth {
+    margin: 0;
+}
+
+.cardContent__total {
+    border-top: 1px solid var(--text-color, black);
+    margin: 8px 0 0;
+    padding-top: 8px;
+
+}
+
+/* Add these new styles to your existing CSS */
+
+.displayContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.currentCode {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color, #1f2937);
+    margin: 0;
+}
+
+.codeValue {
+    font-weight: 700;
+    color: var(--button-secondary, #7c2f00);
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+}
+
+.editButton {
+    background: transparent;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.editButton:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    color: #374151;
+    border-color: #9ca3af;
+}
+
+.editButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.editContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inputLabel {
+    font-weight: 600;
+    color: var(--text-color, #374151);
+    font-size: 14px;
+}
+
+.codeInput {
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    background: white;
+}
+
+.codeInput:focus {
+    border-color: var(--button-secondary, #7c2f00);
+    box-shadow: 0 0 0 3px rgba(124, 47, 0, 0.1);
+}
+
+.codeInput:disabled {
+    background-color: #f9fafb;
+    color: #6b7280;
+    cursor: not-allowed;
+    border-color: #d1d5db;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.cancelButton {
+    padding: 10px 20px;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancelButton:hover:not(:disabled) {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.cancelButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.saveButton {
+    padding: 10px 20px;
+    background: var(--button-secondary, #7c2f00);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.saveButton:hover:not(:disabled) {
+    background: var(--button-secondary-hover, #8c3400);
+}
+
+.saveButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+    .displayContainer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .currentCode {
+        text-align: center;
+    }
+
+    .editButton {
+        align-self: center;
+        width: fit-content;
+    }
+
+    .buttonGroup {
+        flex-direction: column-reverse;
+    }
+
+    .cancelButton,
+    .saveButton {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

@@ -21,6 +21,8 @@ import { _updateActivity } from "./update-activity";
 import { _updateDepartment } from "./update-department";
 import { _updateReport } from "./update-report";
 import { _updateUser } from "./update-user";
+import {_getRegistrationCode} from "./get-registration-code";
+import {_updateRegistrationCode} from "./update_registration_code";
 
 export const pmpSdk = {
   logIn: _logIn,
@@ -46,4 +48,6 @@ export const pmpSdk = {
   createActivity: _createActivity,
   deleteActivity: _deleteActivity,
   updateActivity: _updateActivity,
+  getRegistrationCode: _getRegistrationCode,
+  updateRegistrationCode: _updateRegistrationCode,
 }
