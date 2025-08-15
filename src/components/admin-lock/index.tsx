@@ -17,7 +17,7 @@ export const AdminProvider: FC<Props> = ({ children }) => {
         if (isLoading) return
 
         if (!user || user.role !== 'admin') {
-            router.replace('/')
+            // router.replace('/')
         }
     }, [user, isLoading, router])
 

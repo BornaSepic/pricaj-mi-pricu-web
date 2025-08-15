@@ -45,7 +45,9 @@ export const AdminLoginCode: FC = () => {
             setNewCode('');
             queryClient.invalidateQueries({ queryKey: ['get-registration-code'] });
         } catch (error) {
-            const errorMessage = error || 'Greška pri ažuriranju koda';
+            // TODO
+            // const errorMessage = error?.message || 'Greška pri ažuriranju koda';
+            const errorMessage = 'Greška pri ažuriranju koda';
             toast.error(errorMessage);
         } finally {
             setIsLoading(false);

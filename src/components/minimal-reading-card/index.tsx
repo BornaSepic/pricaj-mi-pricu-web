@@ -223,7 +223,7 @@ export const MinimalReadingCard: FC<Props> = ({
                     <div className={styles.badgeContainer}>
                         {showNoReportBadge && (
                             <div className={styles.unavailableBadge}>
-                                <span>NEMA IZVJEŠĆA</span>
+                                <span>!</span>
                             </div>
                         )}
                     </div>
