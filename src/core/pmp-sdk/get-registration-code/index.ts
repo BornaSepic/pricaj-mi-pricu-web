@@ -1,1 +1,1 @@
-export const _getRegistrationCode = () => '123456';
+export const _getRegistrationCode = () => '1234';

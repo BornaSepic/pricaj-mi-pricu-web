@@ -217,8 +217,7 @@
 /* Mobile responsiveness */
 @media (max-width: 640px) {
     .displayContainer {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: row;
         gap: 12px;
     }
 
