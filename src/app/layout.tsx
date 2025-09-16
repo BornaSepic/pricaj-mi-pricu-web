@@ -9,7 +9,7 @@ import { AppInstallPrompt } from '../components/app-install-prompt';
 import { MainWrapper } from '../components/main-wrapper';
 
 export const metadata: Metadata = {
-  title: 'Pricaj mi priču',
+  title: 'Pričaj mi priču',
   description: 'Za sve pričalice i one koji to žele biti.',
 }
 

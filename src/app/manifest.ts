@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Pricalice',
     short_name: 'Pricalice',
-    description: 'Čitanje i planiranje čitanja u Pricalici',
+    description: 'Čitanje i planiranje čitanja u Pričalici',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',
