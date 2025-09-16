@@ -6,14 +6,15 @@ import { ReadingCard } from "../reading-card"
 import styles from "./styles.module.css"
 import { pmpSdk } from "../../core/pmp-sdk"
 import { BlockedReadingCard } from "../blocked-reading-card"
+import { MinimalReadingCard } from "../minimal-reading-card"
 
 export type Props = {
     id: string
 }
 
 export const Department: FC<Props> = ({
-                                          id
-                                      }) => {
+    id
+}) => {
     const [showFuture, setShowFuture] = useState(true)
 
     const { data: department } = useQuery({
@@ -23,8 +24,8 @@ export const Department: FC<Props> = ({
     })
 
     const { data: readingsForDepartment, refetch } = useQuery({
-        queryKey: [`get-readings-for-department`, id],
-        queryFn: () => pmpSdk.getReadingsForDepartment(id, 'active'),
+        queryKey: [`get-readings-for-department`, id, showFuture],
+        queryFn: () => pmpSdk.getReadingsForDepartment(id, showFuture ? 'active' : 'inactive'),
         placeholderData: (prev) => prev || []
     })
 
@@ -38,9 +39,9 @@ export const Department: FC<Props> = ({
                 <h1>{department.name}</h1>
                 <div className={styles.toggle__container}>
                     <label className={styles.toggle__label}>
-            <span className={styles.toggle__text}>
-              {showFuture ? 'Sljedećih 14 dana' : 'Prethodnih 14 dana'}
-            </span>
+                        <span className={styles.toggle__text}>
+                            {showFuture ? 'Sljedećih 14 dana' : 'Prethodnih 14 dana'}
+                        </span>
                         <div className={styles.toggle__switch}>
                             <input
                                 type="checkbox"
@@ -54,28 +55,45 @@ export const Department: FC<Props> = ({
                 </div>
             </div>
 
-            {readingsForDepartment.map((item) => {
-                const isBlocked = item.readings.some(reading => reading.blocked)
-                if (isBlocked) {
+            {showFuture ? (
+                readingsForDepartment.map((item) => {
+                    const isBlocked = item.readings.some(reading => reading.blocked)
+                    if (isBlocked) {
+                        return (
+                            <BlockedReadingCard
+                                department={department}
+                                key={item.date}
+                                date={item.date}
+                            />
+                        )
+                    }
+
                     return (
-                        <BlockedReadingCard
+                        <ReadingCard
                             department={department}
                             key={item.date}
                             date={item.date}
+                            readings={item.readings}
+                            onChange={() => refetch()}
                         />
                     )
-                }
+                })
+            ) : (
+                readingsForDepartment.map((item) => {
+                    return (
+                        <MinimalReadingCard
+                            key={`${item.date}`}
+                            department={department}
+                            readings={item.readings}
+                            date={item.date}
+                            timeframe={"past"}
+                            onChange={() => refetch()}
+                        />
+                    )
+                })
+            )
+            }
 
-                return (
-                    <ReadingCard
-                        department={department}
-                        key={item.date}
-                        date={item.date}
-                        readings={item.readings}
-                        onChange={() => refetch()}
-                    />
-                )
-            })}
         </div>
     )
 }

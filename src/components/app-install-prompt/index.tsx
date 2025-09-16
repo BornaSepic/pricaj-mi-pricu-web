@@ -57,21 +57,21 @@ export const AppInstallPrompt: FC = () => {
             }
           });
         }}
-      >Install</button>
-      {isIOS && (
+      >Instaliraj</button>
+      {/* {isIOS && (
         <p>
-          To install this app on your iOS device, tap the share button
+          Da biste instalirali ovu aplikaciju na svoj iOS uređaj, dodirnite gumb za dijeljenje
           <span role="img" aria-label="share icon">
             {' '}
             ⎋{' '}
           </span>
-          and then "Add to Home Screen"
+          a zatim "Dodaj na početni ekran"
           <span role="img" aria-label="plus icon">
             {' '}
             ➕{' '}
           </span>.
         </p>
-      )}
+      )} */}
     </div>
   )
 }

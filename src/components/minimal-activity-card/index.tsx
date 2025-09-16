@@ -21,6 +21,10 @@ export const MinimalActivityCard: FC<Props> = ({
 
     const isSignedUp = user && activity.users.some(signedUpUser => user.id === signedUpUser.id);
 
+    // Check if activity limit is reached
+    const isLimitReached = activity.limit && activity.users.length >= activity.limit;
+    const canSignUp = !isSignedUp && !isLimitReached;
+
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
 
@@ -38,6 +42,8 @@ export const MinimalActivityCard: FC<Props> = ({
     };
 
     const handleSignUp = () => {
+        if (!canSignUp) return;
+
         setIsLoading(true);
 
         pmpSdk.signUpForActivity(activity.id)
@@ -89,7 +95,12 @@ export const MinimalActivityCard: FC<Props> = ({
                         })})
                     </span>
                 </div>
-                <div className={styles.department}>{activity.title}</div>
+                <div className={styles.department}>
+                    {activity.title}
+                    {isLimitReached && (
+                        <span className={styles.fullIndicator}> (POPUNJENO)</span>
+                    )}
+                </div>
                 <button
                     className={styles.toggleButton}
                     type="button"
@@ -106,6 +117,15 @@ export const MinimalActivityCard: FC<Props> = ({
                         <h4 className={styles.descriptionTitle}>Opis aktivnosti:</h4>
                         <p className={styles.descriptionText}>{activity.description}</p>
                     </div>
+
+                    {activity.limit && (
+                        <div className={styles.limitInfo}>
+                            <p>
+                                Maksimalno sudionika: {activity.users.length}/{activity.limit}
+                                {isLimitReached && <span className={styles.limitReachedText}> - Aktivnost je popunjena</span>}
+                            </p>
+                        </div>
+                    )}
 
                     <div className={styles.usersList}>
                         {Array.from({ length: activity.users.length + 3 }).map((_, index) => {
@@ -151,11 +171,22 @@ export const MinimalActivityCard: FC<Props> = ({
                             ) : (
                                 <button
                                     onClick={handleSignUp}
-                                    className={styles.registerButton}
+                                    className={clsx(
+                                        styles.registerButton,
+                                        !canSignUp && styles.disabledButton
+                                    )}
                                     type="button"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !canSignUp}
+                                    title={isLimitReached ? 'Aktivnost je popunjena' : undefined}
                                 >
-                                    {isLoading ? 'UPISUJEMO TE' : (
+                                    {isLoading ? 'UPISUJEMO TE' : isLimitReached ? (
+                                        <>
+                                            POPUNJENO
+                                            <svg className={styles.lockIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 1C8.676 1 6 3.676 6 7v3H4a1 1 0 00-1 1v10a1 1 0 001 1h16a1 1 0 001-1V11a1 1 0 00-1-1h-2V7c0-3.324-2.676-6-6-6zM8 7c0-2.206 1.794-4 4-4s4 1.794 4 4v3H8V7zm10 13H6v-8h12v8zm-6-6a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                        </>
+                                    ) : (
                                         <>
                                             UPIŠI ME
                                             <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

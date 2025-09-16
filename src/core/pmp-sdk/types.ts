@@ -68,6 +68,7 @@ export const Activity = z.object({
   title: z.string(),
   date: z.string(),
   description: z.string(),
+  limit: z.number().default(0),
   users: z.array(z.object({
     id: z.number(),
     name: z.string(),
@@ -97,6 +98,12 @@ export const ReadingsByDate = z.array(
     readings: z.array(Reading),
   })
 )
+
+export const RegistrationCode = z.object({
+  id: z.number(),
+  code: z.string(),
+  isValid: z.boolean(),
+})
 
 export const GenericResponse = z.object({})
 export const ReadingCreateResponse = z.object({})

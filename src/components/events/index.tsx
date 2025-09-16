@@ -7,13 +7,15 @@ import Link from "next/link";
 import { pmpSdk } from '../../core/pmp-sdk';
 import { MinimalActivityCard } from "../minimal-activity-card";
 import { ActivityEditorModal, Activity, ActivityFormData } from "../event-editor-modal";
-import {AdminProvider} from "../admin-lock";
+import { AdminProvider } from "../admin-lock";
+import { ReadingCardEvent } from '../reading-card-event';
 
 // Create a "new activity" template for adding
 const createNewActivity = (): Activity => ({
     id: 0, // Temporary ID for new activities
     title: '',
     description: '',
+    limit: 0,
     date: new Date().toISOString(),
     users: [],
     created_at: new Date().toISOString(),
@@ -25,7 +27,7 @@ export const Events: FC = () => {
     const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const { data: events, refetch } = useQuery({
+    const { data: events, refetch, isFetching: isLoadingEvents } = useQuery({
         queryKey: [`get-events`],
         queryFn: () => pmpSdk.getEvents(),
         placeholderData: (prev) => prev || []
@@ -93,24 +95,33 @@ export const Events: FC = () => {
                             onClick={handleAddEvent}
                             type="button"
                             title="Dodaj novi događaj"
-                            >
+                        >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                             </svg>
                         </button>
                     </AdminProvider>
                 </div>
 
                 <div className={styles.cardContent}>
-                    {events?.map((item) => {
-                        return (
-                            <MinimalActivityCard
-                                key={item.id}
-                                activity={item}
-                                onChange={() => refetch()}
-                            />
-                        );
-                    })}
+                    {!isLoadingEvents && events && events.length === 0 ? (
+                        <p>Nema događaja</p>
+                    ) : (
+                        <>
+                            {events?.map((item) => {
+                                return (
+                                    <ReadingCardEvent
+                                        key={item.id}
+                                        activity={item}
+                                        date={item.date}
+                                        activities={[item]}
+                                        onChange={() => refetch()}
+                                    />
+                                );
+                            })}
+                        </>
+                    )}
+
                 </div>
             </div>
 

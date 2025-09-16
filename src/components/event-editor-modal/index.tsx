@@ -6,6 +6,7 @@ export type Activity = {
     title: string;
     description: string;
     date: string;
+    limit?: number;
     users: any[];
     created_at?: string;
     updated_at?: string;
@@ -15,6 +16,7 @@ export type ActivityFormData = {
     title: string;
     description: string;
     date: string;
+    limit: number | '';
 }
 
 export type Props = {
@@ -37,7 +39,8 @@ export const ActivityEditorModal: FC<Props> = ({
     const [formData, setFormData] = useState<ActivityFormData>({
         title: '',
         description: '',
-        date: ''
+        date: '',
+        limit: ''
     });
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const titleInputRef = useRef<HTMLInputElement>(null);
@@ -50,7 +53,8 @@ export const ActivityEditorModal: FC<Props> = ({
         const originalData: ActivityFormData = {
             title: activity.title,
             description: activity.description,
-            date: activity.date
+            date: activity.date,
+            limit: activity.limit || ''
         };
 
         const hasChanges = JSON.stringify(formData) !== JSON.stringify(originalData);
@@ -71,7 +75,8 @@ export const ActivityEditorModal: FC<Props> = ({
                         setFormData({
                             title: activity.title,
                             description: activity.description,
-                            date: activity.date
+                            date: activity.date,
+                            limit: activity.limit || ''
                         });
                     }
                 } catch (error) {
@@ -80,7 +85,8 @@ export const ActivityEditorModal: FC<Props> = ({
                     setFormData({
                         title: activity.title,
                         description: activity.description,
-                        date: activity.date
+                        date: activity.date,
+                        limit: activity.limit || ''
                     });
                 }
             } else {
@@ -88,7 +94,8 @@ export const ActivityEditorModal: FC<Props> = ({
                 setFormData({
                     title: activity.title,
                     description: activity.description,
-                    date: activity.date
+                    date: activity.date,
+                    limit: activity.limit || ''
                 });
             }
 
@@ -137,7 +144,8 @@ export const ActivityEditorModal: FC<Props> = ({
             const originalData: ActivityFormData = {
                 title: activity.title,
                 description: activity.description,
-                date: activity.date
+                date: activity.date,
+                limit: activity.limit || ''
             };
             setFormData(originalData);
 
@@ -171,12 +179,22 @@ export const ActivityEditorModal: FC<Props> = ({
         }
     };
 
-    const handleInputChange = (field: keyof ActivityFormData, value: string) => {
+    const handleInputChange = (field: keyof ActivityFormData, value: string | number) => {
         if (!isReadOnly) {
             setFormData(prev => ({
                 ...prev,
                 [field]: value
             }));
+        }
+    };
+
+    const handleLimitChange = (value: string) => {
+        if (!isReadOnly) {
+            // Allow empty string or valid positive numbers
+            const numValue = value === '' ? 100 : parseInt(value, 10);
+            if (value === '' || (!isNaN(numValue) && numValue > 0)) {
+                handleInputChange('limit', numValue);
+            }
         }
     };
 
@@ -257,6 +275,23 @@ export const ActivityEditorModal: FC<Props> = ({
                                     disabled={isLoading}
                                     readOnly={isReadOnly}
                                     required
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label className={styles.formLabel} htmlFor="limit">
+                                    Maksimalni broj sudionika
+                                </label>
+                                <input
+                                    id="limit"
+                                    type="number"
+                                    value={formData.limit}
+                                    onChange={(e) => handleLimitChange(e.target.value)}
+                                    className={styles.formInput}
+                                    disabled={isLoading}
+                                    readOnly={isReadOnly}
+                                    min="1"
+                                    placeholder="Bez ograničenja"
                                 />
                             </div>
                         </div>

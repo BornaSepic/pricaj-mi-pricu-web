@@ -7,6 +7,8 @@ import { useQuery } from '@tanstack/react-query';
 import { capitalizeWord } from '../../core/string/capitalize-word';
 import { pmpSdk } from '../../core/pmp-sdk';
 
+const HOURS_PER_READING = 3;
+
 export const Hours: FC = () => {
     const { user } = useAuth();
     const [date, setDate] = useState(new Date());
@@ -51,7 +53,7 @@ export const Hours: FC = () => {
             return user && reading.user && user.id === reading.user.id;
         });
         if (readingForUser && readingForUser.report) {
-            return acc + 2;
+            return acc + HOURS_PER_READING;
         }
 
         return acc;
@@ -67,7 +69,7 @@ export const Hours: FC = () => {
                 return user && reading.user && user.id === reading.user.id
             });
             if (readingForUser && readingForUser.report) {
-                return acc + 2;
+                return acc + HOURS_PER_READING;
             }
 
             return acc;

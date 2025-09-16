@@ -21,7 +21,7 @@ export const AdminProvider: FC<Props> = ({ children }) => {
         }
     }, [user, isLoading, router])
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return null
     if (!user || user.role !== 'admin') return null
 
     return <>{children}</>

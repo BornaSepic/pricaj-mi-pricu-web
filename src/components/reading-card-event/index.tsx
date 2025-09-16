@@ -2,10 +2,10 @@ import { FC, useState } from 'react';
 import styles from './styles.module.css';
 import clsx from 'clsx';
 import { useAuth } from '../../hooks/useAuth';
-import {Activity} from '../../core/pmp-sdk/types';
+import { Activity } from '../../core/pmp-sdk/types';
 import { pmpSdk } from '../../core/pmp-sdk';
 import { useQueryClient } from '@tanstack/react-query';
-import {useToast} from "../../hooks/useToast";
+import { useToast } from "../../hooks/useToast";
 
 export type Props = {
     activity: Activity;
@@ -18,12 +18,12 @@ export type Props = {
 export const MAX_READINGS_COUNT = 3 as const;
 
 export const ReadingCardEvent: FC<Props> = ({
-                                                activity,
-                                                date: dateAsString,
-                                                activities,
-                                                description,
-                                                onChange
-                                            }) => {
+    activity,
+    date: dateAsString,
+    activities,
+    description,
+    onChange
+}) => {
 
     const queryClient = useQueryClient()
     const { user } = useAuth()
@@ -36,8 +36,15 @@ export const ReadingCardEvent: FC<Props> = ({
 
     // Check if current user is signed up for this activity
     const isSignedUp = user && activity.users.some(signedUpUser => user.id === signedUpUser.id);
+    
+    // Check if activity limit is reached
+    const isLimitReached = activity.limit && activity.users.length >= activity.limit;
+    console.log({ isLimitReached, limit: activity.limit, usersCount: activity.users.length });
+    const canSignUp = !isSignedUp && !isLimitReached;
 
     const handleSignUp = () => {
+        if (!canSignUp) return;
+        
         setIsLoading(true);
 
         pmpSdk.signUpForActivity(activity.id)
@@ -71,6 +78,23 @@ export const ReadingCardEvent: FC<Props> = ({
             });
     }
 
+    // Determine badge status
+    const getBadgeInfo = () => {
+        if (isLimitReached) {
+            return { text: 'POPUNJENO', className: styles.unavailableBadge };
+        }
+        if (activity.limit && activity.users.length > 0) {
+            const remaining = activity.limit - activity.users.length;
+            return { 
+                text: `SLOBODNO (${remaining}/${activity.limit})`, 
+                className: styles.availableBadge 
+            };
+        }
+        return { text: 'SLOBODNO', className: styles.availableBadge };
+    };
+
+    const badgeInfo = getBadgeInfo();
+
     return (
         <div className={styles.card}>
             <div className={styles.cardHeaderFlex}>
@@ -84,11 +108,11 @@ export const ReadingCardEvent: FC<Props> = ({
                     </span>
                     <span>
                         ({date.toLocaleDateString('hr-HR', {
-                        year: undefined,
-                        month: undefined,
-                        day: undefined,
-                        weekday: 'short'
-                    })})
+                            year: undefined,
+                            month: undefined,
+                            day: undefined,
+                            weekday: 'short'
+                        })})
                     </span>
                 </div>
                 <div className={styles.department}>{activity.title}</div>
@@ -96,8 +120,8 @@ export const ReadingCardEvent: FC<Props> = ({
 
             <div className={styles.cardContent}>
                 <div className={styles.badgeContainer}>
-                    <div className={styles.availableBadge}>
-                        {'SLOBODNO'}
+                    <div className={badgeInfo.className}>
+                        {badgeInfo.text}
                     </div>
                 </div>
                 <button
@@ -118,6 +142,14 @@ export const ReadingCardEvent: FC<Props> = ({
                         <h4 className={styles.descriptionTitle}>Opis aktivnosti:</h4>
                         <p className={styles.descriptionText}>{activity.description}</p>
                     </div>
+
+                    {activity.limit && (
+                        <div className={styles.limitInfo}>
+                            <p>
+                                Maksimalno sudionika: {activity.users.length}/{activity.limit}
+                            </p>
+                        </div>
+                    )}
 
                     <div className={styles.usersList}>
                         {Array.from({ length: (activity.users.length > 0) ? activity.users.length + 1 : MAX_READINGS_COUNT }).map((_, index) => {
@@ -145,40 +177,49 @@ export const ReadingCardEvent: FC<Props> = ({
                     </div>
 
                     <div className={styles.buttonContainer}>
-                        {
-                            isSignedUp ? (
-                                <button
-                                    onClick={handleSignOff}
-                                    className={styles.registerButton}
-                                    type="button"
-                                >
-                                    {isLoading ? 'ISPISUJEMO TE' : (
-                                        <>
-                                            ISPIŠI ME
-                                            <svg className={styles.cancelIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z" />
-                                            </svg>
-                                        </>
-                                    )}
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={handleSignUp}
-                                    className={styles.registerButton}
-                                    type="button"
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? 'UPISUJEMO TE' : (
-                                        <>
-                                            UPIŠI ME
-                                            <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
-                                            </svg>
-                                        </>
-                                    )}
-                                </button>
-                            )
-                        }
+                        {isSignedUp ? (
+                            <button
+                                onClick={handleSignOff}
+                                className={styles.registerButton}
+                                type="button"
+                            >
+                                {isLoading ? 'ISPISUJEMO TE' : (
+                                    <>
+                                        ISPIŠI ME
+                                        <svg className={styles.cancelIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z" />
+                                        </svg>
+                                    </>
+                                )}
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleSignUp}
+                                className={clsx(
+                                    styles.registerButton,
+                                    !canSignUp && styles.disabledButton
+                                )}
+                                type="button"
+                                disabled={isLoading || !canSignUp}
+                                title={isLimitReached ? 'Aktivnost je popunjena' : undefined}
+                            >
+                                {isLoading ? 'UPISUJEMO TE' : isLimitReached ? (
+                                    <>
+                                        POPUNJENO
+                                        <svg className={styles.lockIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 1C8.676 1 6 3.676 6 7v3H4a1 1 0 00-1 1v10a1 1 0 001 1h16a1 1 0 001-1V11a1 1 0 00-1-1h-2V7c0-3.324-2.676-6-6-6zM8 7c0-2.206 1.794-4 4-4s4 1.794 4 4v3H8V7zm10 13H6v-8h12v8zm-6-6a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                        </svg>
+                                    </>
+                                ) : (
+                                    <>
+                                        UPIŠI ME
+                                        <svg className={styles.penIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.586 2.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM13.379 4.793L3 15.172V18h2.828l10.379-10.379-2.828-2.828z" />
+                                        </svg>
+                                    </>
+                                )}
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
