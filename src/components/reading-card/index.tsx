@@ -53,6 +53,17 @@ export const ReadingCard: FC<Props> = ({
 
     const isTodayAndPast2PM = isToday() && isPast2PM();
 
+    // Helper function to check if user is admin
+    const isUserAdmin = () => {
+        return user?.role === 'admin';
+    };
+
+    // Count juniors in current readings
+    const juniorCount = readings.filter(reading => reading.user?.seniority === 'junior').length;
+    const isJuniorLimitReached = juniorCount >= 2;
+    const isUserJunior = user?.seniority === 'junior';
+    const isJuniorBlocked = isJuniorLimitReached && isUserJunior && !isUserAdmin();
+
     console.log("date", readings)
 
     const userReading = readings.find(reading => reading.user && user && reading.user.id === user.id);
@@ -71,6 +82,11 @@ export const ReadingCard: FC<Props> = ({
 
         if (isTodayAndPast2PM) {
             toast.warning('Ne možete se prijaviti za današnje čitanje nakon 14:00h');
+            return;
+        }
+
+        if (isJuniorBlocked) {
+            toast.warning('Ne možete se prijaviti - već ima dovoljno juniora');
             return;
         }
 
@@ -132,13 +148,8 @@ export const ReadingCard: FC<Props> = ({
             });
     }
 
-    // Admin functionality
+    // Admin functionality - no 2PM restriction
     const handleAdminSignup = (userId: number) => {
-        if (isTodayAndPast2PM) {
-            toast.warning('Ne možete prijaviti korisnika za današnje čitanje nakon 14:00h');
-            return;
-        }
-
         setIsAdminSignupLoading(true);
 
         pmpSdk.createReading(userId, dateAsString, department.id)
@@ -162,11 +173,6 @@ export const ReadingCard: FC<Props> = ({
     };
 
     const handleAdminRemoveUser = (readingId: number) => {
-        if (isTodayAndPast2PM) {
-            toast.warning('Ne možete ukloniti korisnika za današnje čitanje nakon 14:00h');
-            return;
-        }
-
         const reading = readings.find(r => r.id === readingId);
         if (!reading?.user) return;
 
@@ -224,17 +230,21 @@ export const ReadingCard: FC<Props> = ({
                 <div className={styles.cardContent}>
                     <div className={styles.badgeContainer}>
                         <div className={
-                            isTodayAndPast2PM
+                            (isTodayAndPast2PM && !isUserAdmin())
                                 ? styles.blockedBadge
-                                : isAvailable
-                                    ? styles.availableBadge
-                                    : styles.unavailableBadge
+                                : !isAvailable
+                                    ? styles.unavailableBadge
+                                    : (isJuniorBlocked)
+                                        ? styles.juniorBlockedBadge
+                                        : styles.availableBadge
                         }>
-                            {isTodayAndPast2PM
+                            {(isTodayAndPast2PM && !isUserAdmin())
                                 ? <span>NEDOSTUPNO</span>
-                                : isAvailable
-                                    ? <span>SLOBODNO</span>
-                                    : <span>ZAUZETO</span>
+                                : !isAvailable
+                                    ? <span>ZAUZETO</span>
+                                    : (isJuniorBlocked)
+                                        ? <span>SAMO SENIORI</span>
+                                        : <span>SLOBODNO</span>
                             }
                         </div>
                     </div>
@@ -281,10 +291,10 @@ export const ReadingCard: FC<Props> = ({
                                         <AdminProvider>
                                             <button
                                                 onClick={() => handleAdminRemoveUser(reading.id)}
-                                                className={clsx(styles.removeUserButton, isTodayAndPast2PM && styles.disabledButton)}
+                                                className={styles.removeUserButton}
                                                 type="button"
-                                                disabled={removingUserId === user.id || isTodayAndPast2PM}
-                                                title={isTodayAndPast2PM ? 'Ne možete ukloniti nakon 14:00h' : `Ukloni ${user.name}`}
+                                                disabled={removingUserId === user.id}
+                                                title={`Ukloni ${user.name}`}
                                             >
                                                 {removingUserId === user.id ? (
                                                     <svg className={styles.spinner} width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -321,14 +331,13 @@ export const ReadingCard: FC<Props> = ({
                                             </>
                                         )}
                                     </button>
-                                    {/* Admin-only button */}
+                                    {/* Admin-only button - no 2PM restriction */}
                                     <AdminProvider>
                                         <button
                                             onClick={() => setIsAdminModalOpen(true)}
-                                            className={clsx(styles.adminButton, isTodayAndPast2PM && styles.disabledButton)}
+                                            className={styles.adminButton}
                                             type="button"
-                                            disabled={isTodayAndPast2PM}
-                                            title={isTodayAndPast2PM ? 'Ne možete upisivati korisnike nakon 14:00h' : 'Upiši drugog korisnika (admin)'}
+                                            title="Upiši drugog korisnika (admin)"
                                         >
                                             <>
                                                 UPIŠI KORISNIKA
@@ -336,7 +345,7 @@ export const ReadingCard: FC<Props> = ({
                                         </button>
                                     </AdminProvider>
                                 </div>
-                            ) : isAvailable ? (
+                            ) : isAvailable && !isJuniorBlocked ? (
                                 <div className={styles.availableButtons}>
                                     <button
                                         onClick={handleSignupForReading}
@@ -355,14 +364,13 @@ export const ReadingCard: FC<Props> = ({
                                         )}
                                     </button>
 
-                                    {/* Admin-only button */}
+                                    {/* Admin-only button - no 2PM restriction */}
                                     <AdminProvider>
                                         <button
                                             onClick={() => setIsAdminModalOpen(true)}
-                                            className={clsx(styles.adminButton, isTodayAndPast2PM && styles.disabledButton)}
+                                            className={styles.adminButton}
                                             type="button"
-                                            disabled={isTodayAndPast2PM}
-                                            title={isTodayAndPast2PM ? 'Ne možete upisivati korisnike nakon 14:00h' : 'Upiši drugog korisnika (admin)'}
+                                            title="Upiši drugog korisnika (admin)"
                                         >
                                             <>
                                                 UPIŠI KORISNIKA
@@ -370,7 +378,23 @@ export const ReadingCard: FC<Props> = ({
                                         </button>
                                     </AdminProvider>
                                 </div>
-                            ) : null}
+                            ) : (
+                                /* Show admin button even when junior blocked or no slots available */
+                                <div className={styles.availableButtons}>
+                                    <AdminProvider>
+                                        <button
+                                            onClick={() => setIsAdminModalOpen(true)}
+                                            className={styles.adminButton}
+                                            type="button"
+                                            title="Upiši drugog korisnika (admin)"
+                                        >
+                                            <>
+                                                UPIŠI KORISNIKA
+                                            </>
+                                        </button>
+                                    </AdminProvider>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

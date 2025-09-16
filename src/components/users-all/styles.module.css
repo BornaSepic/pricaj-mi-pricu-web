@@ -1,0 +1,209 @@
+/* Additional styles for Users components */
+
+.card {
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--text-color, black);
+    position: relative;
+    background-color: var(--card-bg, #fff);
+    padding: 16px 16px 0;
+}
+
+.cardHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.cardTitle {
+    margin: 0;
+}
+
+.yearSelector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.yearSelector__button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.yearSelector__label {
+}
+
+.cardContent {
+    font-weight: 500;
+}
+
+.cardContent__currentMonth {
+    margin: 0;
+}
+
+.cardContent__total {
+    border-top: 1px solid var(--text-color, black);
+    margin: 8px 0 0;
+    padding-top: 8px;
+
+}
+
+/* Show more link for homepage component */
+.showMoreLink {
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 0.5rem;
+}
+
+.showMoreLink a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.showMoreLink a:hover {
+    text-decoration: underline;
+}
+
+/* Filters section styles */
+.filtersSection {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.searchInputContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.searchIcon {
+    position: absolute;
+    left: 0.75rem;
+    color: #666;
+    pointer-events: none;
+}
+
+.clearFilterButton {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clearFilterButton:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+.filtersRow {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 150px;
+}
+
+.filterLabel {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.filterSelect {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.filterSelect:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.clearFiltersButton {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    height: fit-content;
+}
+
+.clearFiltersButton:hover {
+    background: #5a6268;
+}
+
+.resultsInfo {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #666;
+    text-align: center;
+}
+
+.filteringNote {
+    color: #007bff;
+    font-style: italic;
+}
+
+.emptyState {
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+}
+
+.emptyStateSubtext {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #999;
+}

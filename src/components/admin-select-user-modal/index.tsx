@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import styles from './styles.module.css';
 import { pmpSdk } from '../../core/pmp-sdk';
@@ -24,6 +24,7 @@ export const AdminUserSelectionModal: FC<Props> = ({
                                                        excludeUserIds = []
                                                    }) => {
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [nameFilter, setNameFilter] = useState<string>('');
 
     const { data: allUsers } = useQuery({
         queryKey: ['get-users'],
@@ -33,23 +34,38 @@ export const AdminUserSelectionModal: FC<Props> = ({
     });
 
     // Filter to only show active users who aren't already signed up
-    const availableUsers = (allUsers || []).filter((user): user is UserData =>
-        user !== null &&
-        user !== undefined &&
-        user.status === 'active' &&
-        !excludeUserIds.includes(user.id)
-    );
+    const availableUsers = useMemo(() => {
+        const activeUsers = (allUsers || []).filter((user): user is UserData =>
+            user !== null &&
+            user !== undefined &&
+            user.status === 'active' &&
+            !excludeUserIds.includes(user.id)
+        );
+
+        // Apply name filter if provided
+        if (nameFilter.trim()) {
+            const filterLower = nameFilter.toLowerCase().trim();
+            return activeUsers.filter(user =>
+                user.name.toLowerCase().includes(filterLower) ||
+                user.email.toLowerCase().includes(filterLower)
+            );
+        }
+
+        return activeUsers;
+    }, [allUsers, excludeUserIds, nameFilter]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (selectedUserId) {
             onUserSelect(selectedUserId);
             setSelectedUserId(null); // Reset selection
+            setNameFilter(''); // Reset filter
         }
     };
 
     const handleClose = () => {
         setSelectedUserId(null); // Reset selection on close
+        setNameFilter(''); // Reset filter on close
         onClose();
     };
 
@@ -63,6 +79,12 @@ export const AdminUserSelectionModal: FC<Props> = ({
         if (e.key === 'Escape') {
             handleClose();
         }
+    };
+
+    const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNameFilter(e.target.value);
+        // Reset selection when filter changes
+        setSelectedUserId(null);
     };
 
     if (!isOpen) return null;
@@ -98,17 +120,65 @@ export const AdminUserSelectionModal: FC<Props> = ({
 
                 <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
                     <div className={styles.modalBody}>
+                        {/* Search Filter Input */}
+                        <div className={styles.filterSection}>
+                            <div className={styles.searchInputContainer}>
+                                <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+                                    <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                <input
+                                    type="text"
+                                    placeholder="Pretraži po imenu ili email adresi..."
+                                    value={nameFilter}
+                                    onChange={handleFilterChange}
+                                    className={styles.searchInput}
+                                />
+                                {nameFilter && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setNameFilter('');
+                                            setSelectedUserId(null);
+                                        }}
+                                        className={styles.clearFilterButton}
+                                        aria-label="Obriši filter"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
                         {availableUsers.length === 0 ? (
                             <div className={styles.emptyState}>
-                                <p>Nema dostupnih korisnika za upis.</p>
-                                <p className={styles.emptyStateSubtext}>
-                                    Svi aktivni korisnici su već upisani ili nema aktivnih korisnika.
-                                </p>
+                                {nameFilter ? (
+                                    <>
+                                        <p>Nema korisnika koji odgovaraju pretrazi "{nameFilter}".</p>
+                                        <p className={styles.emptyStateSubtext}>
+                                            Pokušajte s drugačijim pojmom za pretragu.
+                                        </p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p>Nema dostupnih korisnika za upis.</p>
+                                        <p className={styles.emptyStateSubtext}>
+                                            Svi aktivni korisnici su već upisani ili nema aktivnih korisnika.
+                                        </p>
+                                    </>
+                                )}
                             </div>
                         ) : (
                             <>
                                 <p className={styles.instructionText}>
                                     Odaberite korisnika kojeg želite upisati na čitanje:
+                                    {nameFilter && (
+                                        <span className={styles.filterInfo}>
+                                            {' '}({availableUsers.length} rezultat{availableUsers.length !== 1 ? 'a' : ''})
+                                        </span>
+                                    )}
                                 </p>
                                 <div className={styles.usersList}>
                                     {availableUsers.map((user) => (

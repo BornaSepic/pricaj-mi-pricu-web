@@ -82,7 +82,8 @@
 
 .availableBadge,
 .unavailableBadge,
-.blockedBadge {
+.blockedBadge,
+.juniorBlockedBadge {
     display: inline-block;
     padding: 4px 16px;
     border-radius: 4px;
@@ -104,6 +105,10 @@
 .blockedBadge {
     background-color: var(--blocked-color, #5c5c5c);
     /* amber-500 */
+}
+
+.juniorBlockedBadge {
+    background-color: var(--blocked-color, #5c5c5c);
 }
 
 .expandedContent {
