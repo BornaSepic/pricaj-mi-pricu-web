@@ -59,9 +59,20 @@ export const CreateActivityPayload = z.object({
   title: z.string(),
   date: z.string(),
   description: z.string(),
+  limit: z.number().nullable()
 })
 
 export type CreateActivityPayload = z.infer<typeof CreateActivityPayload>
+
+export const UpdateActivityPayload = z.object({
+  id: z.number(),
+  title: z.string(),
+  date: z.string(),
+  description: z.string(),
+  limit: z.number().nullable()
+})
+
+export type UpdateActivityPayload = z.infer<typeof UpdateActivityPayload>
 
 export const Activity = z.object({
   id: z.number(),

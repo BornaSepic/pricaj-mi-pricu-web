@@ -143,7 +143,7 @@ export const ReadingCardEvent: FC<Props> = ({
                         <p className={styles.descriptionText}>{activity.description}</p>
                     </div>
 
-                    {activity.limit && (
+                    {activity.limit > 0 && (
                         <div className={styles.limitInfo}>
                             <p>
                                 Maksimalno sudionika: {activity.users.length}/{activity.limit}
@@ -152,7 +152,7 @@ export const ReadingCardEvent: FC<Props> = ({
                     )}
 
                     <div className={styles.usersList}>
-                        {Array.from({ length: (activity.users.length > 0) ? activity.users.length + 1 : MAX_READINGS_COUNT }).map((_, index) => {
+                        {Array.from({ length: Math.max(activity.users.length + 1, MAX_READINGS_COUNT) }).map((_, index) => {
 
                             const user = activity.users[index];
 

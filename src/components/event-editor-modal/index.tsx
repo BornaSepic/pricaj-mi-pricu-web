@@ -6,7 +6,7 @@ export type Activity = {
     title: string;
     description: string;
     date: string;
-    limit?: number;
+    limit: number | null;
     users: any[];
     created_at?: string;
     updated_at?: string;
@@ -16,7 +16,7 @@ export type ActivityFormData = {
     title: string;
     description: string;
     date: string;
-    limit: number | '';
+    limit: number | null;
 }
 
 export type Props = {
@@ -40,7 +40,7 @@ export const ActivityEditorModal: FC<Props> = ({
         title: '',
         description: '',
         date: '',
-        limit: ''
+        limit: null
     });
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const titleInputRef = useRef<HTMLInputElement>(null);
@@ -54,7 +54,7 @@ export const ActivityEditorModal: FC<Props> = ({
             title: activity.title,
             description: activity.description,
             date: activity.date,
-            limit: activity.limit || ''
+            limit: activity.limit || null
         };
 
         const hasChanges = JSON.stringify(formData) !== JSON.stringify(originalData);
@@ -76,7 +76,7 @@ export const ActivityEditorModal: FC<Props> = ({
                             title: activity.title,
                             description: activity.description,
                             date: activity.date,
-                            limit: activity.limit || ''
+                            limit: activity.limit || null
                         });
                     }
                 } catch (error) {
@@ -86,7 +86,7 @@ export const ActivityEditorModal: FC<Props> = ({
                         title: activity.title,
                         description: activity.description,
                         date: activity.date,
-                        limit: activity.limit || ''
+                        limit: activity.limit || null
                     });
                 }
             } else {
@@ -95,7 +95,7 @@ export const ActivityEditorModal: FC<Props> = ({
                     title: activity.title,
                     description: activity.description,
                     date: activity.date,
-                    limit: activity.limit || ''
+                    limit: activity.limit || null
                 });
             }
 
@@ -145,7 +145,7 @@ export const ActivityEditorModal: FC<Props> = ({
                 title: activity.title,
                 description: activity.description,
                 date: activity.date,
-                limit: activity.limit || ''
+                limit: activity.limit || null
             };
             setFormData(originalData);
 
@@ -285,7 +285,7 @@ export const ActivityEditorModal: FC<Props> = ({
                                 <input
                                     id="limit"
                                     type="number"
-                                    value={formData.limit}
+                                    value={formData.limit || 0}
                                     onChange={(e) => handleLimitChange(e.target.value)}
                                     className={styles.formInput}
                                     disabled={isLoading}

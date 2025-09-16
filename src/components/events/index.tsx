@@ -15,7 +15,7 @@ const createNewActivity = (): Activity => ({
     id: 0, // Temporary ID for new activities
     title: '',
     description: '',
-    limit: 0,
+    limit: null,
     date: new Date().toISOString(),
     users: [],
     created_at: new Date().toISOString(),
@@ -61,13 +61,11 @@ export const Events: FC = () => {
                 await pmpSdk.createActivity(activityData);
             } else {
                 // Updating existing activity
-                console.log('Updating activity:', selectedActivity.id, activityData);
-                // TODO: Implement API call to update activity
-                // await pmpSdk.updateActivity(selectedActivity.id, activityData);
+                await pmpSdk.updateActivity({
+                    id: selectedActivity.id,
+                    ...activityData
+                });
             }
-
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
 
             refetch();
             setIsModalOpen(false);
