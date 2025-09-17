@@ -22,7 +22,7 @@ export const PastReadings: FC = () => {
 
     const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
     const endOfMonth = isCurrentMonthSelected
-        ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1)
+        ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
         : new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
     const { data: readingsForTimeframe, refetch } = useQuery({
@@ -30,6 +30,27 @@ export const PastReadings: FC = () => {
         queryFn: () => pmpSdk.getReadingsForTimeframe(startOfMonth, endOfMonth),
         placeholderData: (prev) => prev || []
     })
+
+    // Filter readings based on 8pm rule for today's readings
+    const filteredReadings = useMemo(() => {
+        if (!readingsForTimeframe) return [];
+
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const isPast8PM = now.getHours() >= 20; // 8 PM = 20:00
+
+        return readingsForTimeframe.filter(groupedReadings => {
+            const readingDate = new Date(groupedReadings.date);
+            const readingDateOnly = new Date(readingDate.getFullYear(), readingDate.getMonth(), readingDate.getDate());
+
+            // If this reading is from today and it's not past 8 PM, exclude it
+            if (readingDateOnly.getTime() === today.getTime() && !isPast8PM) {
+                return false;
+            }
+
+            return true;
+        });
+    }, [readingsForTimeframe]);
 
     const selectPreviousMonth = () => {
         const previousMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
@@ -96,7 +117,7 @@ export const PastReadings: FC = () => {
             </div>
 
             <div className={styles.cardContent}>
-                {readingsForTimeframe?.map((groupedReadings, index) => {
+                {filteredReadings?.map((groupedReadings, index) => {
                     const reading = groupedReadings.readings.find(reading => reading.department);
 
                     if (!reading) {

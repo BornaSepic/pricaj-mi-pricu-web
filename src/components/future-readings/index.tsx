@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
 import {MinimalReadingCard} from "../minimal-reading-card";
@@ -15,6 +15,27 @@ export const FutureReadings: FC = () => {
         placeholderData: (prev) => prev || []
     })
 
+    // Filter readings to exclude today's reading after 8pm
+    const filteredReadings = useMemo(() => {
+        if (!readingsForTimeframe) return [];
+
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const isPast8PM = now.getHours() >= 20; // 8 PM = 20:00
+
+        return readingsForTimeframe.filter(groupedReadings => {
+            const readingDate = new Date(groupedReadings.date);
+            const readingDateOnly = new Date(readingDate.getFullYear(), readingDate.getMonth(), readingDate.getDate());
+
+            // If this reading is from today and it's past 8 PM, exclude it
+            if (readingDateOnly.getTime() === today.getTime() && isPast8PM) {
+                return false;
+            }
+
+            return true;
+        });
+    }, [readingsForTimeframe]);
+
     return (
         <div className={styles.card}>
             <div className={styles.cardHeader}>
@@ -22,7 +43,7 @@ export const FutureReadings: FC = () => {
             </div>
 
             <div className={styles.cardContent}>
-                {readingsForTimeframe?.map((groupedReadings, index) => {
+                {filteredReadings?.map((groupedReadings, index) => {
                     const reading = groupedReadings.readings.find(reading => reading.department);
 
                     if (!reading) {

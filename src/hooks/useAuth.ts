@@ -16,6 +16,10 @@ const getUser = (): Promise<User | null> => {
         return null
       }
 
+      if (data?.status === "inactive") {
+          return null
+      }
+
       return data
     })
     .catch(() => {
