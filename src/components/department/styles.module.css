@@ -79,9 +79,9 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/*.toggle__input:checked + .toggle__slider {
-    background-color: #2196F3;
-}*/
+.toggle__input:checked + .toggle__slider {
+    background-color: #8fb586;
+}
 
 .toggle__input:checked + .toggle__slider:before {
     transform: translateX(26px);

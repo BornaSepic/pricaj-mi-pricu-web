@@ -45,8 +45,8 @@ export const Department: FC<Props> = ({
                         <div className={styles.toggle__switch}>
                             <input
                                 type="checkbox"
-                                checked={!showFuture}
-                                onChange={(e) => setShowFuture(!e.target.checked)}
+                                checked={showFuture}
+                                onChange={(e) => setShowFuture(e.target.checked)}
                                 className={styles.toggle__input}
                             />
                             <div className={styles.toggle__slider}></div>
