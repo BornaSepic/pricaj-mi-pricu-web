@@ -86,7 +86,7 @@ export const MinimalActivityCard: FC<Props> = ({
                             day: '2-digit'
                         })}
                     </span>
-                    <span>
+                    <span translate="no">
                         ({date.toLocaleDateString('hr-HR', {
                             year: undefined,
                             month: undefined,
