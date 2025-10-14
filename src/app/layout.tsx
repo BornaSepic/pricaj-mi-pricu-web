@@ -27,7 +27,7 @@ export type Props = {
 
 const RootLayout: FC<Props> = ({ children }) => {
   return (
-    <html lang="hr">
+    <html lang="hr" translate="no">
       <body>
         <Providers>
           <Header />
