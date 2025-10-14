@@ -11,6 +11,9 @@ import { MainWrapper } from '../components/main-wrapper';
 export const metadata: Metadata = {
   title: 'Pričaj mi priču',
   description: 'Za sve pričalice i one koji to žele biti.',
+    other: {
+        'google': 'notranslate'
+    }
 }
 
 export const viewport: Viewport = {
