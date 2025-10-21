@@ -15,20 +15,20 @@ export const FutureReadings: FC = () => {
         placeholderData: (prev) => prev || []
     })
 
-    // Filter readings to exclude today's reading after 8pm
+    // Filter readings to exclude today's reading after 7pm
     const filteredReadings = useMemo(() => {
         if (!readingsForTimeframe) return [];
 
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const isPast8PM = now.getHours() >= 20; // 8 PM = 20:00
+        const isPast7PM = now.getHours() >= 19; // 7 PM = 19:00
 
         return readingsForTimeframe.filter(groupedReadings => {
             const readingDate = new Date(groupedReadings.date);
             const readingDateOnly = new Date(readingDate.getFullYear(), readingDate.getMonth(), readingDate.getDate());
 
-            // If this reading is from today and it's past 8 PM, exclude it
-            if (readingDateOnly.getTime() === today.getTime() && isPast8PM) {
+            // If this reading is from today and it's past 7 PM, exclude it
+            if (readingDateOnly.getTime() === today.getTime() && isPast7PM) {
                 return false;
             }
 

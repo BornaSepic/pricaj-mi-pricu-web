@@ -31,20 +31,20 @@ export const PastReadings: FC = () => {
         placeholderData: (prev) => prev || []
     })
 
-    // Filter readings based on 8pm rule for today's readings
+    // Filter readings based on 7pm rule for today's readings
     const filteredReadings = useMemo(() => {
         if (!readingsForTimeframe) return [];
 
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const isPast8PM = now.getHours() >= 20; // 8 PM = 20:00
+        const isPast7PM = now.getHours() >= 19; // 7 PM = 19:00
 
         return readingsForTimeframe.filter(groupedReadings => {
             const readingDate = new Date(groupedReadings.date);
             const readingDateOnly = new Date(readingDate.getFullYear(), readingDate.getMonth(), readingDate.getDate());
 
-            // If this reading is from today and it's not past 8 PM, exclude it
-            if (readingDateOnly.getTime() === today.getTime() && !isPast8PM) {
+            // If this reading is from today and it's not past 7 PM, exclude it
+            if (readingDateOnly.getTime() === today.getTime() && !isPast7PM) {
                 return false;
             }
 
