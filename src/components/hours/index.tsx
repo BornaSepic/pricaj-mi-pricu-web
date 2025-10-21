@@ -33,9 +33,9 @@ export const Hours: FC = () => {
     })
 
     const { data: readingsForTimeframe } = useQuery({
-        queryKey: [`get-readings-for-timeframe`, date],
+        queryKey: [`get-readings-for-timeframe`, date, user?.id],
         queryFn: () => pmpSdk.getReadingsForTimeframe(startOfMonth, endOfMonth),
-        placeholderData: (prev) => prev || []
+        placeholderData: (prev) => prev || [],
     })
 
     const selectPreviousMonth = () => {
@@ -74,7 +74,7 @@ export const Hours: FC = () => {
 
             return acc;
         }, 0);
-    }, [allReadings]);
+    }, [allReadings, user]);
 
     return (
         <div className={styles.card}>

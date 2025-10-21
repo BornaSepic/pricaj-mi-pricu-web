@@ -5,10 +5,9 @@ import styles from './styles.module.css';
 import { useQuery } from '@tanstack/react-query';
 import Link from "next/link";
 import { pmpSdk } from '../../core/pmp-sdk';
-import { MinimalActivityCard } from "../minimal-activity-card";
 import { ActivityEditorModal, Activity, ActivityFormData } from "../event-editor-modal";
 import { AdminProvider } from "../admin-lock";
-import { ReadingCardEvent } from '../reading-card-event';
+import { ActivityCard } from '../activity-card';
 
 // Create a "new activity" template for adding
 const createNewActivity = (): Activity => ({
@@ -36,12 +35,6 @@ export const Events: FC = () => {
     // Handle adding new event
     const handleAddEvent = () => {
         setSelectedActivity(createNewActivity());
-        setIsModalOpen(true);
-    };
-
-    // Handle editing existing event (called from MinimalActivityCard if needed)
-    const handleEditEvent = (activity: Activity) => {
-        setSelectedActivity(activity);
         setIsModalOpen(true);
     };
 
@@ -108,12 +101,11 @@ export const Events: FC = () => {
                         <>
                             {events?.map((item) => {
                                 return (
-                                    <ReadingCardEvent
+                                    <ActivityCard
                                         key={item.id}
                                         activity={item}
                                         date={item.date}
-                                        activities={[item]}
-                                        onChange={() => refetch()}
+                                        onChange={refetch}
                                     />
                                 );
                             })}

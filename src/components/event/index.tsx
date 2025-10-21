@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { FC } from "react"
 import styles from "./styles.module.css"
 import { pmpSdk } from "../../core/pmp-sdk"
-import { ReadingCardEvent } from "../reading-card-event";
+import { ActivityCard } from "../activity-card";
 
 export const Event: FC = ({ }) => {
     const { data: events, refetch, isLoading } = useQuery({
@@ -26,12 +26,11 @@ export const Event: FC = ({ }) => {
                 <>
                     {events.map((item) => {
                         return (
-                            <ReadingCardEvent
+                            <ActivityCard
                                 activity={item}
                                 key={item.id}
                                 date={item.date}
-                                activities={[item]}
-                                onChange={() => refetch()}
+                                onChange={refetch}
                             />
                         )
                     })}

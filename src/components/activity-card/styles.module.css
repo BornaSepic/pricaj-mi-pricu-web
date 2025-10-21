@@ -170,3 +170,28 @@
     color: #555;
     margin: 0;
 }
+
+.editButton {
+    background: transparent;
+    border: 1px solid #d1d5db;
+    border-radius: 50%;
+    padding: 6px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editButton:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+    border-color: #9ca3af;
+}
+
+.ActivityCard__controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
