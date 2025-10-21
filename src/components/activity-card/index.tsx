@@ -14,7 +14,6 @@ export type Props = {
     onChange?: () => void;
 }
 
-export const MAX_READINGS_COUNT = 3 as const;
 
 export const ActivityCard: FC<Props> = ({
     activity,
@@ -137,6 +136,8 @@ export const ActivityCard: FC<Props> = ({
         }
     };
 
+    const activitySlotCount = activity.limit ? Math.min(activity.limit, Math.max(activity.users.length + 1, 3)) : Math.max(activity.users.length + 1, 3);
+
     return (
         <>
             <div className={styles.card}>
@@ -221,7 +222,7 @@ export const ActivityCard: FC<Props> = ({
                         )}
 
                         <div className={styles.usersList}>
-                            {Array.from({ length: Math.max(activity.users.length + 1, MAX_READINGS_COUNT) }).map((_, index) => {
+                            {Array.from({ length: activitySlotCount }).map((_, index) => {
                                 const user = activity.users[index];
 
                                 if (!user) {
