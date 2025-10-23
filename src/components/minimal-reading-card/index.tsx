@@ -220,22 +220,25 @@ export const MinimalReadingCard: FC<Props> = ({
                             })})
                         </span>
                     </div>
-                    <div className={styles.badgeContainer}>
-                        {showNoReportBadge && (
-                            <div className={styles.unavailableBadge}>
-                                <span>!</span>
-                            </div>
-                        )}
+                    <div className={styles.slotInfo}>{readings.length}/{MAX_READINGS_COUNT}</div>
+                    <div className={styles.headerRightContainer}>
+                        <div className={styles.badgeContainer}>
+                            {showNoReportBadge && (
+                                <div className={styles.unavailableBadge}>
+                                    <span>!</span>
+                                </div>
+                            )}
+                        </div>
+                        <div className={styles.department}>{department.name}</div>
+                        <button
+                            className={styles.toggleButton}
+                            type="button"
+                        >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={clsx(styles.rotateIcon, isExpanded && styles.rotateIcon__rotated)}>
+                                <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
                     </div>
-                    <div className={styles.department}>{department.name}</div>
-                    <button
-                        className={styles.toggleButton}
-                        type="button"
-                    >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={clsx(styles.rotateIcon, isExpanded && styles.rotateIcon__rotated)}>
-                            <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
                 </div>
 
                 {isExpanded && (

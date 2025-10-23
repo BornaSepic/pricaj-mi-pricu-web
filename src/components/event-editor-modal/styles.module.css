@@ -205,6 +205,58 @@
     animation: spin 1s linear infinite;
 }
 
+.numberInputWrapper {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+}
+
+.numberButton {
+    width: 48px;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    font-weight: 300;
+    color: #666;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.numberButton:hover:not(:disabled) {
+    background: #f8f8f8;
+    color: #333;
+}
+
+.numberButton:active:not(:disabled) {
+    background: #eee;
+}
+
+.numberButton:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.numberInput {
+    flex: 1;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    padding: 0 12px;
+    min-width: 0;
+}
+
+.numberInput:focus {
+    outline: none;
+}
+
+.numberInputWrapper:focus-within {
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
 /* Validation styles */
 .formInput:invalid,
 .formTextarea:invalid {

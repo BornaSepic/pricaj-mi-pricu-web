@@ -191,7 +191,7 @@ export const ActivityEditorModal: FC<Props> = ({
     const handleLimitChange = (value: string) => {
         if (!isReadOnly) {
             // Allow empty string or valid positive numbers
-            const numValue = value === '' ? 100 : parseInt(value, 10);
+            const numValue = value === '' ? 0 : parseInt(value, 10);
             if (value === '' || (!isNaN(numValue) && numValue > 0)) {
                 handleInputChange('limit', numValue);
             }
@@ -282,17 +282,47 @@ export const ActivityEditorModal: FC<Props> = ({
                                 <label className={styles.formLabel} htmlFor="limit">
                                     Maksimalni broj sudionika
                                 </label>
-                                <input
-                                    id="limit"
-                                    type="number"
-                                    value={formData.limit || 0}
-                                    onChange={(e) => handleLimitChange(e.target.value)}
-                                    className={styles.formInput}
-                                    disabled={isLoading}
-                                    readOnly={isReadOnly}
-                                    min="1"
-                                    placeholder="Bez ograničenja"
-                                />
+                                <div className={styles.numberInputWrapper}>
+                                    <button
+                                        type="button"
+                                        className={styles.numberButton}
+                                        onClick={() => {
+                                            const currentValue = formData.limit || 0;
+                                            if (currentValue > 0) {
+                                                handleInputChange('limit', currentValue - 1);
+                                            }
+                                        }}
+                                        disabled={isLoading || isReadOnly || !formData.limit || formData.limit <= 0}
+                                        aria-label="Smanji broj"
+                                    >
+                                        −
+                                    </button>
+
+                                    <input
+                                        id="limit"
+                                        type="text"
+                                        inputMode="numeric"
+                                        value={formData.limit || ''}
+                                        onChange={(e) => handleLimitChange(e.target.value)}
+                                        className={styles.numberInput}
+                                        disabled={isLoading}
+                                        readOnly={isReadOnly}
+                                        placeholder="Bez ograničenja"
+                                    />
+
+                                    <button
+                                        type="button"
+                                        className={styles.numberButton}
+                                        onClick={() => {
+                                            const currentValue = formData.limit || 0;
+                                            handleInputChange('limit', currentValue + 1);
+                                        }}
+                                        disabled={isLoading || isReadOnly}
+                                        aria-label="Povećaj broj"
+                                    >
+                                        +
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
