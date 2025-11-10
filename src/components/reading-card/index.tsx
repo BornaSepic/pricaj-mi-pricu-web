@@ -56,7 +56,7 @@ export const ReadingCard: FC<Props> = ({
     // Check if date is Monday, Friday, or Sunday
     const isBlockedDay = () => {
         const dayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, 5 = Friday
-        return dayOfWeek === 0 || dayOfWeek === 1 || dayOfWeek === 5; // Sunday, Monday, Friday
+        return dayOfWeek === 0 || dayOfWeek === 5; // Sunday, Monday, Friday
     };
 
     const isDayBlocked = isBlockedDay();
