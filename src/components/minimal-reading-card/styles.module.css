@@ -152,6 +152,15 @@
     height: 16px;
 }
 
+.disabledButton {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.disabledButton:hover {
+    background: inherit !important;
+}
+
 .modalOverlay {
     position: fixed;
     top: 0;

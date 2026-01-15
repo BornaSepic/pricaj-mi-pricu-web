@@ -38,6 +38,18 @@ export const MinimalReadingCard: FC<Props> = ({
     const date = new Date(dateAsString);
     const isPast = timeframe === 'past';
 
+    const isToday = () => {
+        const today = new Date();
+        return date.toDateString() === today.toDateString();
+    };
+
+    const isPast2PM = () => {
+        const now = new Date();
+        return now.getHours() >= 14; // 14:00 = 2PM
+    };
+
+    const isTodayAndPast2PM = isToday() && isPast2PM();
+
     // Check if current user has a reading without a report
     const currentUserReading = readings.find(reading =>
         reading.user && user && reading.user.id === user.id
@@ -61,6 +73,11 @@ export const MinimalReadingCard: FC<Props> = ({
         });
 
         if (!readingToCancel) {
+            return;
+        }
+
+        if (isTodayAndPast2PM) {
+            toast.warning('Ne možete otkazati današnje čitanje nakon 14:00h');
             return;
         }
 
@@ -299,7 +316,7 @@ export const MinimalReadingCard: FC<Props> = ({
                             <div className={styles.buttonContainer}>
                                 <button
                                     onClick={handleCancelingReading}
-                                    className={styles.registerButton}
+                                    className={clsx(styles.registerButton, isTodayAndPast2PM && styles.disabledButton)}
                                     type="button"
                                 >
                                     {isLoading ? 'ISPISUJEMO TE' : (

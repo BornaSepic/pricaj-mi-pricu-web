@@ -40,7 +40,6 @@ export const ReadingCard: FC<Props> = ({
     const date = new Date(dateAsString);
     const isAvailable = readings.length < MAX_READINGS_COUNT;
 
-    // Check if it's today and past 2pm
     const isToday = () => {
         const today = new Date();
         return date.toDateString() === today.toDateString();
@@ -71,8 +70,6 @@ export const ReadingCard: FC<Props> = ({
     const isJuniorLimitReached = juniorCount >= 2;
     const isUserJunior = user?.seniority === 'junior';
     const isJuniorBlocked = isJuniorLimitReached && isUserJunior && !isUserAdmin();
-
-    console.log("date", readings)
 
     const userReading = readings.find(reading => reading.user && user && reading.user.id === user.id);
     const isUserSignedUp = optimisticIsUserSignedUp === null ? !!userReading : optimisticIsUserSignedUp;
